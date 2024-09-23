@@ -6,7 +6,7 @@ export interface LoginForm {
 }
 
 // 登入請求 返回的 token ( 因為 token 返回的是一個對象 )
-interface UserToken {
+export interface UserToken {
   token: string
 }
 

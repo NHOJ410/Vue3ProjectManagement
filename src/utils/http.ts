@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus' // 導入 element-plus訊息提示框
+import 'element-plus/dist/index.css'
 
 // 創建 axios實例
 const http = axios.create({
@@ -16,6 +17,8 @@ http.interceptors.request.use(
   },
   function (error) {
     // 對請求錯誤做些什麼
+
+    console.log(error)
     return Promise.reject(error)
   }
 )

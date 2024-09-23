@@ -1,17 +1,21 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { ElNotification } from 'element-plus'
 import { UserFilled, Lock } from '@element-plus/icons-vue' // 導入 element-plus 的圖標
+// 導入type類型
+import type { LoginForm } from '@/api/user/type' // 導入用戶登入表單類型
+// 導入 Pinia倉庫
+import { useUserStore } from '@/stores'
+const userStore = useUserStore()
+
+// 導入vue-router
+import { useRouter } from 'vue-router'
+const router = useRouter()
 
 // -------------- 登入表單部分 --------------
 
-// 登入表單類型限制
-interface LoginFormType {
-  username: string
-  password: string
-}
-
 // 登入表單
-const loginForm = ref<LoginFormType>({
+const loginForm = ref<LoginForm>({
   username: '',
   password: ''
 })
@@ -30,8 +34,50 @@ const rules = {
 
 // -------------- 登入按鈕部分 --------------
 
-// 登入按鈕事件處理函數
-const loginBtn = async () => {}
+const btnLoading = ref<boolean>(false)
+
+//  登入按鈕事件處理函數
+const loginBtn = async () => {
+  btnLoading.value = true // 按下登入按鈕後 開啟 loading效果 ( 防抖 )
+
+  //  利用 try catch 來根據 retrun Promise 的結果來判斷登入是否成功
+
+  try {
+    //  try 部分 Promise為 成功
+
+    //  調用登入請求
+    await userStore.userLogin(loginForm.value)
+
+    //  成功後提示用戶登入成功
+    ElNotification.success({
+      title: '登入成功',
+      message: '歡迎回來 ! John',
+      offset: 50,
+      showClose: false
+    })
+
+    // 並且跳轉到首頁 ( /home )
+    router.replace('/home')
+  } catch (error) {
+    //  catch 為捕獲失敗的 Promise.reject()
+
+    //  提示用戶登入失敗
+    ElNotification.error({
+      title: '登入失敗',
+      message: '帳號或密碼錯誤 請重新再確認一次',
+      offset: 50,
+      showClose: false
+    })
+
+    btnLoading.value = false // 登入失敗後 , 關閉按鈕的 loading 狀態 ( 防抖 )
+  }
+
+  //  不管成功或失敗 按下登入按鈕後 將表單清空
+  loginForm.value = {
+    username: '',
+    password: ''
+  }
+}
 </script>
 
 <template>
@@ -54,7 +100,7 @@ const loginBtn = async () => {}
             </el-form-item>
             <!-- 按鈕區域 -->
             <el-form-item>
-              <el-button type="primary" class="login-btn" @click="loginBtn">登入</el-button>
+              <el-button type="primary" :loading="btnLoading" class="login-btn" @click="loginBtn">登入</el-button>
             </el-form-item>
           </el-form>
         </el-col>

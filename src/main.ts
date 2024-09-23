@@ -3,8 +3,7 @@ import router from './router'
 
 // create Vue
 import { createApp } from 'vue'
-// create Pinia
-import { createPinia } from 'pinia'
+// Pinia
 import pinia from '@/stores/index'
 
 // elementPlus
@@ -23,7 +22,6 @@ import GlobalCom from '@/components'
 // 全局組件部分
 app.use(GlobalCom)
 // pinia部分
-app.use(createPinia())
 app.use(pinia)
 
 // vue-router
