@@ -2,8 +2,7 @@
 
 <template>
   <div>
-    <!-- 一級路由出口 -->
-    <router-view></router-view>
+    <h1>首頁</h1>
   </div>
 </template>
 
