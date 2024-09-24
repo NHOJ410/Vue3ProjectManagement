@@ -5,7 +5,7 @@ import { setting } from '@/setting' // 導入Logo區域樣式配置
 <template>
   <div class="logo" v-if="setting.isShow">
     <h1>
-      <img :src="setting.logoURL" alt="" />
+      <img :src="setting.logoURL" alt="Logo圖片" />
       <h2>{{ setting.title }}</h2>
     </h1>
   </div>
@@ -19,9 +19,6 @@ import { setting } from '@/setting' // 導入Logo區域樣式配置
     width: 100%;
     height: $base-logo-height;
     padding: 5px;
-
-    color: transparent;
-    background-clip: text;
 
     img {
       width: 100px;
