@@ -5,9 +5,10 @@ export interface LoginForm {
   password: string
 }
 
-// 登入請求 返回的 token ( 因為 token 返回的是一個對象 )
+// 登入請求後 返回的數據類型 ( 成功後返回 token 失敗的話則返回 message  )
 export interface UserToken {
-  token: string
+  token?: string
+  message?: string
 }
 
 // 登入請求 返回的數據類型 code 和 token

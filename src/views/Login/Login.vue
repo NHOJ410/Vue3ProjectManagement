@@ -7,10 +7,11 @@ import type { LoginForm } from '@/api/user/type' // 導入用戶登入表單類�
 // 導入 Pinia倉庫
 import { useUserStore } from '@/stores'
 const userStore = useUserStore()
-
 // 導入vue-router
 import { useRouter } from 'vue-router'
 const router = useRouter()
+// 導入當前時間函數
+import { currentTime } from '@/utils/currentTime'
 
 // -------------- 登入表單部分 --------------
 
@@ -50,8 +51,8 @@ const loginBtn = async () => {
 
     //  成功後提示用戶登入成功
     ElNotification.success({
-      title: '登入成功',
-      message: '歡迎回來 ! John',
+      title: `${currentTime().welcomeMsg}`,
+      message: '歡迎回來  John',
       offset: 50,
       showClose: false
     })
