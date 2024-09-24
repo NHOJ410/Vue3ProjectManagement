@@ -7,10 +7,10 @@ export const constantRoutes = [
     name: 'login'
   },
   {
-    // 一級路由 - 首頁
-    path: '/home',
-    component: () => import('@/views/Home/Home.vue'),
-    name: 'home'
+    // 一級路由 - 首頁layout
+    path: '/',
+    component: () => import('@/Layout/Layout.vue'),
+    name: 'layout'
   },
   {
     // 一級路由 - 404頁面
