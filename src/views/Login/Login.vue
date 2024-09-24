@@ -23,22 +23,25 @@ const loginForm = ref<LoginForm>({
 
 // 登入表單 校驗規則
 const rules = {
+  // 帳號校驗
   username: [
     { required: true, message: '請輸入帳號', trigger: 'blur' },
     { min: 3, max: 15, message: '帳號長度應在 3 到 15 個字符之間', trigger: 'blur' }
   ],
+  // 密碼校驗
   password: [
     { required: true, message: '請輸入密碼', trigger: 'blur' },
-    { min: 6, max: 20, message: '密碼長度應在 6 到 20 個字符之間', trigger: 'blur' }
+    { min: 6, max: 15, message: '密碼長度應在 6 到 15 個字符之間', trigger: 'blur' }
   ]
 }
 
 // -------------- 登入按鈕部分 --------------
-
-const btnLoading = ref<boolean>(false)
-
+const elFormRef = ref() // 獲取表單元素
+const btnLoading = ref<boolean>(false) // 按鈕 loading變量
 //  登入按鈕事件處理函數
 const loginBtn = async () => {
+  await elFormRef.value.validate() // 按下登入按鈕後 觸發elForm的二次驗證
+
   btnLoading.value = true // 按下登入按鈕後 開啟 loading效果 ( 防抖 )
 
   //  利用 try catch 來根據 retrun Promise 的結果來判斷登入是否成功
