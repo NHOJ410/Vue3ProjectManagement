@@ -16,7 +16,9 @@ export default {
     <!--  沒有children屬性(沒有摺疊菜單) -->
     <el-menu-item v-if="!item.children && !item.meta.hidden" :index="item.path">
       <template #title>
-        <span>圖標佔位 &nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <el-icon>
+          <component :is="item.meta.icon"></component>
+        </el-icon>
         <span>{{ item.meta.title }}</span>
       </template>
     </el-menu-item>
@@ -24,7 +26,9 @@ export default {
     <!-- 有children屬性 , 但裡面只有一個子路由 ( 就不需要摺疊菜單了! ) -->
     <el-menu-item v-if="item.children && item.children.length === 1 && !item.meta.hidden" :index="item.children[0].path">
       <template #title>
-        <span>圖標佔位 &nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <el-icon>
+          <component :is="item.children[0].meta.icon"></component>
+        </el-icon>
         <span>{{ item.children[0].meta.title }}</span>
       </template>
     </el-menu-item>
@@ -32,7 +36,9 @@ export default {
     <!-- 有children屬性 , 且超過一個路由 ( 需要用摺疊菜單 )  -->
     <el-sub-menu v-if="item.children && item.children.length > 1 && !item.meta.hidden" :index="item.path">
       <template #title>
-        <span>圖標佔位 &nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <el-icon>
+          <component :is="item.meta.icon"></component>
+        </el-icon>
         <!-- 菜單標題 -->
         <span>{{ item.meta.title }}</span>
       </template>

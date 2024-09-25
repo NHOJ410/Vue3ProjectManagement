@@ -17,12 +17,18 @@ export const constantRoutes = [
     name: 'layout',
     meta: {
       title: 'layout',
-      hidden: false
+      hidden: false,
+      icon: 'Menu'
     },
     children: [
       // 二級路由 - Home 頁面
-      { path: '/home', component: () => import('@/views/Home/Home.vue'), name: 'home', meta: { title: '首頁', hidden: false } },
-      { path: '/2', component: () => import('@/views/Home/Home.vue'), name: 'home', meta: { title: '測試', hidden: false } }
+      {
+        path: '/home',
+        component: () => import('@/views/Home/Home.vue'),
+        name: 'home',
+        meta: { title: '首頁', hidden: false, icon: 'HomeFilled' }
+      },
+      { path: '/2', component: () => import('@/views/Home/Home.vue'), name: 'home', meta: { title: '測試', hidden: false, icon: 'House' } }
     ]
   },
   {
