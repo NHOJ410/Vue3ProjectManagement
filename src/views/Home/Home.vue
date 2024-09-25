@@ -2,7 +2,7 @@
 
 <template>
   <div>
-    <h1>首頁</h1>
+    <h1>我是Home組件</h1>
   </div>
 </template>
 

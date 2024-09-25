@@ -5,6 +5,8 @@ import { ref } from 'vue'
 import { userLoginAPI } from '@/api/user/user'
 //  導入 type類型
 import type { LoginForm, LoginResponse } from '@/api/user/type'
+//  導入路由數組 ( 生成菜單需要 方便做權限管理 )
+import { constantRoutes } from '@/router/routes'
 
 // 用戶倉庫
 export const useUserStore = defineStore(
@@ -25,10 +27,13 @@ export const useUserStore = defineStore(
       userToken.value = res.data.token
     }
 
-    // 要記得 return
+    // 存儲路由 ( 生成菜單需要 方便做權限管理 )
+    const menuRoutes = ref(constantRoutes)
+
     return {
       userLogin, // 用戶登入請求
-      userToken // 用戶token
+      userToken, // 用戶token
+      menuRoutes // 存儲路由 ( 生成菜單需要 方便做權限管理 )
     }
   },
   {
