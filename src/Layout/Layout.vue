@@ -2,15 +2,22 @@
 import LogoItem from '@/Layout/Logo/LogoItem.vue' // 導入Logo組件
 import MenuItem from '@/Layout/Menu/MenuItem.vue' // 導入菜單組件
 import MainContent from '@/Layout/MainContent/MainContent.vue' // 導入二級路由出口組件
+import Tabbar from '@/Layout/Tabbar/Tabbar.vue' // 導入頂部導航組件
 // 導入 Pinia倉庫
 import { useUserStore } from '@/stores' // 導入用戶倉庫
 const userStore = useUserStore() // 定義用戶倉庫
+// 獲取路由對象
+import { useRoute } from 'vue-router'
+const route = useRoute()
 </script>
 
 <template>
   <div class="layout-container">
     <!-- 頂部導航 -->
-    <div class="layout-topNav">頂部導航</div>
+    <div class="layout-topNav">
+      <Tabbar></Tabbar>
+    </div>
+
     <!-- 左側菜單 -->
     <div class="layout-aside">
       <!-- Logo組件 -->
@@ -18,11 +25,12 @@ const userStore = useUserStore() // 定義用戶倉庫
       <!-- 導航條組件 -->
       <el-scrollbar class="scrollbar">
         <!-- 菜單組件 -->
-        <el-menu class="layout-menu" router="true">
+        <el-menu class="layout-menu" :router="true" :default-active="route.path">
           <MenuItem :menuList="userStore.menuRoutes"> </MenuItem>
         </el-menu>
       </el-scrollbar>
     </div>
+
     <!-- 右側頁面內容 -->
     <div class="layout-content">
       <MainContent></MainContent>
@@ -34,7 +42,6 @@ const userStore = useUserStore() // 定義用戶倉庫
 .layout-container {
   width: 100%;
   height: 100vh;
-  background-color: red;
 
   // 左側菜單
   .layout-aside {
@@ -65,7 +72,6 @@ const userStore = useUserStore() // 定義用戶倉庫
   .layout-topNav {
     width: calc(100% - $base-menu-width); // 寬度 = 100% - 左側菜單寬度
     height: $base-tapbar-height;
-    background-color: aqua;
     position: fixed;
     top: 0;
     left: $base-menu-width; // 固定定位寬度 = 左側菜單寬度
