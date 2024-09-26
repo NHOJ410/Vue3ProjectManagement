@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import LogoItem from '@/Layout/Logo/LogoItem.vue' // 導入Logo組件
 import MenuItem from '@/Layout/Menu/MenuItem.vue' // 導入菜單組件
+import MainContent from '@/Layout/MainContent/MainContent.vue' // 導入二級路由出口組件
 // 導入 Pinia倉庫
 import { useUserStore } from '@/stores' // 導入用戶倉庫
 const userStore = useUserStore() // 定義用戶倉庫
@@ -17,15 +18,14 @@ const userStore = useUserStore() // 定義用戶倉庫
       <!-- 導航條組件 -->
       <el-scrollbar class="scrollbar">
         <!-- 菜單組件 -->
-        <el-menu class="layout-menu">
+        <el-menu class="layout-menu" router="true">
           <MenuItem :menuList="userStore.menuRoutes"> </MenuItem>
         </el-menu>
       </el-scrollbar>
     </div>
     <!-- 右側頁面內容 -->
     <div class="layout-content">
-      <router-view></router-view>
-      <p style="height: 10000px; background-color: greenyellow"></p>
+      <MainContent></MainContent>
     </div>
   </div>
 </template>
