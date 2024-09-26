@@ -5,7 +5,10 @@ import MainContent from '@/Layout/MainContent/MainContent.vue' // 導入二級�
 import Tabbar from '@/Layout/Tabbar/Tabbar.vue' // 導入頂部導航組件
 // 導入 Pinia倉庫
 import { useUserStore } from '@/stores' // 導入用戶倉庫
+import { useLayoutSettingStore } from '@/stores' // 導入設定倉庫
 const userStore = useUserStore() // 定義用戶倉庫
+const settingStore = useLayoutSettingStore() // 定義設定倉庫
+
 // 獲取路由對象
 import { useRoute } from 'vue-router'
 const route = useRoute()
@@ -14,18 +17,18 @@ const route = useRoute()
 <template>
   <div class="layout-container">
     <!-- 頂部導航 -->
-    <div class="layout-topNav">
+    <div class="layout-topNav" :class="{ isOpen: settingStore.isOpen }">
       <Tabbar></Tabbar>
     </div>
 
     <!-- 左側菜單 -->
-    <div class="layout-aside">
+    <div class="layout-aside" :class="{ isOpen: settingStore.isOpen }">
       <!-- Logo組件 -->
       <LogoItem></LogoItem>
       <!-- 導航條組件 -->
       <el-scrollbar class="scrollbar">
         <!-- 菜單組件 -->
-        <el-menu class="layout-menu" :router="true" :default-active="route.path">
+        <el-menu class="layout-menu" :router="true" :default-active="route.path" :collapse="settingStore.isOpen">
           <MenuItem :menuList="userStore.menuRoutes"> </MenuItem>
         </el-menu>
       </el-scrollbar>
