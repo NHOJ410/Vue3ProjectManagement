@@ -7,6 +7,8 @@ $base-menu-width: 260px; // 左側菜單寬度
 $base-menu-BGCcolor: #1a1613; // 菜單背景色
 $base-logo-height: 100px; // Logo高度
 $base-logo-title: 24px;  // Logo部分的文字大小
+$base-menu-close : 100px;  // 菜單縮放時的寬度
+$base-menu-close-transition : 0.8s all; // 菜單縮放時的過渡效果
 
 // 頂部導航條 
 $base-tapbar-height : 100px; // 頂部導航條高度

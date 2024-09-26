@@ -14,8 +14,8 @@ const onchangeOpen = () => {
 
 <template>
   <!-- 展開按鈕 -->
-  <el-icon style="margin-left: 20px" @click="onchangeOpen" class="isOpen">
-    <component :is="settingStore.isOpen ? 'Right' : 'Back'"></component>
+  <el-icon style="margin-left: 20px" @click="onchangeOpen" class="isOpen" :class="{ openTransition: settingStore.isOpen }">
+    <Right />
   </el-icon>
 
   <!-- 麵包屑組件 -->
@@ -29,6 +29,12 @@ const onchangeOpen = () => {
 // 切換展開狀態按鈕
 .isOpen {
   cursor: pointer;
+  transition: $base-menu-close-transition;
+
+  &.openTransition {
+    /* 添加動畫效果 */
+    transform: rotate(-180deg);
+  }
 }
 
 // 麵包屑組件

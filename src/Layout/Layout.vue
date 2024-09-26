@@ -35,7 +35,7 @@ const route = useRoute()
     </div>
 
     <!-- 右側頁面內容 -->
-    <div class="layout-content">
+    <div class="layout-content" :class="{ isOpen: settingStore.isOpen }">
       <MainContent></MainContent>
     </div>
   </div>
@@ -51,6 +51,12 @@ const route = useRoute()
     width: $base-menu-width;
     height: 100vh;
     background-color: gray;
+    transition: $base-menu-close-transition;
+
+    // 菜單縮放時的寬度
+    &.isOpen {
+      width: $base-menu-close;
+    }
 
     // 滾動條部分
     .scrollbar {
@@ -78,6 +84,14 @@ const route = useRoute()
     position: fixed;
     top: 0;
     left: $base-menu-width; // 固定定位寬度 = 左側菜單寬度
+
+    transition: $base-menu-close-transition;
+
+    // 菜單縮放時的寬度
+    &.isOpen {
+      width: calc(100vw - $base-menu-close);
+      left: $base-menu-close;
+    }
   }
 
   // 中間內容部分
@@ -91,6 +105,14 @@ const route = useRoute()
     left: $base-menu-width; // 固定定位寬度 = 左側菜單寬度
     padding: 20px;
     overflow: auto;
+
+    transition: $base-menu-close-transition;
+
+    // 菜單縮放時的寬度
+    &.isOpen {
+      width: calc(100vw - $base-menu-close);
+      left: $base-menu-close;
+    }
   }
 }
 </style>

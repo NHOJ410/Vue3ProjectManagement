@@ -67,7 +67,7 @@ export const constantRoutes = [
         path: '/acl/role',
         component: () => import('@/views/Acl/Role/Role.vue'),
         name: 'Role',
-        meta: { title: '角色管理', icon: 'InfoFilled', hidden: false }
+        meta: { title: '權限管理', icon: 'InfoFilled', hidden: false }
       },
       // 二級路由 - 菜單管理
       {
