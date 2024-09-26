@@ -50,12 +50,13 @@ const route = useRoute()
   .layout-aside {
     width: $base-menu-width;
     height: 100vh;
-    background-color: gray;
+    background: linear-gradient(to right, #141e30, #243b55);
     transition: $base-menu-close-transition;
 
     // 菜單縮放時的寬度
     &.isOpen {
       width: $base-menu-close;
+      font-size: 0;
     }
 
     // 滾動條部分

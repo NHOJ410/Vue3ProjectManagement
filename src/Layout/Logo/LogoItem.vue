@@ -16,6 +16,8 @@ const settingStore = useLayoutSettingStore() // 定義設定倉庫
 
 <style lang="scss" scoped>
 .logo {
+  padding-left: 10px;
+
   h1 {
     display: flex;
     align-items: center;
@@ -23,8 +25,8 @@ const settingStore = useLayoutSettingStore() // 定義設定倉庫
     height: $base-logo-height;
 
     img {
-      width: 100px;
-      height: 100px;
+      width: 80px;
+      height: 80px;
     }
 
     h2 {

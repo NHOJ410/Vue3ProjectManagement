@@ -31,8 +31,8 @@ const onchangeOpen = () => {
   cursor: pointer;
   transition: $base-menu-close-transition;
 
+  // 切換時添加翻轉效果
   &.openTransition {
-    /* 添加動畫效果 */
     transform: rotate(-180deg);
   }
 }
