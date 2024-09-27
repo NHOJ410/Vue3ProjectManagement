@@ -1,7 +1,10 @@
 <script setup lang="ts">
+import { useRoute } from 'vue-router'
 // 導入倉庫
 import { useLayoutSettingStore } from '@/stores' // 導入 設定倉庫
 const settingStore = useLayoutSettingStore()
+// 定義路由對象
+const route = useRoute()
 
 // --------- 切換展開按鈕 -------------
 
@@ -18,10 +21,14 @@ const onchangeOpen = () => {
     <Right />
   </el-icon>
 
-  <!-- 麵包屑組件 -->
+  <!-- 麵包屑導航部分 -->
   <el-breadcrumb separator-icon="ArrowRight" class="breadcrumb">
-    <el-breadcrumb-item>首頁</el-breadcrumb-item>
-    <el-breadcrumb-item>用戶管理</el-breadcrumb-item>
+    <el-breadcrumb-item v-for="item in route.matched" :key="item.path" v-show="item.meta.title" :to="item.path">
+      <el-icon>
+        <component :is="item.meta.icon"></component>
+      </el-icon>
+      <span class="breadcrumbTitle">{{ item.meta.title }}</span>
+    </el-breadcrumb-item>
   </el-breadcrumb>
 </template>
 
@@ -37,8 +44,15 @@ const onchangeOpen = () => {
   }
 }
 
-// 麵包屑組件
+// 麵包屑導航
 .breadcrumb {
   font-size: 20px;
+
+  // 麵包屑導航文字
+  .breadcrumbTitle {
+    margin: 0 10px;
+    vertical-align: top;
+    font-weight: 400;
+  }
 }
 </style>
