@@ -35,7 +35,7 @@ const settingStore = useLayoutSettingStore() // 定義設定倉庫
       font-weight: 700;
       text-shadow: 2px 2px 2px rgba(245, 238, 238, 0.8);
       opacity: 1;
-      margin-left: 20px;
+      margin: 0 10px;
       transition: $base-menu-close-transition;
 
       &.isOpen {

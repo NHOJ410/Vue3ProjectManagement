@@ -3,15 +3,34 @@ import LogoItem from '@/Layout/Logo/LogoItem.vue' // 導入Logo組件
 import MenuItem from '@/Layout/Menu/MenuItem.vue' // 導入菜單組件
 import MainContent from '@/Layout/MainContent/MainContent.vue' // 導入二級路由出口組件
 import Tabbar from '@/Layout/Tabbar/Tabbar.vue' // 導入頂部導航組件
+import { ElMessageBox } from 'element-plus' // 導入 ElMessageBox組件
 // 導入 Pinia倉庫
 import { useUserStore } from '@/stores' // 導入用戶倉庫
 import { useLayoutSettingStore } from '@/stores' // 導入設定倉庫
 const userStore = useUserStore() // 定義用戶倉庫
 const settingStore = useLayoutSettingStore() // 定義設定倉庫
+// 導入路由對象
+import { useRouter } from 'vue-router' // 導入路由對象
+const router = useRouter() // 定義路由對象
 
 // 獲取路由對象
 import { useRoute } from 'vue-router'
 const route = useRoute()
+
+// --------- 登出按鈕邏輯 ---------
+const logOut = async () => {
+  // 使用 ElMessageBox.confirm 來二次確認用戶是否要登出
+  await ElMessageBox.confirm('確認要登出嗎?', '溫馨提示', {
+    cancelButtonText: '取消',
+    confirmButtonText: '確認',
+    type: 'warning'
+  })
+
+  // 如果走到這裡 代表是要登出 那就 清除倉庫中存儲的用戶訊息
+  userStore.userLogout()
+  // 跳轉到登入頁面 這樣就可以了
+  router.replace('/login')
+}
 </script>
 
 <template>
@@ -30,6 +49,17 @@ const route = useRoute()
         <!-- 菜單組件 -->
         <el-menu class="layout-menu" :router="true" :default-active="route.path" :collapse="settingStore.isOpen">
           <MenuItem :menuList="userStore.menuRoutes"> </MenuItem>
+        </el-menu>
+        <!-- 因為菜單組件使用了 遞歸組件 且開啟了 router模式 (默認會由index來跳轉) 所以登出按鈕寫在外面 方便做後續處理 -->
+        <el-menu class="layout-menu" :default-active="route.path" :collapse="settingStore.isOpen">
+          <el-menu-item @click="logOut">
+            <el-icon>
+              <component :is="'SwitchButton'"></component>
+            </el-icon>
+            <template #title>
+              <span>登出</span>
+            </template>
+          </el-menu-item>
         </el-menu>
       </el-scrollbar>
     </div>

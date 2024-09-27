@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 //  導入api
-import { userLoginAPI } from '@/api/user/user'
+import { userLoginAPI, userInfoAPI } from '@/api/user/user'
 //  導入 type類型
 import type { LoginForm, LoginResponse } from '@/api/user/type'
 //  導入路由數組 ( 生成菜單需要 方便做權限管理 )
@@ -12,10 +12,15 @@ import { constantRoutes } from '@/router/routes'
 export const useUserStore = defineStore(
   'user',
   () => {
-    //  存儲用戶 token
+    // 存儲用戶 token
     const userToken = ref<string | null>()
+    // 存儲用戶訊息
+    const userInfo = ref({
+      username: '',
+      avatar: ''
+    })
 
-    //  用戶登入請求部分 ( 這裡的參數 data 類型 由我們之前封裝的 loginForm 類型來定義 )
+    // ------------  用戶登入請求部分 ( 這裡的參數 data 類型 由我們之前封裝的 loginForm 類型來定義 ) --------------
     const userLogin = async (data: LoginForm) => {
       //  調用登入請求接口
       const res: LoginResponse = await userLoginAPI(data)
@@ -27,12 +32,35 @@ export const useUserStore = defineStore(
       userToken.value = res.data.token
     }
 
+    // ------------ 獲取用戶訊息請求部分 --------------
+    const getUserInfo = async () => {
+      const res = await userInfoAPI()
+
+      // 存儲用戶訊息 (用戶名/頭像)
+      userInfo.value.username = res.data.checkUser.username
+      userInfo.value.avatar = res.data.checkUser.avatar
+    }
+
+    // ------------ 用戶登出處理( 刪除倉庫資料 ) --------------
+    const userLogout = () => {
+      //  清除 token
+      userToken.value = ''
+      //  清除用戶訊息
+      userInfo.value = {
+        username: '',
+        avatar: ''
+      }
+    }
+
     // 存儲路由 ( 生成菜單需要 方便做權限管理 )
     const menuRoutes = ref(constantRoutes)
 
     return {
       userLogin, // 用戶登入請求
       userToken, // 用戶token
+      getUserInfo, // 獲取用戶訊息
+      userInfo, // 存儲用戶訊息
+      userLogout, // 用戶登出
       menuRoutes // 存儲路由 ( 生成菜單需要 方便做權限管理 )
     }
   },

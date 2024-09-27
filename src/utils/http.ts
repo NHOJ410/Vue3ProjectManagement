@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus' // 導入 element-plus訊息提示框
 import 'element-plus/dist/index.css'
+import { useUserStore } from '@/stores'
 
 // 創建 axios實例
 const http = axios.create({
@@ -12,6 +13,13 @@ const http = axios.create({
 http.interceptors.request.use(
   function (config) {
     // 在發送請求前做些什麼
+
+    // ---------- 在請求攔截器上 統一攜帶 token ----------
+    const userStore = useUserStore()
+
+    if (userStore.userToken) {
+      config.headers.token = userStore.userToken
+    }
 
     return config
   },

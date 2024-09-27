@@ -16,11 +16,10 @@ const onchangeOpen = () => {
 </script>
 
 <template>
-  <!-- 展開按鈕 -->
+  <!-- 展開按鈕部分 -->
   <el-icon style="margin-left: 20px" @click="onchangeOpen" class="isOpen" :class="{ openTransition: settingStore.isOpen }">
-    <Right />
+    <Fold />
   </el-icon>
-
   <!-- 麵包屑導航部分 -->
   <el-breadcrumb separator-icon="ArrowRight" class="breadcrumb">
     <el-breadcrumb-item v-for="item in route.matched" :key="item.path" v-show="item.meta.title" :to="item.path">
@@ -40,7 +39,7 @@ const onchangeOpen = () => {
 
   // 切換時添加翻轉效果
   &.openTransition {
-    transform: rotate(-180deg);
+    transform: rotate(180deg);
   }
 }
 
