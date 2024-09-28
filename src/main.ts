@@ -13,6 +13,8 @@ import 'element-plus/dist/index.css'
 import 'virtual:svg-icons-register'
 // 引入 全局scss樣式
 import '@/styles/common.scss'
+// 引入 路由前置/後置守衛
+import '@/router/permission'
 
 const app = createApp(App)
 
