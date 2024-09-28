@@ -6,11 +6,14 @@ import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import vue from '@vitejs/plugin-vue'
 
 // mock接口
-import { UserConfigExport, ConfigEnv } from 'vite'
+import { UserConfigExport, ConfigEnv, loadEnv } from 'vite'
 import { viteMockServe } from 'vite-plugin-mock'
 
 // https://vitejs.dev/config/
-export default ({ command }: ConfigEnv): UserConfigExport => {
+export default ({ command, mode }: ConfigEnv): UserConfigExport => {
+  // 獲取 開發/測試/生產 階段的環境對象
+  const env = loadEnv(mode, process.cwd())
+
   return {
     plugins: [
       vue(),
@@ -39,6 +42,16 @@ export default ({ command }: ConfigEnv): UserConfigExport => {
         scss: {
           javascriptEnabled: true,
           additionalData: '@import "./src/styles/variable.scss";'
+        }
+      }
+    },
+    // 配置代理跨域
+    server: {
+      proxy: {
+        [env.VITE_APP_BASE_API]: {
+          target: env.VITE_SERVE, // 獲取數據的服務器地址
+          changeOrigin: true, // 是否開啟代理跨域
+          rewrite: (path) => path.replace(/^\/api/, '') // 路徑重寫
         }
       }
     }

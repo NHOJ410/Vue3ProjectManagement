@@ -48,26 +48,26 @@ router.beforeEach(async (to, from) => {
     //  並跳轉到首頁
     return '/'
   } else if (token && !username) {
-    // ---------- 1. 如果有token 但沒有用戶名的請況 ( 可能是 token 過期 ) --------------
+    // ----------  如果有token 但沒有用戶名的請況 ( 可能是 token 過期 或是token 獲取錯誤 ) --------------
 
-    // 2.  由於我們在獲取用戶訊息時 , 有針對獲取失敗的情況拋出錯誤 所以這裡我們可以使用 try catch 的方式來攔截
+    //   由於我們在獲取用戶訊息時 , 有針對獲取失敗的情況拋出錯誤 所以這裡我們可以使用 try catch 的方式來攔截
     try {
-      // 3. 調用倉庫方法 , 重新獲取用戶訊息
+      //  調用倉庫方法 , 重新獲取用戶訊息
       await userStore.getUserInfo()
 
-      // 4. 如果走到這裡代表回傳的是一個 錯誤的 Promise 代表獲取失敗 === token 過期
+      //  如果走到這裡代表回傳的是一個 錯誤的 Promise 代表獲取失敗 === token 過期
     } catch (error) {
-      //  5. 提示用戶尚未登入
+      //   提示用戶尚未登入
       ElMessage({
         message: '溫馨提示 : 你好像還沒有登入 , 系統將跳轉到登入頁面',
         type: 'error',
         duration: 5000
       })
 
-      // 6. 調用方法 清空數據 , 防止 bug
-      userStore.userLogout()
+      //  調用方法 清空數據 , 防止 bug
+      await userStore.userLogout()
 
-      // 7. 跳轉到登入頁面
+      //  跳轉到登入頁面
       return '/login'
     }
   }

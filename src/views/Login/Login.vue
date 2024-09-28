@@ -2,8 +2,8 @@
 import { ref } from 'vue'
 import { ElNotification } from 'element-plus'
 import { UserFilled, Lock } from '@element-plus/icons-vue' // 導入 element-plus 的圖標
-// 導入type類型
-import type { LoginForm } from '@/api/user/type' // 導入用戶登入表單類型
+// // 導入type類型
+// import type { LoginForm } from '@/api/user/type' // 導入用戶登入表單類型
 // 導入 Pinia倉庫
 import { useUserStore } from '@/stores'
 const userStore = useUserStore()
@@ -16,9 +16,9 @@ import { currentTime } from '@/utils/currentTime'
 // -------------- 登入表單部分 --------------
 
 // 登入表單
-const loginForm = ref<LoginForm>({
-  username: '',
-  password: ''
+const loginForm = ref<any>({
+  username: 'admin',
+  password: '111111'
 })
 
 // 登入表單 校驗規則

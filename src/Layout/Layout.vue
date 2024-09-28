@@ -27,7 +27,7 @@ const logOut = async () => {
   })
 
   // 如果走到這裡 代表是要登出 那就 清除倉庫中存儲的用戶訊息
-  userStore.userLogout()
+  await userStore.userLogout()
   // 跳轉到登入頁面 這樣就可以了
   router.replace('/login')
 }
