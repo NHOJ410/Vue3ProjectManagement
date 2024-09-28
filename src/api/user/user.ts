@@ -1,4 +1,6 @@
 import http from '@/utils/http'
+// 導入 ts類型檔案
+import type { LoginForm, LoginResponseData, GetUserInfoResponseData, UserLogoutResponseData } from './type'
 
 // 統一管理接口
 enum API {
@@ -8,8 +10,8 @@ enum API {
 }
 
 // 用戶登入請求
-export const userLoginAPI = (data: any) => {
-  return http<any, any>({
+export const userLoginAPI = (data: LoginForm) => {
+  return http<LoginForm, LoginResponseData>({
     url: API.LOGIN_URL,
     method: 'post',
     data
@@ -18,7 +20,7 @@ export const userLoginAPI = (data: any) => {
 
 // 獲取用戶訊息請求
 export const userInfoAPI = () => {
-  return http<any, any>({
+  return http<string, GetUserInfoResponseData>({
     url: API.USERINFO_URL,
     method: 'get'
   })
@@ -26,7 +28,7 @@ export const userInfoAPI = () => {
 
 // 用戶登出請求
 export const userLogoutAPI = () => {
-  return http<any, any>({
+  return http<string, UserLogoutResponseData>({
     url: API.USERLOGOUT_URL,
     method: 'post'
   })

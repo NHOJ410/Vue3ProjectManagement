@@ -3,7 +3,8 @@ import { ref } from 'vue'
 
 //  導入api
 import { userLoginAPI, userInfoAPI, userLogoutAPI } from '@/api/user/user'
-//  導入 type類型
+//  導入 ts類型
+import type { LoginForm, LoginResponseData, GetUserInfoResponseData, UserLogoutResponseData } from '@/api/user/type'
 //  導入路由數組 ( 生成菜單需要 方便做權限管理 )
 import { constantRoutes } from '@/router/routes'
 
@@ -20,9 +21,9 @@ export const useUserStore = defineStore(
     })
 
     // ------------  用戶登入請求部分 ( 這裡的參數 data 類型 由我們之前封裝的 loginForm 類型來定義 ) --------------
-    const userLogin = async (data: any) => {
+    const userLogin = async (data: LoginForm) => {
       //  調用登入請求接口
-      const res: any = await userLoginAPI(data)
+      const res: LoginResponseData = await userLoginAPI(data)
 
       //  如果服務器返回 201 === 登入失敗 return 一個錯誤的 Promise 方便 組件中做判斷
       if (res.code === 201) return Promise.reject(new Error())
@@ -33,7 +34,7 @@ export const useUserStore = defineStore(
 
     // ------------ 獲取用戶訊息請求部分 --------------
     const getUserInfo = async () => {
-      const res = await userInfoAPI()
+      const res: GetUserInfoResponseData = await userInfoAPI()
       if (res.code === 200) {
         // 存儲用戶訊息 (用戶名/頭像)
         userInfo.value.username = res.data.name
@@ -49,8 +50,7 @@ export const useUserStore = defineStore(
     // ------------ 用戶登出處理( 刪除倉庫資料 ) --------------
     const userLogout = async () => {
       // 調用登出請求接口
-      const res = await userLogoutAPI()
-
+      const res: UserLogoutResponseData = await userLogoutAPI()
       // 如果後台返回的 code 不是 200 就拋出一個錯誤的 Promise 方便 組件中做判斷
       if (res.code !== 200) return Promise.reject(new Error())
 
