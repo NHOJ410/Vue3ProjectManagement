@@ -35,10 +35,16 @@ export const useUserStore = defineStore(
     // ------------ 獲取用戶訊息請求部分 --------------
     const getUserInfo = async () => {
       const res = await userInfoAPI()
+      if (res.code === 200) {
+        // 存儲用戶訊息 (用戶名/頭像)
+        userInfo.value.username = res.data.checkUser.username
+        userInfo.value.avatar = res.data.checkUser.avatar
 
-      // 存儲用戶訊息 (用戶名/頭像)
-      userInfo.value.username = res.data.checkUser.username
-      userInfo.value.avatar = res.data.checkUser.avatar
+        return Promise.resolve() // 返回真 一個成功的 Promise
+      } else {
+        // 如果 code 不是 200 的話 代表獲取用戶訊息失敗 ( 可能是 token 過期 ) , 就拋出一個錯誤的 Promise 方便路由導航守衛去做判斷
+        return Promise.reject(new Error())
+      }
     }
 
     // ------------ 用戶登出處理( 刪除倉庫資料 ) --------------
@@ -52,19 +58,24 @@ export const useUserStore = defineStore(
       }
     }
 
-    // 存儲路由 ( 生成菜單需要 方便做權限管理 )
+    // --------- 存儲路由 ( 生成菜單需要 方便做權限管理 ) ----------------
     const menuRoutes = ref(constantRoutes)
 
     return {
-      userLogin, // 用戶登入請求
+      // ------ state ------
       userToken, // 用戶token
-      getUserInfo, // 獲取用戶訊息
       userInfo, // 存儲用戶訊息
-      userLogout, // 用戶登出
-      menuRoutes // 存儲路由 ( 生成菜單需要 方便做權限管理 )
+      menuRoutes, // 存儲路由 ( 生成菜單需要 方便做權限管理 )
+
+      // ------ action ------
+      userLogin, // 用戶登入請求
+      getUserInfo, // 獲取用戶訊息
+      userLogout // 用戶登出
     }
   },
   {
-    persist: true
+    persist: {
+      pick: ['userToken'] // 這裡只有token 需要進行本地存儲持久化
+    }
   }
 )

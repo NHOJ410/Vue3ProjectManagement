@@ -104,7 +104,7 @@ const loginBtn = async () => {
             </el-form-item>
             <!-- 按鈕區域 -->
             <el-form-item>
-              <el-button type="primary" :loading="btnLoading" class="login-btn" @click="loginBtn">登入</el-button>
+              <el-button type="primary" :loading="btnLoading" class="login-btn" @click="loginBtn" @keyup.enter="loginBtn">登入</el-button>
             </el-form-item>
           </el-form>
         </el-col>
