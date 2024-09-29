@@ -2,7 +2,7 @@ import http from '@/utils/http'
 // 導入 ts類型檔案
 import type { LoginForm, LoginResponseData, GetUserInfoResponseData, UserLogoutResponseData } from './type'
 
-// 統一管理接口
+// 統一管理url
 enum API {
   LOGIN_URL = '/admin/acl/index/login', // 用戶登入接口
   USERINFO_URL = '/admin/acl/index/info', // 獲取用戶信息

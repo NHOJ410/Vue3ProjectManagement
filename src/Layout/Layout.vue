@@ -98,7 +98,12 @@ const logOut = async () => {
       .layout-menu {
         --el-menu-bg-color: $base-menu-BGCcolor;
         --el-menu-text-color: #fff;
-        --el-menu-active-color: skyblue;
+        --el-menu-active-color: rgb(0, 204, 255);
+
+        &:hover {
+          --el-menu-text-color: #000;
+          transition: 0.5s all;
+        }
       }
 
       // 菜單組件部分
@@ -130,7 +135,6 @@ const logOut = async () => {
     color: white;
     width: calc(100% - $base-menu-width); // 寬度 = 100% - 左側菜單寬度
     height: calc(100vh - $base-tapbar-height); // 高度 = 視口高度 - 頂部導航高度
-    background-color: blue;
     position: absolute;
     top: $base-tapbar-height; // 固定定位高度 = 頂部導航高度
     left: $base-menu-width; // 固定定位寬度 = 左側菜單寬度

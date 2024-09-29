@@ -1,6 +1,7 @@
 // 配置 路由前置/後置導航守衛
 import router from '@/router'
 
+// 導入 elementPlus組件
 import { ElMessage } from 'element-plus'
 
 // 導入 nprogress 和 它的 css樣式
