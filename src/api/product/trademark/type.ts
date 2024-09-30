@@ -9,7 +9,7 @@ export interface ResponseData {
 
 // ----------- 品牌管理 分頁列表 返回的數據類型-------------
 
-// 已有品牌 ( 返回 or 添加/編輯按紐 ) 的數據類型
+// 已有品牌  ( 添加/編輯按紐 ) 的數據類型
 export interface Trademark {
   // 以下三個因為在 添加的時候不會用到 所以用可選鍊
   id?: number
