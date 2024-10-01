@@ -7,7 +7,8 @@ import type { TrademarkListResponse, Trademark } from './type'
 enum API {
   TRADMARK_URL = '/admin/product/baseTrademark/', // 獲取分頁列表
   ADDTRADMARK_URL = '/admin/product/baseTrademark/save', // 添加品牌
-  EDITTRADMARK_URL = '/admin/product/baseTrademark/update' // 編輯品牌
+  EDITTRADMARK_URL = '/admin/product/baseTrademark/update', // 編輯品牌
+  DELETETRADEMARK_URL = '/admin/product/baseTrademark/remove' // 刪除品牌
 }
 
 // ----------- 獲取品牌管理 分頁列表 -------------
@@ -32,5 +33,13 @@ export const editTrademarkAPI = (data: Trademark) => {
     url: API.EDITTRADMARK_URL,
     method: 'put',
     data
+  })
+}
+
+// ---------- 刪除品牌請求 ----------------
+export const deleteTrademarkAPI = (id: number) => {
+  return http<number, any>({
+    url: `${API.DELETETRADEMARK_URL}/${id}`,
+    method: 'delete'
   })
 }

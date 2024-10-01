@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, nextTick, watch } from 'vue'
 // 導入 api
-import { getTrademarkListAPI, addTrademarkAPI, editTrademarkAPI } from '@/api/product/trademark/trademark'
+import { getTrademarkListAPI, addTrademarkAPI, editTrademarkAPI, deleteTrademarkAPI } from '@/api/product/trademark/trademark'
 // 導入ts類型
 import type { Records, Trademark } from '@/api/product/trademark/type'
 import type { UploadProps } from 'element-plus'
@@ -11,14 +11,14 @@ import { ElMessageBox, ElMessage } from 'element-plus'
 onMounted(() => {
   ElMessageBox({
     title: '注意',
-    message: '因為後端鎖定前13條數據不能修改 , 所以不能進行編輯或刪除喔!',
+    message: '因為後端鎖定前13條數據不能修改 , 所以不能進行編輯或刪除喔! 然後因為是公共接口 所以可能會有一些奇怪的數據 請見諒= =',
     confirmButtonText: '好的 我知道了'
   })
 })
 
 // ---------- 提供給 分頁器組件的變量 ----------
 const currentPage = ref<number>(1) // 當前分頁頁碼
-const dataCount = ref<number>(3) // 當前頁面展示數據數量
+const dataCount = ref<number>(10) // 當前頁面展示數據數量
 
 // ---------- 獲取品牌管理 數據 ----------
 const totalCount = ref<number>(0) // 品牌總數量
@@ -64,6 +64,9 @@ const onEdit = (row: Trademark) => {
 
 //  底部確認按鈕
 const onConfirm = async () => {
+  // 在點擊確認按鈕前 最後一次觸發表單驗證功能 避免無效的提交
+  await formRef.value.validate()
+
   //  因為確認按鈕要走兩個請求接口 ( 可能是添加 或是編輯 ) 所以點擊確認前用 有沒有 id 來進行判斷要走哪個接口
 
   // 沒有 id 代表是 新增品牌請求
@@ -131,6 +134,62 @@ const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
 const handleAvatarSuccess: UploadProps['onSuccess'] = (response) => {
   // 將返回的 圖片地址 賦值給 img的 url 路徑做渲染
   onAddParams.value.logoUrl = response.data
+  // 成功上傳圖片後 , 將表單驗證的警告清空
+  formRef.value.clearValidate()
+}
+
+// 表單驗證部份
+const formRef = ref()
+const rules = {
+  // 品牌名稱驗證
+  tmName: [
+    { required: true, message: '請輸入品牌名稱', trigger: 'blur' },
+    {
+      validator: (rule: any, value: any, callback: any) => {
+        if (value.trim().length < 2) {
+          callback(new Error('品牌名稱不能小於 2 個字'))
+        }
+        callback()
+      },
+      trigger: 'blur'
+    }
+  ],
+  // 品牌LOGO驗證 ( 因為圖片不算在表單內 , 所以必須要用自定義校驗規則 , 用 validate() 在按下確認按鈕時攔截	)
+  logoUrl: [
+    {
+      validator: (rule: any, value: any, callback: any) => {
+        // 如果沒有圖片就攔截
+        if (!value) callback(new Error('請上傳品牌LOGO圖片'))
+        // 有的話就放行
+        callback()
+      }
+    }
+  ]
+}
+// 在點擊添加或編輯品牌時 , 先將表單驗證的警告清空 ( 利用 watch 來監視 isShow的變化 )
+watch(isShow, () => {
+  //  ( 注意這裡要調用 nextTick() 方法 , 等待DOM渲染完畢 )
+  nextTick(() => {
+    formRef.value.clearValidate()
+  })
+})
+
+// ------- 刪除品牌按鈕 -------
+const onRemove = async (row: Trademark) => {
+  // 調用刪除請求 ( 這裡的參數 id 一直報類型錯誤 所以直接斷言 )
+  const result = await deleteTrademarkAPI(row.id as number)
+
+  // 如果後台返回的 code 不是200 代表刪除失敗了
+  if (result.code !== 200) {
+    ElMessage.error('刪除品牌失敗')
+    return false
+  }
+
+  // 走到這裡代表成功 提示用戶
+  ElMessage.success('刪除品牌成功')
+
+  // 重新獲取最新的品牌列表
+  getTrademarkList()
 }
 </script>
 
@@ -159,8 +218,14 @@ const handleAvatarSuccess: UploadProps['onSuccess'] = (response) => {
         <!-- 內容區 - 編輯/刪除 按鈕部分 -->
         <el-table-column label="對應操作" align="center">
           <template #default="{ row }">
+            <!-- 編輯按紐 -->
             <el-button type="warning" icon="edit" @click="onEdit(row)">編輯</el-button>
-            <el-button type="danger" icon="delete">刪除</el-button>
+            <!-- 刪除按紐 -->
+            <el-popconfirm :title="`確定要刪除${row.tmName}嗎?`" width="auto" icon="Delete" icon-color="red" @confirm="onRemove(row)">
+              <template #reference>
+                <el-button type="danger" icon="delete">刪除</el-button>
+              </template>
+            </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
@@ -169,7 +234,7 @@ const handleAvatarSuccess: UploadProps['onSuccess'] = (response) => {
       <el-pagination
         v-model:current-page="currentPage"
         v-model:page-size="dataCount"
-        :page-sizes="[5, 10, 15, 20]"
+        :page-sizes="[10, 15, 20]"
         layout=" prev, pager, next, jumper , -> , sizes, total"
         :total="totalCount"
         class="paginationItem"
@@ -181,13 +246,13 @@ const handleAvatarSuccess: UploadProps['onSuccess'] = (response) => {
 
     <!-- 添加 / 編輯 品牌按鈕的對話框組件 -->
     <el-dialog v-model="isShow" :title="onAddParams.id ? '修改品牌' : '添加品牌'" class="changeTrademark">
-      <el-form style="width: 80%" :model="onAddParams">
+      <el-form style="width: 80%" :model="onAddParams" :rules="rules" :hide-required-asterisk="true" ref="formRef">
         <!-- 品牌名稱區域 -->
-        <el-form-item label="品牌名稱" label-width="100px">
+        <el-form-item label="品牌名稱" label-width="100px" prop="tmName">
           <el-input placeholder="請輸入品牌名稱" v-model="onAddParams.tmName"></el-input>
         </el-form-item>
         <!-- 品牌LOGO區域 -->
-        <el-form-item label="品牌LOGO " label-width="100px">
+        <el-form-item label="品牌LOGO " label-width="100px" prop="logoUrl">
           <el-upload
             class="avatar-uploader"
             :show-file-list="false"
