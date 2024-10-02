@@ -221,7 +221,7 @@ const onRemove = async (row: Trademark) => {
             <!-- 編輯按紐 -->
             <el-button type="warning" icon="edit" @click="onEdit(row)">編輯</el-button>
             <!-- 刪除按紐 -->
-            <el-popconfirm :title="`確定要刪除${row.tmName}嗎?`" width="auto" icon="Delete" icon-color="red" @confirm="onRemove(row)">
+            <el-popconfirm :title="`確定要刪除 :「${row.tmName}」嗎?`" width="auto" icon="Delete" icon-color="red" @confirm="onRemove(row)">
               <template #reference>
                 <el-button type="danger" icon="delete">刪除</el-button>
               </template>

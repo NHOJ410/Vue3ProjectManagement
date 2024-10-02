@@ -102,7 +102,7 @@ export const constantRoutes = [
         path: '/product/attr',
         component: () => import('@/views/Product/Attr/Attr.vue'),
         name: 'Attr',
-        meta: { title: '屬性管理', icon: 'ChromeFilled', hidden: false }
+        meta: { title: '產品管理', icon: 'ChromeFilled', hidden: false }
       },
       // 二級路由 - SPU管理
       {

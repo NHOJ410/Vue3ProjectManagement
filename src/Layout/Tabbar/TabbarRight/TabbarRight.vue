@@ -42,9 +42,9 @@ const onFullScreen = () => {
 
 <template>
   <!-- 用戶名區域 -->
-  <h2 class="username">歡迎回來 {{ userStore.userInfo.username }}</h2>
+  <h2 class="username">歡迎回來 John</h2>
   <!-- 頭像區域 ( 這裡設定了一個默認頭像 [狗狗] ) -->
-  <img class="avatar" :src="userStore.userInfo.avatar || '../../../../public/defaultAvatar.jpg'" />
+  <img class="avatar" :src="'../../../../public/defaultAvatar.jpg' || userStore.userInfo.avatar" />
 
   <!-- 按鈕區域 -->
 
