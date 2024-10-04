@@ -6,7 +6,7 @@ import { useUserStore } from '@/stores'
 // 創建 axios實例
 const http = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_API, // 基礎路徑上會攜帶開發環境的變量(/api)
-  timeout: 10000
+  timeout: 200000
 })
 
 // 配置請求攔截器

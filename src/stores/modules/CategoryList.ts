@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
 // 導入 api
-import { getCategory1API, getCategory2API, getCategory3API } from '@/api/product/attr/attr'
+import { getCategory1API, getCategory2API, getCategory3API, getAttrContentAPI } from '@/api/product/attr/attr'
 // 導入ts類型定義
-import type { CategoryListData } from '@/api/product/attr/type'
+import type { CategoryListData, AttrDataType } from '@/api/product/attr/type'
 
 export const useCategoryListStore = defineStore('categoryList', () => {
   // ---------------- 一級分類下拉菜單部份 -----------------
@@ -91,6 +91,27 @@ export const useCategoryListStore = defineStore('categoryList', () => {
     c3ID.value = ''
   }
 
+  // -------------------- 獲取篩選後的內容 ---------------------
+
+  const attrContentList = ref<AttrDataType[]>([]) // 存儲點擊完成下拉菜單後得到的內容
+
+  // 發送請求 獲取篩選後的內容
+  const getAttrContent = async () => {
+    const res = await getAttrContentAPI(c1ID.value as number, c2ID.value as number, c3ID.value as number)
+
+    if (res.code !== 200) return Promise.reject(new Error('獲取篩選後的內容失敗'))
+
+    attrContentList.value = res.data
+  }
+
+  // 使用 watch來監視 c3ID 的變化 , 一旦變化了就發請求 獲取篩選後的內容
+  watch(c3ID, () => {
+    attrContentList.value = [] // 偵測到數據變化 先清空內容 防止數據殘留問題
+
+    if (c3ID.value === '') return // 避免ID重置時觸發請求
+    getAttrContent()
+  })
+
   return {
     c1List, // 存儲一級分類下拉菜單列表
     c1ID, // 存儲一級分類ID 用來發送請求 獲取二級分類下拉菜單列表
@@ -105,6 +126,9 @@ export const useCategoryListStore = defineStore('categoryList', () => {
     c3List, // 存儲三級分類下拉菜單列表
     c3ID, // 存儲三級分類ID 用來發送請求 獲取三級分類下拉菜單列表
     getC3, // 獲取三級分類下拉菜單
-    getC3ID // 獲取三級分類下拉菜單蒐集到的 ID
+    getC3ID, // 獲取三級分類下拉菜單蒐集到的 ID
+
+    attrContentList, // 存儲點擊完成下拉菜單後得到的內容
+    getAttrContent // 發送請求 獲取篩選後的內容
   }
 })

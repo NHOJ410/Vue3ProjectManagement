@@ -21,3 +21,30 @@ export interface CategoryListData {
 export interface CategoryListResponseData extends ResponseData {
   data: CategoryListData[]
 }
+
+// ------------------------- 內容區部分 ----------------------------------
+
+// --------- data 參數 AttrValueList 的數據類型 --------------
+export interface AttrValueList {
+  id?: number
+  createTime?: any
+  updateTime?: any
+  valueName: string
+  attrId?: number
+}
+
+// ------------ data 參數的數據類型部分 --------------
+export interface AttrDataType {
+  id?: number
+  createTime?: any
+  updateTime?: any
+  attrName: string
+  categoryId: number | string
+  categoryLevel: number
+  attrValueList: AttrValueList[]
+}
+
+// ----------------- 獲取篩選後的產品內容 TS類型定義 --------------------
+export interface AttrContentData extends ResponseData {
+  data: AttrDataType[]
+}

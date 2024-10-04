@@ -10,6 +10,15 @@ const categoryListStore = useCategoryListStore() // 定義分類倉庫
 onMounted(() => {
   categoryListStore.getC1()
 })
+
+// ----------- 接收內容區(父組件)傳遞過來的參數 -----------------
+
+defineProps({
+  // 接收 是否為 添加/編輯頁面的變量
+  isModify: {
+    type: Boolean
+  }
+})
 </script>
 
 <template>
@@ -24,6 +33,7 @@ onMounted(() => {
             style="width: 240px"
             :model-value="categoryListStore.c1ID"
             @update:model-value="categoryListStore.getC1ID"
+            :disabled="!isModify"
           >
             <el-option v-for="c1 in categoryListStore.c1List" :key="c1.id" :label="c1.name" width="120px" :value="c1.id"></el-option>
           </el-select>
@@ -36,6 +46,7 @@ onMounted(() => {
             style="width: 240px"
             :model-value="categoryListStore.c2ID"
             @update:model-value="categoryListStore.getC2ID"
+            :disabled="!isModify"
           >
             <el-option v-for="c2 in categoryListStore.c2List" :key="c2.id" :label="c2.name" :value="c2.id"></el-option>
           </el-select>
@@ -48,6 +59,7 @@ onMounted(() => {
             style="width: 240px"
             :model-value="categoryListStore.c3ID"
             @update:model-value="categoryListStore.getC3ID"
+            :disabled="!isModify"
           >
             <el-option v-for="c3 in categoryListStore.c3List" :key="c3.id" :label="c3.name" :value="c3.id"></el-option>
           </el-select>
