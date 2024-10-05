@@ -85,7 +85,7 @@ export const constantRoutes = [
     name: 'Product',
     meta: {
       title: '商品管理',
-      icon: 'Goods',
+      icon: 'ShoppingCartFull',
       hidden: false
     },
     redirect: '/product/trademark',
@@ -95,14 +95,14 @@ export const constantRoutes = [
         path: '/product/trademark',
         component: () => import('@/views/Product/Trademark/trademark.vue'),
         name: 'Trademark',
-        meta: { title: '品牌管理', icon: 'ShoppingCartFull', hidden: false }
+        meta: { title: '品牌管理', icon: 'ChromeFilled', hidden: false }
       },
       // 二級路由 - 屬性管理
       {
         path: '/product/attr',
         component: () => import('@/views/Product/Attr/Attr.vue'),
         name: 'Attr',
-        meta: { title: '產品管理', icon: 'ChromeFilled', hidden: false }
+        meta: { title: '產品管理', icon: 'Goods', hidden: false }
       },
       // 二級路由 - SPU管理
       {

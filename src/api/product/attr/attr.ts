@@ -10,7 +10,9 @@ enum API {
 
   GetAttrContent_URL = '/admin/product/attrInfoList/', // 獲取篩選後的產品內容
 
-  ADDORUPDATEATTR_URL = '/admin/product/saveAttrInfo' // 添加或編輯產品內容
+  ADDORUPDATEATTR_URL = '/admin/product/saveAttrInfo', // 添加或編輯產品內容
+
+  DELETEATTR_URL = '/admin/product/deleteAttr' // 刪除產品內容
 }
 
 // -------------- 獲取一級分類請求 ---------------
@@ -47,5 +49,13 @@ export const addOrUpdateAttrAPI = (data: any) => {
     url: API.ADDORUPDATEATTR_URL,
     method: 'post',
     data
+  })
+}
+
+// -------------- 刪除產品內容請求 ---------------
+export const deleteAttrAPI = (attrId: number) => {
+  return http<any, any>({
+    url: `${API.DELETEATTR_URL}/${attrId}`,
+    method: 'delete'
   })
 }

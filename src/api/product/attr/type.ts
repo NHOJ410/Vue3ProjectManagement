@@ -31,6 +31,7 @@ export interface AttrValueList {
   updateTime?: any
   valueName: string
   attrId?: number
+  flag?: boolean // 這個不是後台數據 , 是用來控制是否可以為編輯狀態的變量
 }
 
 // ------------ data 參數的數據類型部分 --------------

@@ -112,6 +112,12 @@ export const useCategoryListStore = defineStore('categoryList', () => {
     getAttrContent()
   })
 
+  // 用來重製  路由跳轉後 下拉菜單內容的 actions
+
+  const resetCategoryListData = () => {
+    ;(c1List.value = []), (c2List.value = []), (c3List.value = []), (c1ID.value = ''), (c2ID.value = ''), (c3ID.value = '')
+  }
+
   return {
     c1List, // 存儲一級分類下拉菜單列表
     c1ID, // 存儲一級分類ID 用來發送請求 獲取二級分類下拉菜單列表
@@ -129,6 +135,8 @@ export const useCategoryListStore = defineStore('categoryList', () => {
     getC3ID, // 獲取三級分類下拉菜單蒐集到的 ID
 
     attrContentList, // 存儲點擊完成下拉菜單後得到的內容
-    getAttrContent // 發送請求 獲取篩選後的內容
+    getAttrContent, // 發送請求 獲取篩選後的內容
+
+    resetCategoryListData // 用來重製  路由跳轉後 下拉菜單內容的 actions
   }
 })
