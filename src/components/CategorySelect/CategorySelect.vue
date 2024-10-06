@@ -16,7 +16,8 @@ onMounted(() => {
 defineProps({
   // 接收 是否為 添加/編輯頁面的變量
   isModify: {
-    type: Boolean
+    type: Boolean,
+    default: true
   }
 })
 </script>

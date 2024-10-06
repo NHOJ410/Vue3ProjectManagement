@@ -35,6 +35,12 @@ http.interceptors.request.use(
 http.interceptors.response.use(
   function (response) {
     // 2xx 範圍內的狀態碼都會觸發該函數。
+
+    // 如果 狀態碼 不是 200 就拋出錯誤
+    if (response.data.code !== 200) {
+      return Promise.reject(new Error('獲取數據失敗'))
+    }
+
     // 對響應數據做些處理
     return response.data
   },

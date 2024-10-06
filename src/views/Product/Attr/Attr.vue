@@ -198,7 +198,7 @@ onBeforeUnmount(() => {
     <!-- 中間內容部分 -->
     <div class="page-content" v-show="isModify === true">
       <el-card class="content">
-        <!-- 頂部添加按鈕部分 -->
+        <!-- 添加按鈕部分 -->
         <el-button
           type="primary"
           icon="Plus"
