@@ -24,21 +24,21 @@ export const getCategory1API = () => {
 
 // -------------- 獲取二級分類請求 ---------------
 export const getCategory2API = (c1ID: number) => {
-  return http<number, CategoryListResponseData>({
+  return http<any, CategoryListResponseData>({
     url: `${API.GETC2_URL}/${c1ID}`
   })
 }
 
 // -------------- 獲取三級分類請求 ---------------
 export const getCategory3API = (c2ID: number) => {
-  return http<number, CategoryListResponseData>({
+  return http<any, CategoryListResponseData>({
     url: `${API.GETC3_URL}/${c2ID}`
   })
 }
 
 // -------------- 獲取篩選後的產品內容請求 ---------------
 export const getAttrContentAPI = (c1ID: number, c2ID: number, c3ID: number) => {
-  return http<number, AttrContentData>({
+  return http<any, AttrContentData>({
     url: `${API.GetAttrContent_URL}/${c1ID}/${c2ID}/${c3ID}`
   })
 }

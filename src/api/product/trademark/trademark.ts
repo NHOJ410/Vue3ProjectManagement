@@ -38,7 +38,7 @@ export const editTrademarkAPI = (data: Trademark) => {
 
 // ---------- 刪除品牌請求 ----------------
 export const deleteTrademarkAPI = (id: number) => {
-  return http<number, any>({
+  return http<any, any>({
     url: `${API.DELETETRADEMARK_URL}/${id}`,
     method: 'delete'
   })

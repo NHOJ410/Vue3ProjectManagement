@@ -11,7 +11,7 @@ enum API {
 
 // 用戶登入請求
 export const userLoginAPI = (data: LoginForm) => {
-  return http<LoginForm, LoginResponseData>({
+  return http<any, LoginResponseData>({
     url: API.LOGIN_URL,
     method: 'post',
     data
@@ -20,7 +20,7 @@ export const userLoginAPI = (data: LoginForm) => {
 
 // 獲取用戶訊息請求
 export const userInfoAPI = () => {
-  return http<string, GetUserInfoResponseData>({
+  return http<any, GetUserInfoResponseData>({
     url: API.USERINFO_URL,
     method: 'get'
   })
@@ -28,7 +28,7 @@ export const userInfoAPI = () => {
 
 // 用戶登出請求
 export const userLogoutAPI = () => {
-  return http<string, UserLogoutResponseData>({
+  return http<any, UserLogoutResponseData>({
     url: API.USERLOGOUT_URL,
     method: 'post'
   })
