@@ -17,7 +17,7 @@ const isShowContent = ref<number>(0) // 用來控制 顯示 [ SPU內容區 : 0 ]
 
 // -------------------- 獲取內容區數據 --------------------
 
-const { c3ID } = storeToRefs(categoryStore) // 將 c3ID 解構出來 方便使用
+const { c1ID, c2ID, c3ID } = storeToRefs(categoryStore) // 將 c1ID, c2ID, c3ID 解構出來 方便使用
 
 const currentPage = ref<number>(1) // 用來控制 分頁器 當前頁數的變量
 const dataCount = ref<number>(5) // 用來控制 分頁器 每頁展示數據的變量
@@ -84,13 +84,26 @@ const changeIsShowContent = (obj: any) => {
   //  如果是 add 就是編輯頁面 , 那直接跳轉到第一頁就可以了 不用改變頁碼
   getSpuContent()
 }
+
+// -------------------- 添加 / 查看 SKUFormItem組件部分 --------------------
+const SKUFormItemRef = ref<any>() //  獲取 SKUFormItem組件的實例對象
+
+// 添加SKU按鈕的事件處理函數
+const addSkuBtn = (row: SpuListData) => {
+  // 點擊後 跳轉到添加SKU頁面
+  isShowContent.value = 2
+
+  //  使用 SKUFormItemRef 實例對象裡面爆露的 initAddSku 方法
+  //  這裡將 請求接口需要的 c1ID c2ID row(由el-table提供的 包含 c3ID 和SPU本身的id) 這三個參數傳遞過去
+  SKUFormItemRef.value.initAddSku(c1ID.value, c2ID.value, row)
+}
 </script>
 
 <template>
   <!-- SPU模塊 -->
   <div class="spu">
     <!-- 頂部下拉框菜單組件 -->
-    <CategorySelect :isModify="isModify"></CategorySelect>
+    <CategorySelect :isModify="isModify" :isShowContent="isShowContent"></CategorySelect>
 
     <!-- 中間內容區 -->
     <el-card style="margin-top: 20px">
@@ -119,7 +132,7 @@ const changeIsShowContent = (obj: any) => {
           <el-table-column label="操作">
             <template #default="{ row }">
               <!-- 按鈕部分 - 添加SKU按鈕 -->
-              <el-button type="primary" icon="Plus" title="添加SKU"></el-button>
+              <el-button type="primary" icon="Plus" title="添加SKU" @click="addSkuBtn(row)"></el-button>
               <!-- 按鈕部分 - 修改SPU按鈕 -->
               <el-button type="warning" icon="Edit" title="修改SPU" @click="editSpuBtn(row)"></el-button>
               <!-- 按鈕部分 - 查看SPU按鈕 -->
@@ -146,7 +159,7 @@ const changeIsShowContent = (obj: any) => {
       <!-- 點擊 添加/編輯 SPU按鈕時 出現的組件 -->
       <SPUFormItem ref="SPUFormItemRef" v-show="isShowContent === 1" @changeIsShowContent="changeIsShowContent"> </SPUFormItem>
       <!-- 點擊 添加 SKU按鈕時 出現的組件 -->
-      <SKUFormItem v-show="isShowContent === 2"></SKUFormItem>
+      <SKUFormItem ref="SKUFormItemRef" v-show="isShowContent === 2" @changeIsShowContent="changeIsShowContent"> </SKUFormItem>
     </el-card>
   </div>
 </template>

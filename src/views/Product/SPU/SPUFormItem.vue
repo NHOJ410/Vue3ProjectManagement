@@ -31,22 +31,6 @@ let spuParams = ref<SpuListData>({
   spuSaleAttrList: [] // 已有品牌銷售規格表格數據
 })
 
-// --------------- 控制頁面切換顯示部分 ----------------
-
-// 定義 emit 來通知父組件
-const emit = defineEmits(['changeIsShowContent'])
-
-// 取消按鈕的事件處理函數
-const cancel = () => {
-  // 為了保險 點擊取消按鈕時也把id清除掉
-  spuParams.value.id = null
-
-  // 跳轉回 SPU.vue 列表頁面 這裡帶上兩個參數 , 注意這裡是以一個對象的形式來傳遞
-  // (1) webNum : 用來給父祖件做頁面顯示的
-  // (2) params : 這個取消就直接留在當前頁面就可以了
-  emit('changeIsShowContent', { webNum: 0, params: 'update' })
-}
-
 // --------------- 編輯頁面 - 數據回顯功能部分  ----------------
 
 const spuSelect = ref<TradmarkList[]>([]) // 存儲 [ 已有品牌下拉框 ] 的數據
@@ -228,7 +212,20 @@ const onAttrInpBlur = (row: SpuSaleAttrValueListData) => {
   row.flag = false
 }
 
-// -------------------- 保存按鈕部分 ----------------------------
+// -------------------- 保存 和 取消按鈕部分 ----------------------------
+// 定義 emit 來通知父組件
+const emit = defineEmits(['changeIsShowContent'])
+
+// 取消按鈕的事件處理函數
+const cancel = () => {
+  // 為了保險 點擊取消按鈕時也把id清除掉
+  spuParams.value.id = 0
+
+  // 跳轉回 SPU.vue 列表頁面 這裡帶上兩個參數 , 注意這裡是以一個對象的形式來傳遞
+  // (1) webNum : 用來給父祖件做頁面顯示的
+  // (2) params : 這個取消就直接留在當前頁面就可以了
+  emit('changeIsShowContent', { webNum: 0, params: 'update' })
+}
 
 // 保存按鈕事件處理函數
 const onSave = async () => {

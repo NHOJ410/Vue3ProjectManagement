@@ -6,7 +6,8 @@ import type {
   SkuImageListResponseData,
   SpuSaleAttrValueListResponseData,
   SpuBaseSaleAttrListResponseData,
-  SpuListData
+  SpuListData,
+  AddSKUDataType
 } from './type'
 
 // 統一管理 url
@@ -19,7 +20,9 @@ enum API {
   GETSPUBASESALEATTRLIST_URL = '/admin/product/baseSaleAttrList', // 獲取 SPU銷售規格的下拉框數據請求
 
   ADDSPU_URL = '/admin/product/saveSpuInfo', // 添加SPU請求
-  UPDATESPU_URL = '/admin/product/updateSpuInfo' // 修改SPU請求
+  UPDATESPU_URL = '/admin/product/updateSpuInfo', // 修改SPU請求
+
+  ADDSKU_URL = '/admin/product/saveSkuInfo' // 添加SKU請求
 }
 
 // ------------------- 獲取已有的 SPU 數據請求 -------------------
@@ -74,6 +77,15 @@ export const addOrUpdateSPUAPI = (data: SpuListData) => {
   // 走到這裡代表說形參data有 id , 那就是 [ 修改請求了 ]
   return http<any, any>({
     url: API.UPDATESPU_URL,
+    method: 'post',
+    data
+  })
+}
+
+// ------------------ 添加 SKU 數據請求 -------------------
+export const addSKUDataAPI = (data: AddSKUDataType) => {
+  return http<any, any>({
+    url: API.ADDSKU_URL,
     method: 'post',
     data
   })

@@ -43,6 +43,8 @@ export interface AttrDataType {
   categoryId: number | string
   categoryLevel: number
   attrValueList: AttrValueList[]
+
+  attrIdAndValueId?: string | number // 用來在 添加SKU頁面的時候作為參數傳遞的變量
 }
 
 // ----------------- 獲取篩選後的產品內容 TS類型定義 --------------------

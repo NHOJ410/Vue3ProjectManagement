@@ -12,7 +12,7 @@ export interface ResponseData {
 
 export interface SpuListData {
   category3Id: number | string
-  id?: number | null
+  id?: number
   spuName: string
   tmId: number | string
   description: string
@@ -106,6 +106,8 @@ export interface SpuSaleAttrValueListData {
   updateTime?: string
   flag?: boolean // 新增的 用來給 銷售屬性輸入框使用
   newAttrValue?: string | number // 新增的 用來蒐集輸入框的數據
+
+  attrIdAndValueId?: string | number // 用來在 添加SKU頁面的時候作為參數傳遞的變量
 }
 
 // SPU 銷售規格 表格部分的 返回的數據類型
@@ -126,4 +128,33 @@ export type SpuBaseSaleAttrListData = SpuBaseSaleAttrList[]
 // SPU 銷售規格 下拉框 返回的數據類型
 export interface SpuBaseSaleAttrListResponseData extends ResponseData {
   data: SpuBaseSaleAttrListData
+}
+
+// ------------------------- 添加 SKU頁面 -------------------------------------
+
+// 商品規格下拉菜單的 TS類型
+export interface SkuAttrValueList {
+  attrId: number | string
+  valueId: string | number
+}
+
+// 銷售規格下拉菜單的 TS類型
+export interface SkuSaleAttrValueList {
+  saleAttrId: string | number
+  saleAttrValueId: string | number
+}
+
+// 添加 SKU 請求參數的數據類型
+export interface AddSKUDataType {
+  category3Id: string | number
+  spuId: number | string
+  tmId: string | number
+  skuName: string
+  price: number | string
+  weight: number | string
+  skuDesc: string | number
+  skuDefaultImg: string
+
+  skuAttrValueList: SkuAttrValueList[]
+  skuSaleAttrValueList: SkuSaleAttrValueList[]
 }

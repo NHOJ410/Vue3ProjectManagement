@@ -8,7 +8,7 @@ enum API {
   GETC2_URL = '/admin/product/getCategory2', // 獲取二級分類下拉菜單
   GETC3_URL = '/admin/product/getCategory3', // 獲取三級分類下拉菜單
 
-  GetAttrContent_URL = '/admin/product/attrInfoList/', // 獲取篩選後的產品內容
+  GetAttrContent_URL = '/admin/product/attrInfoList', // 獲取篩選後的產品內容
 
   ADDORUPDATEATTR_URL = '/admin/product/saveAttrInfo', // 添加或編輯產品內容
 
