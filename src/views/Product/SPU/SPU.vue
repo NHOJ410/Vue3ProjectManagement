@@ -1,15 +1,16 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { onBeforeUnmount, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 // 引入子組件
 import SPUFormItem from './SPUFormItem.vue' // 引入 SPUFromItem 子組件
 import SKUFormItem from './SKUFormItem.vue' // 引入 SKUFromItem 子組件
 // 導入api
-import { getSPUListAPI } from '@/api/product/spu/spu'
+import { getSPUListAPI, getCheckSKUListAPI, deleteSPUAPI } from '@/api/product/spu/spu'
 // 引入 TS類型定義
-import type { RecordsData, SpuListData } from '@/api/product/spu/type'
+import type { RecordsData, SpuListData, CheckSkuListData } from '@/api/product/spu/type'
 // 引入倉庫
 import { useCategoryListStore } from '@/stores' // 導入分類倉庫
+import { ElMessage, ElMessageBox } from 'element-plus'
 const categoryStore = useCategoryListStore() // 定義分類倉庫
 
 const isModify = ref<boolean>(true) // 用來控制 下拉框組件 是否禁用的變量
@@ -85,7 +86,7 @@ const changeIsShowContent = (obj: any) => {
   getSpuContent()
 }
 
-// -------------------- 添加 / 查看 SKUFormItem組件部分 --------------------
+// -------------------- 添加 SKUFormItem組件部分 --------------------
 const SKUFormItemRef = ref<any>() //  獲取 SKUFormItem組件的實例對象
 
 // 添加SKU按鈕的事件處理函數
@@ -97,6 +98,59 @@ const addSkuBtn = (row: SpuListData) => {
   //  這裡將 請求接口需要的 c1ID c2ID row(由el-table提供的 包含 c3ID 和SPU本身的id) 這三個參數傳遞過去
   SKUFormItemRef.value.initAddSku(c1ID.value, c2ID.value, row)
 }
+
+// -------------------- 查看 SKU 部分 -------------------------
+const isShowCheckSku = ref<boolean>(false) // 查看 SKU 對話框組件的顯示隱藏
+const checkSKUData = ref<CheckSkuListData[]>([]) // 儲存 SKU列表的數據
+const spuName = ref<string>('')
+
+// 查看SKU按鈕的事件處理函數
+const checkSKU = async (row: SpuListData) => {
+  const res = await getCheckSKUListAPI(row.id as number)
+
+  // 如果 code 不等於 200 提示用戶獲取列表失敗
+  if (res.code !== 200) {
+    ElMessage.error('獲取SKU列表失敗')
+    return
+  }
+
+  // 如果走到這裡就代表成功了 那就儲存數據吧!
+  checkSKUData.value = res.data
+
+  // 打開對話框 , 顯示 SKU列表
+  isShowCheckSku.value = true
+
+  // 儲存對應點擊的 SPU名稱
+  spuName.value = row.spuName
+}
+
+// -------------------- 刪除 SPU 部分 --------------------------
+// 刪除SPU按鈕的事件處理函數
+const deleteSPUBtn = async (row: SpuListData) => {
+  // 先進行二次確認 , 詢問用戶是否要刪除
+  await ElMessageBox.confirm('此操作將永久刪除該SPU, 是否繼續?', '提示', {
+    cancelButtonText: '取消',
+    confirmButtonText: '確定',
+    type: 'warning'
+  })
+
+  // 如果走到這裡 , 代表就是確認刪除 SPU , 那就調用接口來刪除
+  const res = await deleteSPUAPI(row.id as number)
+
+  if (res.code !== 200) {
+    ElMessage.error('刪除SPU失敗 , 請重新確認')
+  }
+
+  // 如果走到這裡 就代表刪除成功了
+  ElMessage.success('刪除SPU成功')
+  // 重新獲取 SPU列表
+  getSpuContent()
+}
+
+// --------------- 切換路由後 , 清空 頂部下拉菜單的數據 -------------------
+onBeforeUnmount(() => {
+  categoryStore.resetCategoryListData()
+})
 </script>
 
 <template>
@@ -136,9 +190,9 @@ const addSkuBtn = (row: SpuListData) => {
               <!-- 按鈕部分 - 修改SPU按鈕 -->
               <el-button type="warning" icon="Edit" title="修改SPU" @click="editSpuBtn(row)"></el-button>
               <!-- 按鈕部分 - 查看SPU按鈕 -->
-              <el-button type="info" icon="View" title="查看SPU"></el-button>
+              <el-button type="info" icon="View" title="查看SPU" @click="checkSKU(row)"></el-button>
               <!-- 按鈕部分 - 刪除SPU按鈕 -->
-              <el-button type="danger" icon="Delete" title="刪除SPU"></el-button>
+              <el-button type="danger" icon="Delete" title="刪除SPU" @click="deleteSPUBtn(row)"></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -161,6 +215,32 @@ const addSkuBtn = (row: SpuListData) => {
       <!-- 點擊 添加 SKU按鈕時 出現的組件 -->
       <SKUFormItem ref="SKUFormItemRef" v-show="isShowContent === 2" @changeIsShowContent="changeIsShowContent"> </SKUFormItem>
     </el-card>
+
+    <!-- 點擊 查看 SKU按鈕時 出現的組件 -->
+    <el-dialog v-model="isShowCheckSku" :title="spuName" width="60%">
+      <el-table :data="checkSKUData" border>
+        <el-table-column label="產品圖片" align="center">
+          <template #default="{ row }">
+            <el-image :src="row.skuDefaultImg" fit="cover" style="width: 60%; height: 60%"></el-image>
+          </template>
+        </el-table-column>
+        <el-table-column label="產品名稱" align="center">
+          <template #default="{ row }">
+            <p style="font-size: 24px">{{ row.skuName }}</p>
+          </template>
+        </el-table-column>
+        <el-table-column label="產品重量" align="center">
+          <template #default="{ row }">
+            <p>{{ row.weight }} (g)</p>
+          </template>
+        </el-table-column>
+        <el-table-column label="產品價格" align="center">
+          <template #default="{ row }">
+            <p>$ {{ row.price }} 元</p>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
   </div>
 </template>
 

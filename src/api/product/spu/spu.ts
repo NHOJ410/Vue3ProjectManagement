@@ -7,7 +7,8 @@ import type {
   SpuSaleAttrValueListResponseData,
   SpuBaseSaleAttrListResponseData,
   SpuListData,
-  AddSKUDataType
+  AddSKUDataType,
+  CheckSkuListResponseData
 } from './type'
 
 // 統一管理 url
@@ -22,7 +23,11 @@ enum API {
   ADDSPU_URL = '/admin/product/saveSpuInfo', // 添加SPU請求
   UPDATESPU_URL = '/admin/product/updateSpuInfo', // 修改SPU請求
 
-  ADDSKU_URL = '/admin/product/saveSkuInfo' // 添加SKU請求
+  ADDSKU_URL = '/admin/product/saveSkuInfo', // 添加SKU請求
+
+  GETCHECKSKULIST_URL = '/admin/product/findBySpuId', // 獲取 查看SKU列表請求
+
+  DELETESPU_URL = '/admin/product/deleteSpu' // 刪除SPU請求
 }
 
 // ------------------- 獲取已有的 SPU 數據請求 -------------------
@@ -88,5 +93,20 @@ export const addSKUDataAPI = (data: AddSKUDataType) => {
     url: API.ADDSKU_URL,
     method: 'post',
     data
+  })
+}
+
+// ------------------ 獲取 SKU列表請求 -------------------
+export const getCheckSKUListAPI = (spuId: number) => {
+  return http<any, CheckSkuListResponseData>({
+    url: `${API.GETCHECKSKULIST_URL}/${spuId}`
+  })
+}
+
+// ------------------ 刪除 SPU請求 -----------------------
+export const deleteSPUAPI = (spuId: number) => {
+  return http<any, any>({
+    url: `${API.DELETESPU_URL}/${spuId}`,
+    method: 'delete'
   })
 }

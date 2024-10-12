@@ -158,3 +158,18 @@ export interface AddSKUDataType {
   skuAttrValueList: SkuAttrValueList[]
   skuSaleAttrValueList: SkuSaleAttrValueList[]
 }
+
+// ------------------------ 查看 SKU 列表 -------------------------------
+
+// 查看SKU列表的 data的數據類型
+export interface CheckSkuListData extends AddSKUDataType {
+  id: number
+  createTime?: string
+  updateTime?: string
+  isSale?: number | string
+}
+
+// 查看SKU列表 返回的數據類型
+export interface CheckSkuListResponseData extends ResponseData {
+  data: CheckSkuListData[]
+}
