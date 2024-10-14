@@ -25,15 +25,15 @@ const totalCount = ref<number>(0) // 品牌總數量
 const trademarkList = ref<Records>([]) // 品牌內容列表
 
 // 獲取品牌列表
-const getTrademarkList = async () => {
-  const res = await getTrademarkListAPI(currentPage.value, dataCount.value)
+const getTrademarkList = async (currentPage: number) => {
+  const res = await getTrademarkListAPI(currentPage, dataCount.value)
   if (res.code === 200) {
     totalCount.value = res.data.total
     trademarkList.value = res.data.records
   }
 }
 onMounted(() => {
-  getTrademarkList()
+  getTrademarkList(currentPage.value)
 })
 
 // ------- 添加 / 編輯品牌按鈕的對話框組件 -------
@@ -106,7 +106,7 @@ const onConfirm = async () => {
   ElMessage.success(onAddParams.value.id ? '編輯品牌成功!' : '添加品牌成功!')
 
   //  重新發請求 渲染最新的品牌列表
-  getTrademarkList()
+  getTrademarkList(currentPage.value)
 
   //  關閉對話框
   isShow.value = false
@@ -189,7 +189,7 @@ const onRemove = async (row: Trademark) => {
   ElMessage.success('刪除品牌成功')
 
   // 重新獲取最新的品牌列表
-  getTrademarkList()
+  getTrademarkList(trademarkList.value.length > 1 ? currentPage.value : currentPage.value - 1)
 }
 </script>
 

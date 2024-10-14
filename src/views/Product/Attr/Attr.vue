@@ -210,22 +210,22 @@ onBeforeUnmount(() => {
         >
         <!-- 內容展示部分 -->
         <el-table border :data="attrContentList">
-          <el-table-column label="序列號" type="index" align="center" width="80px"></el-table-column>
+          <el-table-column label="序列號" type="index" align="center" width="120px"></el-table-column>
           <!-- 內容 - 產品名稱 -->
-          <el-table-column label="產品名稱" width="120px">
+          <el-table-column label="產品名稱" width="280px" align="center">
             <template #default="{ row }">
               <h3 class="attrName">{{ row.attrName }}</h3>
             </template>
           </el-table-column>
           <!-- 內容 - 產品規格 這裡使用 el-tag 組件 -->
-          <el-table-column label="產品規格">
+          <el-table-column label="產品規格" align="center">
             <template #default="{ row }">
               <!-- 內容 - el-tag組件 用來sku規格標籤 -->
               <el-tag style="margin: 5px" v-for="item in row.attrValueList" :key="item.id">{{ item.valueName }}</el-tag>
             </template>
           </el-table-column>
           <!-- 內容 - 按鈕部分 -->
-          <el-table-column label="操作" width="120px">
+          <el-table-column label="操作" width="280px" align="center">
             <template #default="{ row }">
               <!-- 編輯按紐 -->
               <el-button type="warning" icon="Edit" size="small" @click="handleModify(row)"></el-button>

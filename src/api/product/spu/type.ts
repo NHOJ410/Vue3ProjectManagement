@@ -9,7 +9,6 @@ export interface ResponseData {
 // ---------- 獲取SPU列表的數據類型 ---------------
 
 // spu數據的 ts類型
-
 export interface SpuListData {
   category3Id: number | string
   id?: number

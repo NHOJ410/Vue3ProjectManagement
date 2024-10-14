@@ -26,9 +26,9 @@ const totalData = ref<number>(0) // 用來控制 分頁器 總數據數量
 const spuList = ref<RecordsData>([]) // 存儲 SPU內容列表
 
 // 封裝 獲取 SPU內容數據的方法
-const getSpuContent = async () => {
+const getSpuContent = async (currentPage: number) => {
   // 發送請求 獲取數據 ( 根據文檔 : 將 當前頁數 , 每頁展示的數量 , 下拉框參數C3ID 作為參數 )
-  const res = await getSPUListAPI(currentPage.value, dataCount.value, c3ID.value)
+  const res = await getSPUListAPI(currentPage, dataCount.value, c3ID.value)
 
   // 將請求到的數據存儲到頁面上
   spuList.value = res.data.records
@@ -44,7 +44,7 @@ watch(
     // 如果 c3ID 為空 就中斷 , 防止二次點擊下拉框時 發送無效的請求
     if (c3ID.value === '') return
     // 調用封裝好的方法 發送請求 獲取數據
-    getSpuContent()
+    getSpuContent(currentPage.value)
   }
 )
 
@@ -83,7 +83,7 @@ const changeIsShowContent = (obj: any) => {
   }
 
   //  如果是 add 就是編輯頁面 , 那直接跳轉到第一頁就可以了 不用改變頁碼
-  getSpuContent()
+  getSpuContent(currentPage.value)
 }
 
 // -------------------- 添加 SKUFormItem組件部分 --------------------
@@ -144,7 +144,7 @@ const deleteSPUBtn = async (row: SpuListData) => {
   // 如果走到這裡 就代表刪除成功了
   ElMessage.success('刪除SPU成功')
   // 重新獲取 SPU列表
-  getSpuContent()
+  getSpuContent(spuList.value.length > 1 ? currentPage.value : currentPage.value - 1)
 }
 
 // --------------- 切換路由後 , 清空 頂部下拉菜單的數據 -------------------
@@ -169,21 +169,21 @@ onBeforeUnmount(() => {
         <!-- 內容區 - SPU列表 -->
         <el-table border style="margin-top: 20px" :data="spuList">
           <!-- 內容區 - 序列號 -->
-          <el-table-column label="序列號" type="index" align="center" width="80px"></el-table-column>
+          <el-table-column label="序列號" type="index" align="center" width="120px"></el-table-column>
           <!-- 內容區 - SPU名稱 -->
-          <el-table-column label="SPU名稱">
+          <el-table-column label="SPU名稱" align="center" width="280px">
             <template #default="{ row }">
               <h3 class="spu-Name">{{ row.spuName }}</h3>
             </template>
           </el-table-column>
           <!-- 內容區 - SPU描述 -->
-          <el-table-column label="SPU描述" show-overflow-tooltip>
+          <el-table-column label="SPU描述" show-overflow-tooltip align="center">
             <template #default="{ row }">
               <span class="spu-description">{{ row.description }}</span>
             </template>
           </el-table-column>
           <!-- 內容區 - 按鈕部分 -->
-          <el-table-column label="操作">
+          <el-table-column label="操作" align="center" width="280px">
             <template #default="{ row }">
               <!-- 按鈕部分 - 添加SKU按鈕 -->
               <el-button type="primary" icon="Plus" title="添加SKU" @click="addSkuBtn(row)"></el-button>
@@ -198,6 +198,7 @@ onBeforeUnmount(() => {
         </el-table>
         <!-- 底部分頁器 -->
         <el-pagination
+          v-show="totalData > 0"
           v-model:current-page="currentPage"
           v-model:page-size="dataCount"
           :page-sizes="[5, 10, 15]"
@@ -205,8 +206,8 @@ onBeforeUnmount(() => {
           layout=" prev, pager, next, jumper , -> , sizes, total"
           :total="totalData"
           class="paginationItem"
-          @size-change="getSpuContent()"
-          @current-change="getSpuContent()"
+          @size-change="getSpuContent(currentPage)"
+          @current-change="getSpuContent(currentPage)"
         />
       </div>
 
