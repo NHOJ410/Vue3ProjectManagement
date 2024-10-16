@@ -96,11 +96,11 @@ const loginBtn = async () => {
             <h1>Hello ! 歡迎來到品牌管理頁面</h1>
             <!-- 帳號區域 -->
             <el-form-item prop="username">
-              <el-input :prefix-icon="UserFilled" v-model="loginForm.username" placeholder="請輸入帳號"></el-input>
+              <el-input :prefix-icon="UserFilled" v-model.trim="loginForm.username" placeholder="請輸入員工暱稱(帳號)"></el-input>
             </el-form-item>
             <!-- 密碼區域 -->
             <el-form-item prop="password">
-              <el-input :prefix-icon="Lock" v-model="loginForm.password" show-password placeholder="請輸入密碼"></el-input>
+              <el-input :prefix-icon="Lock" v-model.trim="loginForm.password" show-password placeholder="請輸入密碼"></el-input>
             </el-form-item>
             <!-- 按鈕區域 -->
             <el-form-item>

@@ -60,14 +60,14 @@ export const constantRoutes = [
         path: '/acl/user',
         component: () => import('@/views/Acl/User/User.vue'),
         name: 'User',
-        meta: { title: '用戶管理', icon: 'UserFilled', hidden: false }
+        meta: { title: '員工管理', icon: 'UserFilled', hidden: false }
       },
       // 二級路由 - 角色管理
       {
         path: '/acl/role',
         component: () => import('@/views/Acl/Role/Role.vue'),
         name: 'Role',
-        meta: { title: '權限管理', icon: 'InfoFilled', hidden: false }
+        meta: { title: '職位管理', icon: 'InfoFilled', hidden: false }
       },
       // 二級路由 - 菜單管理
       {
