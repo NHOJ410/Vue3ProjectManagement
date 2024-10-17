@@ -296,7 +296,7 @@ watch(searchUserName, () => {
 
         <!-- 搜索按鈕 -->
         <el-form-item>
-          <el-button icon="Search" type="success" :disabled="!searchUserName" @click="searchUserBtn">搜索</el-button>
+          <el-button icon="Search" type="success" :disabled="!searchUserName" @click="searchUserBtn">搜索員工</el-button>
         </el-form-item>
       </el-form>
     </el-card>
