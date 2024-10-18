@@ -72,7 +72,7 @@ export const constantRoutes = [
       // 二級路由 - 菜單管理
       {
         path: '/acl/permission',
-        component: () => import('@/views/Acl/Permission/Permissions.vue'),
+        component: () => import('@/views/Acl/Permission/Permission.vue'),
         name: 'Permission',
         meta: { title: '菜單管理', icon: 'Tickets', hidden: false }
       }
