@@ -9,6 +9,8 @@ import pinia from '@/stores/index'
 // elementPlus
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
+// 引入 elementPlus 切換主題css變量
+import 'element-plus/theme-chalk/dark/css-vars.css'
 // 引入svg圖標插件
 import 'virtual:svg-icons-register'
 // 引入 全局scss樣式

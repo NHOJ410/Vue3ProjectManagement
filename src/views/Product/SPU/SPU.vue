@@ -254,7 +254,6 @@ onBeforeUnmount(() => {
       font-weight: bold;
       font-size: 20px;
       text-align: center;
-      color: blue;
     }
 
     // 內容區 - SPU描述部分

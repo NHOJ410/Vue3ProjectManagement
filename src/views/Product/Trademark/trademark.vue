@@ -286,8 +286,7 @@ const onRemove = async (row: Trademark) => {
 
       // 品牌名稱
       .trademark-name {
-        color: blue;
-        font-size: 20px;
+        font-size: 24px;
         font-weight: bold;
       }
 

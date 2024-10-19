@@ -102,7 +102,6 @@ const logOut = async () => {
 
         &:hover {
           --el-menu-text-color: #000;
-          transition: 0.5s all;
         }
       }
 
