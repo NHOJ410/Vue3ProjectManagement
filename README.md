@@ -10,4 +10,4 @@
 
 但由於服務器在中國 且數據是共用的 所以可能會有請求過慢或是一些些奇奇怪怪的數據 請見諒
 
-詳細項目介紹請看 notion 筆記 : [Notion筆記](https://childlike-box-14b.notion.site/127916c569a480738d88fe3404894bec?pvs=4)
+詳細項目介紹請看 [Notion筆記](https://childlike-box-14b.notion.site/127916c569a480738d88fe3404894bec?pvs=4)
