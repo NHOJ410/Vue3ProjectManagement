@@ -68,10 +68,10 @@ const changeModel = () => {
 }
 
 // ------------ 切換按鈕主題顏色功能 ----------------
-const sureBtn = ref<string>('#fff') // 確認按鈕顏色
-const editBtn = ref<string>('#fff') // 編輯按鈕顏色
-const checkBtn = ref<string>('#fff') // 查看按鈕顏色
-const deleteBtn = ref<string>('#fff') // 刪除按鈕顏色
+const sureBtn = ref<string>('#000') // 存儲確認按鈕顏色
+const editBtn = ref<string>('#000') // 存儲編輯按鈕顏色
+const checkBtn = ref<string>('#000') // 存儲查看按鈕顏色
+const deleteBtn = ref<string>('#000') // 存儲刪除按鈕顏色
 
 // 調色盤集成 方便使用 v-for遍歷
 const colorObj = ref([
@@ -105,19 +105,6 @@ const changeModelColor = (newColor: string, oldColor: string) => {
       <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjNt3nrnq3aTlhOwA5ia2n7RegMyFx56_EKA&s" />
     </el-avatar>
 
-    <!-- 切換暗黑模式按鈕 -->
-    <el-switch
-      class="switch"
-      v-model="switchModel"
-      @change="changeModel"
-      size="large"
-      width="40px"
-      title="切換主題按鈕"
-      inline-prompt
-      active-icon="Sunrise"
-      inactive-icon="MoonNight"
-      style="--el-switch-on-color: #000; --el-switch-off-color: #dbd9d9; border-color: #000"
-    />
     <!-- 更新數據按鈕 -->
     <el-button size="large" circle color="#626aef" icon="Refresh" plain @click="settingStore.switchRefresh()" title="重新整理"></el-button>
     <!-- 全螢幕按鈕 -->
@@ -131,9 +118,21 @@ const changeModelColor = (newColor: string, oldColor: string) => {
     >
       <template #icon> <svgIcon :svgName="isFull === 0 ? 'fullScreen' : 'exitFullScreen'" width="20px" height="20px"></svgIcon> </template
     ></el-button>
-
     <!-- 設定按鈕 -->
     <el-button size="large" circle color="#626aef" icon="MagicStick" plain title="按鈕主題顏色" @click="setting"></el-button>
+    <!-- 切換暗黑模式按鈕 -->
+    <el-switch
+      class="switch"
+      v-model="switchModel"
+      @change="changeModel"
+      size="large"
+      width="40px"
+      title="切換主題按鈕"
+      inline-prompt
+      active-icon="Sunrise"
+      inactive-icon="MoonNight"
+      style="--el-switch-on-color: #000; --el-switch-off-color: #dbd9d9; border-color: #000"
+    />
 
     <!-- 點擊 [ 切換按鈕主題顏色 ] 出現的設定視窗 -->
     <el-dialog title="切換按鈕主題顏色 (時間問題 還有很多bug 請見諒..)" width="600px" v-model="isShowSettingPop" :append-to-body="true">
@@ -142,7 +141,9 @@ const changeModelColor = (newColor: string, oldColor: string) => {
           <el-tab-pane v-for="item in colorObj" :key="item.color" :label="item.label">
             <div class="demo-color-sizes">
               <!-- 預覽按鈕部分 -->
-              <el-button :type="item.type" style="margin: 0px 30px 5px 0">{{ item.label }}</el-button>
+              <el-button :type="item.type" style="margin: 0px 30px 5px 0">{{
+                `預覽 「${item.label}」 顏色 , 右邊方框可以調整顏色`
+              }}</el-button>
               <!-- 取色器組件 -->
               <el-color-picker @change="changeModelColor(item.color as string, item.colorStr)" v-model="item.color" size="large" />
             </div>

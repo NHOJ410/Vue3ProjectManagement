@@ -37,7 +37,7 @@ export const constantRoutes = [
     component: () => import('@/views/DataScreen/DataScreen.vue'),
     name: 'Screen',
     meta: {
-      title: 'eCharts數據可視化',
+      title: 'Dashboard',
       hidden: false,
       icon: 'Platform'
     }

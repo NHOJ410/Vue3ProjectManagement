@@ -1,0 +1,123 @@
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
+// 導入 echarts
+import * as echarts from 'echarts'
+
+// 獲取 銷售商品種類柱狀圖容器
+const typeDom = ref()
+
+// 商品數據
+const productArr = ref([
+  { name: '智慧型手機', value: 9542, color: '#c2e59c' },
+  { name: '筆記型電腦', value: 4574, color: '#64b3f4' },
+  { name: '藍芽耳機', value: 8397, color: '#c471ed' },
+  { name: '無線耳機', value: 5043, color: '#f64f59' },
+  { name: '智慧手錶', value: 6432, color: '#ED213A' }
+])
+
+// 注意要在 onMounted() 鉤子中 , 因為要等待 DOM元素加載完成
+onMounted(() => {
+  // 初始化 echarts 實例
+  const myChart = echarts.init(typeDom.value)
+
+  // 通過初始化拿到的 echarts , 裡面去配置設置項
+  // 配置圖表
+  myChart.setOption({
+    // x|y軸組件
+    xAxis: {
+      type: 'category', // 圖形圖標在x軸均勻分佈展示
+      data: productArr.value.map((item) => item.name), // 商品名稱
+      axisLabel: {
+        color: '#fff', // 設置x軸文字顏色為白色
+        fontSize: 14
+      }
+    },
+    yAxis: {
+      show: false
+    },
+
+    // 布局組件
+    grid: {
+      top: 5,
+      left: 10,
+      bottom: 30,
+      right: 20
+    },
+    // 系列: 決定顯示圖形圖標是哪一種的
+    series: [
+      {
+        type: 'bar',
+        // 商品銷售量
+        data: productArr.value.map((item) => item.value),
+        // 柱條的樣式
+        itemStyle: {
+          borderRadius: [5, 5, 0, 0],
+          // 柱條顏色
+          color: function (data: any) {
+            // 給每一個柱條設置背景顏色
+            let arr = productArr.value.map((item) => item.color)
+            return arr[data.dataIndex]
+          }
+        }
+      }
+    ]
+  })
+})
+</script>
+
+<template>
+  <!-- 商品種類銷售柱狀圖部分 -->
+  <div class="box">
+    <!-- 標題部分 -->
+    <div class="statistics">
+      <!-- 標題 -->
+      <h3 class="satisfaction">五大熱銷商品統計</h3>
+    </div>
+
+    <!-- 內容部分 - 銷售商品種類柱狀圖 -->
+    <div class="type" ref="typeDom"></div>
+  </div>
+</template>
+
+<style lang="scss" scoped>
+.box {
+  background: url('../../images/dataScreen-main-lb.png') no-repeat;
+  background-size: 100% 100%;
+  padding: 0 5px 5px 5px;
+  position: relative;
+  user-select: none; // 禁止被反白選取到
+
+  // 標題部分
+  .statistics {
+    width: 100%;
+    height: 98px;
+
+    // 標題部分
+    .satisfaction {
+      font-size: 24px;
+      font-style: italic;
+      font-weight: 600;
+      padding-top: 20px;
+      padding-left: 10px;
+      color: #fff;
+
+      // 標題部分的背景圖
+      &::after {
+        content: '';
+        display: block;
+        margin-top: 10px;
+        width: 80px;
+        height: 6px;
+        background: url('../../images/dataScreen-title.png') no-repeat;
+        background-size: cover;
+      }
+    }
+  }
+
+  // 內容部分 - 銷售商品種類柱狀圖
+  .type {
+    width: 100%;
+    height: 330px;
+  }
+}
+</style>
