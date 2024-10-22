@@ -2,7 +2,7 @@
 ![image](https://github.com/user-attachments/assets/17d9b9cb-66ca-4c59-9c99-911309a4f52f)
 
 
-使用的技術棧有 : Vue3 + Pinia + TS + AXIOS + ECharts  
+使用的技術棧有 : Vue3 + Pinia + TS + ElementPlus + AXIOS + ECharts  
 
 使用的預校驗工具有 : styleLint 和 Husky Hooks
 
