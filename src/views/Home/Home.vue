@@ -31,7 +31,7 @@ import { currentTime } from '@/utils/currentTime'
         </div>
 
         <!-- 右下角 作品描述 -->
-        <p class="desc">此項目使用了 Vue3 + TypeScript + elementPlus</p>
+        <p class="desc">此項目使用了 Vue3 + TypeScript + elementPlus + eCharts製作</p>
       </div>
     </el-card>
 
@@ -45,8 +45,8 @@ import { currentTime } from '@/utils/currentTime'
       <svgIcon :svgName="'elementPlusLogo'" width="300px" height="300px"></svgIcon>
       <!-- Pinia Logo -->
       <svgIcon :svgName="'Pinia'" width="300px" height="300px"></svgIcon>
-      <!-- Axios Logo -->
-      <svgIcon :svgName="'axios'" width="300px" height="300px"></svgIcon>
+      <!-- eCharts Logo -->
+      <svgIcon :svgName="'ECharts'" width="300px" height="300px"></svgIcon>
     </div>
   </div>
 </template>

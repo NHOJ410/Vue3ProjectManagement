@@ -1,4 +1,6 @@
 // 路由配置
+
+// 1. 常量路由 ( 任何用戶無須權限都可以訪問 )
 export const constantRoutes = [
   // 一級路由 - 登入頁面
   {
@@ -10,7 +12,7 @@ export const constantRoutes = [
       hidden: true
     }
   },
-  // 一級路由 - 首頁layout
+  // 一級路由 - 首頁layout(home)
   {
     path: '/',
     component: () => import('@/Layout/Layout.vue'),
@@ -31,17 +33,31 @@ export const constantRoutes = [
       }
     ]
   },
-  // 一級路由 - echarts數據可視化
+  // 一級路由 - 年度銷售資料數據可視化
   {
     path: '/screen',
     component: () => import('@/views/DataScreen/DataScreen.vue'),
     name: 'Screen',
     meta: {
-      title: 'Dashboard',
+      title: '年度銷售資料數據可視化',
       hidden: false,
       icon: 'Platform'
     }
   },
+  // 一級路由 - 404頁面
+  {
+    path: '/404',
+    component: () => import('@/views/404NotFind/NotFind404.vue'),
+    name: '404',
+    meta: {
+      title: '404頁面',
+      hidden: true
+    }
+  }
+]
+
+// 2. 異步路由 ( 根據權限來決定是否可以訪問 )
+export const asyncRoutes = [
   // 一級路由 - 權限管理
   {
     path: '/acl',
@@ -119,18 +135,11 @@ export const constantRoutes = [
         meta: { title: 'SKU管理', icon: 'Orange', hidden: false }
       }
     ]
-  },
+  }
+]
 
-  // 一級路由 - 404頁面
-  {
-    path: '/404',
-    component: () => import('@/views/404NotFind/NotFind404.vue'),
-    name: '404',
-    meta: {
-      title: '404頁面',
-      hidden: true
-    }
-  },
+// 3. 任意路由 ( 當為匹配到的時候導向的路由 )
+export const anyRoutes = [
   // 未匹配到任何路由 ( 路由重定向 ) 導向 404
   {
     path: '/:pathMatch(.*)*',

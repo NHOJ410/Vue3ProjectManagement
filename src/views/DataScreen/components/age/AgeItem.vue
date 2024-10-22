@@ -56,7 +56,7 @@ onMounted(() => {
         },
         // 餅圖小折線的樣式
         label: {
-          color: '#29fcff', // 標籤文字顏色
+          color: '#fff', // 標籤文字顏色
           fontSize: 14 // 文字大小
         }
       }
