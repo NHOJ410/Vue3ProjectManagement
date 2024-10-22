@@ -53,11 +53,7 @@ export const constantRoutes = [
       title: '404頁面',
       hidden: true
     }
-  }
-]
-
-// 2. 異步路由 ( 根據權限來決定是否可以訪問 )
-export const asyncRoutes = [
+  },
   // 一級路由 - 權限管理
   {
     path: '/acl',
@@ -135,11 +131,7 @@ export const asyncRoutes = [
         meta: { title: 'SKU管理', icon: 'Orange', hidden: false }
       }
     ]
-  }
-]
-
-// 3. 任意路由 ( 當為匹配到的時候導向的路由 )
-export const anyRoutes = [
+  },
   // 未匹配到任何路由 ( 路由重定向 ) 導向 404
   {
     path: '/:pathMatch(.*)*',
