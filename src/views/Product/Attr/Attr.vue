@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, onBeforeUnmount, ref } from 'vue'
+import { nextTick, onBeforeUnmount, ref, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { ElMessage, ElMessageBox } from 'element-plus'
 // 導入 api
@@ -38,6 +38,15 @@ const handleModify = (row: AttrDataType) => {
   }
 }
 
+// 一進頁面的提示框
+onMounted(() => {
+  ElMessageBox.alert('', '提示', {
+    message: '查詢產品盡量都選最後的選項 前面選項的接口壞了 !',
+    confirmButtonText: '好的',
+    type: 'warning'
+  })
+})
+
 // --------------------------- 進入 添加 / 編輯頁面 ---------------------------------
 
 // 編輯頁面內的取消按鈕
@@ -45,7 +54,7 @@ const cancelModify = () => {
   isModify.value = !isModify.value
 }
 
-// 存儲 添加 / 編輯產品按鈕的數據
+// 存儲 添加 / 編輯商品規格按鈕的數據
 const attrParams = ref<AttrDataType>({
   attrName: '', // 產品名稱
   attrValueList: [], // 用來產品列表的數組
@@ -53,14 +62,14 @@ const attrParams = ref<AttrDataType>({
   categoryLevel: 3 // 值為 3 表示 三級分類 這裡直接寫死就可以了
 })
 
-// 添加產品按鈕的事件處理函數
+// 添加商品規格按鈕的事件處理函數
 const addAttr = () => {
   attrParams.value.attrValueList.push({
-    valueName: '', // 新增的產品名稱
+    valueName: '', // 新增的商品規格名稱
     flag: true // 這個不是後台數據 , 是用來控制是否可以為編輯狀態的變量
   })
 
-  // 點擊後 讓產品規格輸入框自動聚焦
+  // 點擊後 讓商品規格規格輸入框自動聚焦
   nextTick(() => {
     attrInputRef.value[attrParams.value.attrValueList.length - 1].focus()
   })
@@ -95,7 +104,7 @@ const saveAttr = async () => {
 
 // -------------- 產品規格 - 內容區輸入和展示框部分 ------------------
 
-// 產品規格 - 編輯框的失去焦點處理函數 ( 切換成展示框 )
+// 商品規格 - 編輯框的失去焦點處理函數 ( 切換成展示框 )
 const toShowSku = (row: AttrValueList, $index: number) => {
   // bug修復 - 當產品規格名稱重複的時候
   const repeatAttr = attrParams.value.attrValueList.find((item) => {
@@ -146,11 +155,11 @@ const toEditSku = (row: AttrValueList, $index: number) => {
   attrInputRef.value[$index].focus()
 }
 
-// 點擊添加產品後 自動聚焦的功能
+// 點擊添加規格按鈕後 自動聚焦的功能
 
 const attrInputRef = ref<any>([]) // 用來存儲添加產品後 , 所添加的所有 el-input 組件元素
 
-// 刪除產品規格按鈕的事件處理函數
+// 刪除規格按鈕的事件處理函數
 const removeAttr = async ($index: number) => {
   // 點擊時先確認用戶是否真的要刪除
   await ElMessageBox.confirm('是否確認刪除該產品規格 ?', {
@@ -167,8 +176,7 @@ const removeAttr = async ($index: number) => {
   ElMessage.success('刪除品牌規格成功!')
 }
 
-// 刪除產品內容按鈕
-
+// 刪除商品規格內容按鈕
 const deleteAttr = async (id: number) => {
   // 發送請求 刪除品牌內容
   const res = await deleteAttrAPI(id)
@@ -206,18 +214,18 @@ onBeforeUnmount(() => {
           style="margin-bottom: 20px"
           :disabled="!categoryListStore.c3ID"
           @click="handleModify"
-          >添加新的產品</el-button
+          >為此商品添加新的規格</el-button
         >
         <!-- 內容展示部分 -->
         <el-table border :data="attrContentList">
           <el-table-column label="序列號" type="index" align="center" width="120px"></el-table-column>
-          <!-- 內容 - 產品名稱 -->
-          <el-table-column label="產品名稱" width="280px" align="center">
+          <!-- 內容 - 產品規格名稱 -->
+          <el-table-column label="產品規格名稱" width="280px" align="center">
             <template #default="{ row }">
               <h3 class="attrName">{{ row.attrName }}</h3>
             </template>
           </el-table-column>
-          <!-- 內容 - 產品規格 這裡使用 el-tag 組件 -->
+          <!-- 內容 - 產品規格規格 這裡使用 el-tag 組件 -->
           <el-table-column label="產品規格" align="center">
             <template #default="{ row }">
               <!-- 內容 - el-tag組件 用來sku規格標籤 -->
@@ -244,29 +252,29 @@ onBeforeUnmount(() => {
     <!-- 添加 / 編輯頁面 -->
     <div class="page-modify" v-show="isModify === false">
       <el-card class="modify">
-        <!-- 輸入產品名稱部份 -->
+        <!-- 輸入規格名稱部份 -->
         <el-form :inline="true" :model="attrParams">
-          <el-form-item label="產品名稱 : " style="width: 400px">
-            <el-input placeholder="請輸入產品名稱" v-model.trim="attrParams.attrName"></el-input>
+          <el-form-item label="規格名稱 : " style="width: 400px">
+            <el-input placeholder="請輸入規格名稱" v-model.trim="attrParams.attrName"></el-input>
           </el-form-item>
-          <!-- 添加產品值按鈕 -->
+          <!-- 添加規格值按鈕 -->
           <el-form-item>
-            <el-button type="success" icon="Plus" :disabled="!attrParams.attrName" @click="addAttr">添加產品</el-button>
+            <el-button type="success" icon="Plus" :disabled="!attrParams.attrName" @click="addAttr">添加規格</el-button>
           </el-form-item>
 
-          <!-- 中間展示添加的產品列表 -->
+          <!-- 中間展示添加的規格列表 -->
           <el-table border class="modify-content" :data="attrParams.attrValueList">
             <el-table-column label="序列號" type="index" width="80px" align="center"></el-table-column>
-            <el-table-column label="產品規格">
+            <el-table-column label="規格" align="center">
               <template #default="{ row, $index }">
-                <!-- 產品規格 - 編輯框 -->
+                <!-- 規格 - 編輯框 -->
                 <el-input
                   v-show="row.flag === true"
                   v-model.trim="row.valueName"
                   @blur="toShowSku(row, $index)"
                   :ref="(element: any) => (attrInputRef[$index] = element)"
                 ></el-input>
-                <!-- 產品規格 - 展示框 -->
+                <!-- 規格 - 展示框 -->
                 <div v-show="!row.flag" @click="toEditSku(row, $index)" style="cursor: pointer">{{ row.valueName }}</div>
               </template>
             </el-table-column>

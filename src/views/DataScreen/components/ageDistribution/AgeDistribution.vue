@@ -1,16 +1,12 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
+// 導入 年度銷售數據倉庫
+import { useDashBoardStore } from '@/stores'
+const dashBoardStore = useDashBoardStore()
+const { consumerData } = storeToRefs(dashBoardStore)
 // 導入 echarts
 import * as echarts from 'echarts'
-
-// 消費者年齡分布數據
-const consumerData = ref([
-  { age: '17歲以下', week: 800, month: 3200 },
-  { age: '17~24歲', week: 2000, month: 8000 },
-  { age: '24~35歲', week: 2500, month: 10000 },
-  { age: '35~50歲', week: 2800, month: 11200 },
-  { age: '51~60歲', week: 2200, month: 8800 }
-])
 
 // 每周消費 echarts設定
 const weekData = ref({

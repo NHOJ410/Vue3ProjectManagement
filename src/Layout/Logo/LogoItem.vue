@@ -7,10 +7,10 @@ const settingStore = useLayoutSettingStore() // 定義設定倉庫
 
 <template>
   <div class="logo" v-if="setting.isShow">
-    <h1>
+    <div class="logo-content">
       <img :src="setting.logoURL" alt="Logo圖片" />
-      <h2 :class="{ isOpen: settingStore.isOpen }">{{ setting.title }}</h2>
-    </h1>
+      <h1 :class="{ isOpen: settingStore.isOpen }">{{ setting.title }}</h1>
+    </div>
   </div>
 </template>
 
@@ -18,7 +18,7 @@ const settingStore = useLayoutSettingStore() // 定義設定倉庫
 .logo {
   padding-left: 10px;
 
-  h1 {
+  .logo-content {
     display: flex;
     align-items: center;
     width: 100%;
@@ -29,7 +29,7 @@ const settingStore = useLayoutSettingStore() // 定義設定倉庫
       height: 80px;
     }
 
-    h2 {
+    h1 {
       font-size: $base-logo-title;
       color: #fff;
       font-weight: 700;

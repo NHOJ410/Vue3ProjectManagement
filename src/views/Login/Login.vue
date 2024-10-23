@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { ElNotification } from 'element-plus'
+import { ref, onMounted } from 'vue'
+import { ElNotification, ElMessageBox } from 'element-plus'
 import { UserFilled, Lock } from '@element-plus/icons-vue' // 導入 element-plus 的圖標
 // // 導入type類型
 // import type { LoginForm } from '@/api/user/type' // 導入用戶登入表單類型
@@ -12,6 +12,17 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 // 導入當前時間函數
 import { currentTime } from '@/utils/currentTime'
+
+// -------------- 提示用戶消息彈出框 ---------------
+
+onMounted(() => {
+  ElMessageBox.alert('', '歡迎來到品牌後台管理系統', {
+    message: '系統預設帳號 : admin 密碼 : 111111 <br> 如果有登入問題請按下「登入旁的黃色按鈕」',
+    confirmButtonText: '好的',
+    customClass: 'alertMessage',
+    dangerouslyUseHTMLString: true
+  })
+})
 
 // -------------- 登入表單部分 --------------
 
@@ -82,18 +93,30 @@ const loginBtn = async () => {
     password: ''
   }
 }
+
+// -------------- 直接跳轉到首頁按鈕部分 -------
+const toHome = () => {
+  // 由於後端的token 不是隨機生成的 是固定的 所以可以這樣處理
+  userStore.userToken =
+    'eyJhbGciOiJIUzUxMiIsInppcCI6IkdaSVAifQ.H4sIAAAAAAAAAKtWKi5NUrJSCjAK0A0Ndg1S0lFKrShQsjI0NzY0NDIyNjLVUSotTi3yTAGKQZh-ibmpQB2JKbmZeUq1APcDlJFBAAAA.ScvHQobwz9HyTdWmfIMexIVbkYsSbz7Z9CgNuK7XcAjqR1IbgCJkaL3JS_3e760vXGbVJObw_i5M7qh6TxVziA'
+  // 跳轉到首頁
+  router.push('/home')
+}
 </script>
 
 <template>
   <div>
     <div class="login-container">
       <el-row>
-        <el-col :span="12" :xs="0"></el-col>
+        <!-- 左側VueLogo -->
+        <el-col :span="12" :xs="0">
+          <svgIcon class="vueLogo" :svgName="'vueLogo'" width="400px" height="400px"></svgIcon>
+        </el-col>
 
-        <!-- 登入頁面表單 ( 頁面小於 768px 佔滿整份 ) -->
+        <!-- 右側登入頁面表單 ( 頁面小於 768px 佔滿整份 ) -->
         <el-col :span="12" :xs="24">
           <el-form class="login-form" :model="loginForm" :rules="rules" ref="elFormRef">
-            <h1>Hello ! 歡迎來到品牌管理頁面</h1>
+            <h1>Hello ! 歡迎來到品牌後台管理頁面</h1>
             <!-- 帳號區域 -->
             <el-form-item prop="username">
               <el-input :prefix-icon="UserFilled" v-model.trim="loginForm.username" placeholder="請輸入員工暱稱(帳號)"></el-input>
@@ -104,7 +127,14 @@ const loginBtn = async () => {
             </el-form-item>
             <!-- 按鈕區域 -->
             <el-form-item>
-              <el-button type="primary" :loading="btnLoading" class="login-btn" @click="loginBtn" @keyup.enter="loginBtn">登入</el-button>
+              <div class="buttonItem">
+                <el-button type="primary" :loading="btnLoading" class="login-btn" @click="loginBtn" @keyup.enter="loginBtn"
+                  >用戶登入</el-button
+                >
+                <el-button type="warning" :loading="btnLoading" @click="toHome" @keyup.enter="loginBtn"
+                  >如果遇到接口問題無法登入請按這裡</el-button
+                >
+              </div>
             </el-form-item>
           </el-form>
         </el-col>
@@ -117,8 +147,19 @@ const loginBtn = async () => {
 .login-container {
   width: 100%;
   height: 100vh;
-  background: url('@/assets/images/background.jpg') no-repeat;
-  background-size: cover;
+  background: linear-gradient(to right, #c2e59c, #64b3f4);
+
+  // VueLogo圖片
+  .vueLogo {
+    position: absolute;
+    top: 22vh;
+    left: 15vw;
+  }
+
+  // 我要修改提示用戶消息彈出框樣式 width : 800px
+  .el-message {
+    width: 800px;
+  }
 
   // 登入表單
   .login-form {
@@ -128,7 +169,7 @@ const loginBtn = async () => {
     align-items: center;
     background: url('@/assets/images/login_form.png') no-repeat;
     background-size: cover;
-    padding: 40px;
+    padding: 20px;
 
     // 登入頁面標題
     h1 {
@@ -139,9 +180,8 @@ const loginBtn = async () => {
       margin: 20px;
     }
 
-    // 登入按鈕
-    .login-btn {
-      width: 100%;
+    .buttonItem {
+      display: flex;
     }
   }
 }

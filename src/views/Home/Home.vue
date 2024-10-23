@@ -38,15 +38,15 @@ import { currentTime } from '@/utils/currentTime'
     <!-- 底部SVG LOGO圖標區域 -->
     <div class="bottom">
       <!-- Vue Logo -->
-      <svgIcon :svgName="'vueLogo'" width="300px" height="300px"></svgIcon>
+      <svgIcon :svgName="'vueLogo'" width="260px" height="260px"></svgIcon>
       <!-- TS Logo -->
-      <svgIcon :svgName="'typescript'" width="300px" height="300px"></svgIcon>
+      <svgIcon :svgName="'typescript'" width="260px" height="260px"></svgIcon>
       <!-- ElementPlus Logo -->
-      <svgIcon :svgName="'elementPlusLogo'" width="300px" height="300px"></svgIcon>
+      <svgIcon :svgName="'elementPlusLogo'" width="260px" height="260px"></svgIcon>
       <!-- Pinia Logo -->
-      <svgIcon :svgName="'Pinia'" width="300px" height="300px"></svgIcon>
+      <svgIcon :svgName="'Pinia'" width="260px" height="260px"></svgIcon>
       <!-- eCharts Logo -->
-      <svgIcon :svgName="'ECharts'" width="300px" height="300px"></svgIcon>
+      <svgIcon :svgName="'ECharts'" width="260px" height="260px"></svgIcon>
     </div>
   </div>
 </template>

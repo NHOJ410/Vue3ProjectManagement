@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, computed, watch } from 'vue'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 // 導入API
 import {
   getUserInfoListAPI,
@@ -55,6 +55,7 @@ const userParams = ref<getUserInfoRecordsType>({
 // 員工資料表單 校驗規則
 const rules = {
   // 員工姓名
+
   name: [
     { required: true, message: '請輸入員工姓名', trigger: 'blur' },
     {
@@ -252,6 +253,13 @@ const handleSelectionChange = (value: any) => {
 
 // 批量刪除員工資料按鈕的事件處理函數
 const deletePatchUser = async () => {
+  // 先詢問用戶是否要刪除
+  await ElMessageBox.confirm('請問您確認要刪除選取的員工資料?', '注意', {
+    confirmButtonText: '是的',
+    cancelButtonText: '取消',
+    type: 'warning'
+  })
+
   // 將數據整理一下 , 因為後端需要的是 id數組
   const idList: number[] = deleteUserArr.value.map((item) => item.id as number)
 

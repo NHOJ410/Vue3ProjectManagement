@@ -21,10 +21,10 @@ const onchangeOpen = () => {
     <Fold />
   </el-icon>
   <!-- 麵包屑導航部分 -->
-  <el-breadcrumb separator-icon="ArrowRight" class="breadcrumb">
+  <el-breadcrumb :separator-icon="'ArrowRight'" class="breadcrumb">
     <el-breadcrumb-item v-for="item in route.matched" :key="item.path" v-show="item.meta.title" :to="item.path">
       <el-icon>
-        <component :is="item.meta.icon"></component>
+        <component v-if="item.meta.icon" :is="item.meta.icon"></component>
       </el-icon>
       <span class="breadcrumbTitle">{{ item.meta.title }}</span>
     </el-breadcrumb-item>

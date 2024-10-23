@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+// 導入 年度銷售數據倉庫
+import { useDashBoardStore } from '@/stores'
+const dashBoardStore = useDashBoardStore()
 // 導入 echarts
 import * as echarts from 'echarts'
 
@@ -38,14 +41,8 @@ onMounted(() => {
         type: 'pie',
         radius: '80%', // 餅圖半徑
         center: ['65%', '50%'], // 圓心位置
-        // 餅圖數據
-        data: [
-          { value: 1148, name: '17歲以下' },
-          { value: 2512, name: '17~24歲' },
-          { value: 1024, name: '24~35歲' },
-          { value: 735, name: '35~50歲' },
-          { value: 330, name: '51~60歲' }
-        ],
+        // 餅圖中心數據
+        data: dashBoardStore.ageDistribution,
         // 鼠標懸浮樣式效果
         emphasis: {
           itemStyle: {

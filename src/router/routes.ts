@@ -109,12 +109,12 @@ export const constantRoutes = [
         name: 'Trademark',
         meta: { title: '品牌管理', icon: 'ChromeFilled', hidden: false }
       },
-      // 二級路由 - 屬性管理
+      // 二級路由 - 商品規格管理
       {
         path: '/product/attr',
         component: () => import('@/views/Product/Attr/Attr.vue'),
         name: 'Attr',
-        meta: { title: '產品管理', icon: 'Goods', hidden: false }
+        meta: { title: '商品規格管理', icon: 'Goods', hidden: false }
       },
       // 二級路由 - SPU管理
       {

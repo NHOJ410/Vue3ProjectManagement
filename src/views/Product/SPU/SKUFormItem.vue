@@ -7,7 +7,7 @@ import { getSPUSaleAttrListAPI, getSPUImageListAPI, addSKUDataAPI } from '@/api/
 import type { SpuListData, SkuImageList, SpuSaleAttrValueListData, AddSKUDataType } from '@/api/product/spu/type'
 import type { AttrDataType } from '@/api/product/attr/type'
 
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 // SPU頁面的表單數據存儲
 const skuParams = ref<AddSKUDataType>({
@@ -66,6 +66,9 @@ const setDefaultImg = (row: SkuImageList) => {
 
   // 設置默認圖片
   skuParams.value.skuDefaultImg = row.imgUrl || ''
+
+  // 提示用戶 設置默認圖片完成
+  ElMessageBox.alert('', '提示', { type: 'success', message: '設置默認圖片成功' })
 }
 
 // -------------------- 底部保存按鈕和取消按鈕 ----------------------
@@ -160,7 +163,7 @@ defineExpose({ initAddSku })
         <el-form inline>
           <el-form-item v-for="item in attrArr" :key="item.id" :label="item.attrName" class="select-label">
             <!-- 這裡v-model 蒐集的下拉菜單數據 , 到時候提交到後端前還要進行處理 -->
-            <el-select class="product-select" placeholder="請選擇商品規格" v-model="item.attrIdAndValueId">
+            <el-select class="product-select" placeholder="選擇商品規格" v-model="item.attrIdAndValueId">
               <el-option
                 v-for="attrValue in item.attrValueList"
                 :key="attrValue.id"
@@ -177,7 +180,7 @@ defineExpose({ initAddSku })
         <el-form inline>
           <el-form-item v-for="item in saleArr" :key="item.id" :label="item.saleAttrName">
             <!-- 這裡v-model 蒐集的下拉菜單數據 , 到時候提交到後端前還要進行處理 -->
-            <el-select class="product-select" placeholder="請選擇銷售規格" v-model="item.attrIdAndValueId">
+            <el-select class="product-select" placeholder="選擇銷售規格" v-model="item.attrIdAndValueId">
               <el-option
                 v-for="attrValue in item.spuSaleAttrValueList"
                 :key="attrValue.id"

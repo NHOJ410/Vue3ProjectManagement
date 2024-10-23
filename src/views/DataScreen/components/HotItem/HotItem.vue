@@ -1,19 +1,15 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
+// 導入 年度銷售數據倉庫
+import { useDashBoardStore } from '@/stores'
+const dashBoardStore = useDashBoardStore()
+const { productArr } = storeToRefs(dashBoardStore)
 // 導入 echarts
 import * as echarts from 'echarts'
 
 // 獲取 銷售商品種類柱狀圖容器
 const typeDom = ref()
-
-// 商品數據
-const productArr = ref([
-  { name: '智慧型手機', value: 9542, color: '#c2e59c' },
-  { name: '筆記型電腦', value: 4574, color: '#64b3f4' },
-  { name: '藍芽耳機', value: 8397, color: '#c471ed' },
-  { name: '無線耳機', value: 5043, color: '#f64f59' },
-  { name: '智慧手錶', value: 6432, color: '#ED213A' }
-])
 
 // 注意要在 onMounted() 鉤子中 , 因為要等待 DOM元素加載完成
 onMounted(() => {

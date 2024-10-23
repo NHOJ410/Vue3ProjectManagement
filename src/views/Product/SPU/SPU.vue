@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeUnmount, ref, watch } from 'vue'
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 // 引入子組件
 import SPUFormItem from './SPUFormItem.vue' // 引入 SPUFromItem 子組件
@@ -15,6 +15,15 @@ const categoryStore = useCategoryListStore() // 定義分類倉庫
 
 const isModify = ref<boolean>(true) // 用來控制 下拉框組件 是否禁用的變量
 const isShowContent = ref<number>(0) // 用來控制 顯示 [ SPU內容區 : 0 ] [ 添加/編輯 SPU 頁面  : 1 ] [ 添加 SKU 頁面 : 2 ] 的變量
+
+onMounted(() => {
+  ElMessageBox.alert('', '提示', {
+    message: '如果要使用「查看按鈕」盡量在 <br> 手機->手機通訊->手機 上最後一頁的數據去查看<br>因為很多數據添加後後端沒有存儲上去',
+    confirmButtonText: 'OK',
+    type: 'warning',
+    dangerouslyUseHTMLString: true
+  })
+})
 
 // -------------------- 獲取內容區數據 --------------------
 
@@ -107,7 +116,7 @@ const spuName = ref<string>('')
 // 查看SKU按鈕的事件處理函數
 const checkSKU = async (row: SpuListData) => {
   const res = await getCheckSKUListAPI(row.id as number)
-
+  console.log(res)
   // 如果 code 不等於 200 提示用戶獲取列表失敗
   if (res.code !== 200) {
     ElMessage.error('獲取SKU列表失敗')

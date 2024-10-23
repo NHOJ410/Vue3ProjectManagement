@@ -24,6 +24,16 @@ onMounted(() => {
 
 // --------------- 添加 / 編輯菜單or功能按鈕部分 -----------------
 const isShowDialog = ref(false) // 控制 點擊添加 / 編輯菜單 按鈕後 對話框組件顯示隱藏狀態
+const formRef = ref() // 獲取 form 表單
+
+// 表單驗證部分
+const rules = ref({
+  // 菜單名稱
+  name: [{ required: true, message: '請輸入菜單名稱', trigger: 'blur' }],
+  // 路由名稱
+  code: [{ required: true, message: '請輸入路由名稱', trigger: 'blur' }]
+})
+
 // 存儲添加 / 編輯菜單or功能按鈕的數據
 const menuParams = ref<menuParamsType>({
   id: 0, // ID
@@ -35,6 +45,9 @@ const menuParams = ref<menuParamsType>({
 
 // 添加按鈕的事件處理函數
 const addMenu = (row: getMenuListDataType) => {
+  //清除表單驗證殘留的提示
+  formRef.value?.clearValidate()
+
   // 清除 表單驗證殘留的數據
   menuParams.value = {
     id: 0, // ID
@@ -63,6 +76,9 @@ const editMenu = (row: getMenuListDataType) => {
 
 // 對話框底部確認按鈕的事件處理函數
 const submit = async () => {
+  // 添加前先進行二次驗證 防止無效請求
+  await formRef.value?.validate()
+
   // 調用接口 提交數據
   const res = await addOrEditMenuAPI(menuParams.value)
 
@@ -136,11 +152,11 @@ const deleteMenu = async (row: getMenuListDataType) => {
     <el-dialog :title="menuParams.id ? '編輯菜單' : '添加菜單'" width="500px" v-model="isShowDialog">
       <!-- 中間輸入框 -->
       <template #default>
-        <el-form ref="form" :model="menuParams" label-width="80px">
-          <el-form-item label="菜單名稱 : ">
+        <el-form ref="formRef" :model="menuParams" label-width="80px" :rules="rules" :hide-required-asterisk="true">
+          <el-form-item label="菜單名稱 : " prop="name">
             <el-input placeholder="請輸入菜單名稱" v-model="menuParams.name"></el-input>
           </el-form-item>
-          <el-form-item label="路由名稱 : ">
+          <el-form-item label="路由名稱 : " prop="code">
             <el-input placeholder="請輸入路由名稱" v-model="menuParams.code"></el-input>
           </el-form-item>
         </el-form>

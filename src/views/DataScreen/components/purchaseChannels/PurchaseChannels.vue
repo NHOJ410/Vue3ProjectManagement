@@ -1,41 +1,12 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
+// 導入 年度銷售數據倉庫
+import { useDashBoardStore } from '@/stores'
+const dashBoardStore = useDashBoardStore()
+const { shopData, shopAgeSData } = storeToRefs(dashBoardStore)
 // 導入 echarts
 import * as echarts from 'echarts'
-
-// 購買渠道數據
-const shopData = ref([
-  { name: '蝦皮購物', max: 10000 },
-  { name: '露天市集', max: 10000 },
-  { name: 'MOMO購物', max: 10000 },
-  { name: 'PCHOME', max: 10000 },
-  { name: '東森購物', max: 10000 },
-  { name: '奇摩購物', max: 10000 }
-])
-
-// 統計年齡層購買渠道數據
-const shopAgeSData = ref([
-  {
-    name: '17歲以下',
-    value: [9057, 3510, 2020, 3500, 5000, 1800]
-  },
-  {
-    name: '17~24歲',
-    value: [8600, 3400, 6800, 2600, 4200, 8100]
-  },
-  {
-    name: '24~35歲',
-    value: [8500, 7800, 9500, 7500, 5700, 4700]
-  },
-  {
-    name: '35~50歲',
-    value: [5000, 3700, 2800, 2600, 4200, 2100]
-  },
-  {
-    name: '51~60歲',
-    value: [1057, 1000, 2400, 2700, 2000, 2100]
-  }
-])
 
 // ---------------------- 雷達圖製作 ------------------
 // 獲取 商品購買渠道 雷達圖的容器

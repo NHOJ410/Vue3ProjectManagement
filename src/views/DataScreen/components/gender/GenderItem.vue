@@ -1,5 +1,11 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
+// 導入年度銷售數據倉庫
+import { useDashBoardStore } from '@/stores'
+const dashBoardStore = useDashBoardStore()
+const { maletoFemaleRatio } = storeToRefs(dashBoardStore)
+
 // 導入 ecahrts
 import * as echarts from 'echarts'
 
@@ -29,7 +35,7 @@ onMounted(() => {
       // 男士的數據部份
       {
         type: 'bar', // 類型 : 柱狀圖
-        data: [54],
+        data: [maletoFemaleRatio.value.male], // 男生所佔的比例
         barWidth: 20, // 柱狀圖寬度
         // 男士柱條層級 (類似z-index)
         z: 100,
@@ -42,10 +48,10 @@ onMounted(() => {
       // 女士的數據部份
       {
         type: 'bar', // 類型 : 柱狀圖
-        data: [100],
+        data: [100], // 女生所佔的比例 (默認100 而男生的顯示層級比較高 所以會蓋過去 剩下就是女生的比例了)
         barWidth: 20, // 柱狀圖寬度
 
-        // 調整女士柱條位置 ( 蓋在男士柱條上)
+        // 調整女士柱條位置 ( 蓋在男士柱條下)
         barGap: '-100%',
 
         // 柱條顏色 和 圓角
@@ -86,8 +92,8 @@ onMounted(() => {
         <div class="rate">
           <!-- 男女比例數據文字展示 -->
           <div class="genderRate">
-            <p>男生 54 %</p>
-            <p>女生 46 %</p>
+            <p>男生 {{ maletoFemaleRatio.male }} %</p>
+            <p>女生 {{ maletoFemaleRatio.female }} %</p>
           </div>
           <!-- 男女比例 echarts柱狀圖展示 -->
           <div class="charts" ref="chartsDom"></div>

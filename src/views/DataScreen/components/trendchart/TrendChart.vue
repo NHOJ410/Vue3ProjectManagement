@@ -1,9 +1,15 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
+// 導入 年度銷售數據倉庫
+import { useDashBoardStore } from '@/stores'
+const dashBoardStore = useDashBoardStore()
+const { saleResult, displayStandards } = storeToRefs(dashBoardStore)
 // 導入 echarts
 import * as echarts from 'echarts'
 
-// -------------- 銷量趨勢圖的製作 -----------------
+// -------------- 銷售成績趨勢圖的製作 -----------------
+
 const chartsDom = ref() // 獲取 銷量趨勢圖容器
 
 // 注意要在 onMounted() 鉤子中 , 因為要等待 DOM元素加載完成
@@ -44,7 +50,7 @@ onMounted(() => {
       splitLine: {
         show: false // 不顯示分割線
       },
-      data: ['周一', '週二', '週三', '週四', '週五', '週六', '週日'], // X軸數據
+      data: saleResult.value.map((item: any) => item.date), // X軸分析數據
       axisLabel: {
         color: '#FFFFFF' // 將文字顏色設置為白色
       }
@@ -53,9 +59,9 @@ onMounted(() => {
     // Y軸設置
     yAxis: {
       type: 'value', // 數值型Y軸
-      min: 1500, // 最小值
-      max: 4500, // 最大值
-      interval: 800, // 標籤間隔
+      min: displayStandards.value.start, // 最小值
+      max: displayStandards.value.end, // 最大值
+      interval: displayStandards.value.middleDifference, // 間隔數值
       splitLine: {
         show: false // 不顯示分割線
       },
@@ -71,7 +77,7 @@ onMounted(() => {
     grid: {
       left: 80, // 左邊距
       top: 30, // 上邊距
-      right: 10, // 右邊距
+      right: 20, // 右邊距
       bottom: 30 // 下邊距
     },
 
@@ -79,7 +85,7 @@ onMounted(() => {
     series: [
       {
         // 數據
-        data: [2741, 3741, 4492, 3584, 4479, 4192, 4312], // 數據值
+        data: saleResult.value.map((item: any) => item.value), // 數據值
         type: 'line', // 圖表類型為折線圖
         smooth: true, // 平滑曲線
         // 遮罩樣式

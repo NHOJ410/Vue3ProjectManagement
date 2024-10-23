@@ -296,7 +296,7 @@ const deleteRole = async (row: recordsType) => {
       v-model="isShowDialog"
       :title="addOrEditroleParams.id ? '編輯職位' : '添加職位'"
       width="25vw"
-      style="height: 9vw"
+      style="height: 10vw"
     >
       <el-form :rules="addOrEditroleRules" :model="addOrEditroleParams" :hide-required-asterisk="true" ref="addOrEditFormRef">
         <!-- 職位名稱輸入框 -->

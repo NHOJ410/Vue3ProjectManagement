@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue'
 // 導入區域子組件
 // (1) 頂部按鈕和大標題
-import TopItem from '@/views/DataScreen/components/top/TopItem.vue'
+import TopItem from '@/views/DataScreen/components/topNav/TopItem.vue'
 // (2) 內容部分 - 左側
 import SatisfactionItem from '@/views/DataScreen/components/satisfaction/SatisfactionItem.vue'
 import GenderItem from '@/views/DataScreen/components/gender/GenderItem.vue'

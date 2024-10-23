@@ -190,40 +190,40 @@ const deleteSKU = async (row: SKURecordsData) => {
       <template #default>
         <!-- 內容區 - 商品名稱部分 -->
         <el-row>
-          <el-col :span="4">
+          <el-col :span="5">
             <h4 class="left-title">商品名稱 :</h4>
           </el-col>
-          <el-col :span="20" style="align-items: center">
+          <el-col :span="19" style="align-items: center">
             <p class="right-content">{{ checkProductData?.skuName }}</p>
           </el-col>
         </el-row>
 
         <!-- 內容區 - 商品描述部分 -->
         <el-row class="mt-50">
-          <el-col :span="4">
+          <el-col :span="5">
             <h4 class="left-title">商品描述 :</h4>
           </el-col>
-          <el-col :span="20">
+          <el-col :span="19">
             <p class="right-content product-desc">{{ checkProductData?.skuDesc }}</p>
           </el-col>
         </el-row>
 
         <!-- 內容區 - 商品價格部分 -->
         <el-row class="mt-50">
-          <el-col :span="4">
+          <el-col :span="5">
             <h4 class="left-title">商品價格 :</h4>
           </el-col>
-          <el-col :span="20">
+          <el-col :span="19">
             <p class="right-content" style="color: red">{{ checkProductData?.price }} 元</p>
           </el-col>
         </el-row>
 
         <!-- 內容區 - 商品規格部分 -->
         <el-row class="mt-50">
-          <el-col :span="4">
+          <el-col :span="5">
             <h4 class="left-title">商品規格 :</h4>
           </el-col>
-          <el-col :span="20">
+          <el-col :span="19">
             <el-tag
               type="primary"
               style="margin: 5px 10px 0 0"
@@ -237,10 +237,10 @@ const deleteSKU = async (row: SKURecordsData) => {
 
         <!-- 內容區 - 商品銷售規格部分 -->
         <el-row class="mt-50">
-          <el-col :span="4">
+          <el-col :span="5">
             <h4 class="left-title">銷售規格 :</h4>
           </el-col>
-          <el-col :span="20">
+          <el-col :span="19">
             <el-tag
               type="warning"
               style="margin: 5px 10px 0 0"

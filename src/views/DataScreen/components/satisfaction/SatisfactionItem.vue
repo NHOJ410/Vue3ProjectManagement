@@ -1,19 +1,16 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+// 導入 年度銷售數據倉庫
+import { useDashBoardStore } from '@/stores'
+const dashBoardStore = useDashBoardStore()
 // 導入 echarts
 import * as echarts from 'echarts'
 // 導入 echarts 水球圖插件
 import 'echarts-liquidfill'
 
-// 參與人數 數量 ( 由於沒有後端資料 , 所以寫死 )
-const joinNum = ref<string>('統計:5749人')
-
 // ------------------- 使用 echarts插件製作水球圖 ------------------
 // 獲取 水球圖容器
 const waterPoloChartDom = ref()
-
-// 顧客滿意度
-const Satisfaction = ref(94)
 
 // 注意要在 onMounted() 鉤子中 , 因為要等待 DOM元素加載完成
 onMounted(() => {
@@ -37,7 +34,7 @@ onMounted(() => {
     series: [
       {
         type: 'liquidFill', // 類型 : 水球圖
-        data: [Satisfaction.value / 100, 0.86], // 數據 ( 這裡將上方死數據 94 轉換成 0.94)
+        data: [1, dashBoardStore.satisfaction / 100], // 水球圖數據
         color: ['pink', 'hotpink'], // 水球圖顏色
         waveAnimation: true, // 是否要有動畫
         animationDurationUpdate: 2000, // 水球圖動畫時間
@@ -46,7 +43,7 @@ onMounted(() => {
         label: {
           // 使用自定義標籤，在 數字 左邊加愛心圖案
           formatter: function () {
-            return `{a|❤ ${Satisfaction.value}%}` // 格式化標籤，愛心加上 94%
+            return `{a|❤ ${dashBoardStore.satisfaction}%}` // 格式化標籤，愛心加上 數據
           },
           rich: {
             a: {
@@ -69,8 +66,7 @@ onMounted(() => {
         top: 'center', // 垂直居中
         style: {
           text: '❤', // 愛心圖案
-          fontSize: 50, // 字體大小
-          fill: 'red' // 愛心顏色
+          fontSize: 50 // 字體大小
         }
       }
     ]
@@ -88,7 +84,7 @@ onMounted(() => {
 
       <!-- 參與人數 -->
       <div class="number">
-        <span class="number-item" v-for="(item, $index) in joinNum" :key="$index">{{ item }}</span>
+        <span class="number-item" v-for="(item, $index) in dashBoardStore.joinNum" :key="$index">{{ item }}</span>
       </div>
     </div>
 
@@ -155,7 +151,7 @@ onMounted(() => {
 
   // 中間水球圖部分
   .waterPoloChart {
-    padding-top: 10px;
+    padding-top: 15px;
     width: 100%;
     height: 290px;
   }

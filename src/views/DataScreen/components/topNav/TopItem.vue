@@ -1,10 +1,31 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ElNotification, ElMessageBox } from 'element-plus'
 // 導入 moment.js 插件
 import moment from 'moment'
 // 導入 VueRouter
 import { useRouter } from 'vue-router'
 const router = useRouter()
+
+onMounted(() => {
+  ElMessageBox.alert('', '提示', {
+    message: '數據存在Pinia倉庫的DashBoard模塊中',
+    confirmButtonText: '好的',
+    type: 'warning'
+  })
+})
+
+// ----------------- 數據統計按鈕部分 -----------------
+const showData = () => {
+  ElNotification({
+    title: '提示',
+    message: '數據存在Pinia倉庫的DashBoard模塊中',
+    type: 'warning',
+    customClass: 'msg'
+  })
+}
+
+// ----------------- 右側當前時間展示部分 -----------------
 
 // 獲取當前時間
 const nowTime = ref(moment().format('YYYY : MM / DD HH : mm : ss'))
@@ -42,7 +63,7 @@ onBeforeUnmount(() => {
     <!-- 右側 -->
     <div class="right">
       <!-- 右側按鈕 -->
-      <span class="dataCount">數據統計</span>
+      <span class="dataCount" @click="showData">數據統計</span>
       <!-- 當前時間部分 -->
       <span class="nowTime">當前時間 : {{ nowTime }}</span>
     </div>
