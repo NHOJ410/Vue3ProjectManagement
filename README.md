@@ -23,7 +23,7 @@
 
 組件庫為 : ElementPlus 
 
-其他js庫用的有 : eCharts + nprogress + mock + moment 
+其他js庫用的有 : eCharts + nprogress + mock + moment + pinia持久化工具
 
 
 ## 在裡面也應用到的很多之前學習過的技術 , 起到了很好的複習作用
