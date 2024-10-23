@@ -39,6 +39,7 @@
     "@rushstack/eslint-patch": "^1.8.0",
     "@tsconfig/node20": "^20.1.4",
     "@types/node": "^20.16.5",
+    "@types/nprogress": "^0.2.3",
     "@vitejs/plugin-vue": "^5.0.5",
     "@vue/eslint-config-prettier": "^9.0.0",
     "@vue/eslint-config-typescript": "^13.0.0",
@@ -72,7 +73,7 @@
     "vite": "^5.3.1",
     "vite-plugin-mock": "^3.0.2",
     "vite-plugin-svg-icons": "^2.0.1",
-    "vue-tsc": "^2.0.21"
+    "vue-tsc": "^2.1.6"
   },
   "lint-staged": {
     "*.{js,ts,vue}": [
