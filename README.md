@@ -1,5 +1,5 @@
 # 項目名稱 : 品牌後台管理系統
-![image](https://github.com/user-attachments/assets/17d9b9cb-66ca-4c59-9c99-911309a4f52f)
+![image](https://github.com/user-attachments/assets/765d2adf-a2fc-482d-9c39-901bab54334d)
 
 # 前言 : 
 
