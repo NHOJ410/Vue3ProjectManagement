@@ -1,12 +1,11 @@
 <script setup lang="ts">
+// 導入組件
 import LogoItem from '@/Layout/Logo/LogoItem.vue' // 導入Logo組件
 import MenuItem from '@/Layout/Menu/MenuItem.vue' // 導入菜單組件
 import MainContent from '@/Layout/MainContent/MainContent.vue' // 導入二級路由出口組件
 import Tabbar from '@/Layout/Tabbar/Tabbar.vue' // 導入頂部導航組件
-import { ElMessageBox } from 'element-plus' // 導入 ElMessageBox組件
 // 導入 Pinia倉庫
-import { useUserStore } from '@/stores' // 導入用戶倉庫
-import { useLayoutSettingStore } from '@/stores' // 導入設定倉庫
+import { useUserStore, useLayoutSettingStore } from '@/stores' // 導入用戶倉庫
 const userStore = useUserStore() // 定義用戶倉庫
 const settingStore = useLayoutSettingStore() // 定義設定倉庫
 // 導入路由對象
@@ -51,7 +50,7 @@ const logOut = async () => {
           <MenuItem :menuList="userStore.menuRoutes"> </MenuItem>
         </el-menu>
         <!-- 因為菜單組件使用了 遞歸組件 且開啟了 router模式 (默認會由index來跳轉) 所以登出按鈕寫在外面 方便做後續處理 -->
-        <el-menu class="layout-menu" :default-active="route.path" :collapse="settingStore.isOpen">
+        <el-menu class="layout-menu" :collapse="settingStore.isOpen">
           <el-menu-item @click="logOut">
             <el-icon>
               <component :is="'SwitchButton'"></component>
@@ -72,6 +71,17 @@ const logOut = async () => {
 </template>
 
 <style lang="scss" scoped>
+// 處理菜單縮放後的樣式
+@mixin closeMenu {
+  transition: $base-menu-close-transition;
+
+  // 菜單縮放後的寬度
+  &.isOpen {
+    width: calc(100vw - $base-menu-close);
+    left: $base-menu-close;
+  }
+}
+
 .layout-container {
   width: 100%;
   height: 100vh;
@@ -100,8 +110,12 @@ const logOut = async () => {
         --el-menu-text-color: #fff;
         --el-menu-active-color: rgb(0, 204, 255);
 
-        &:hover {
-          --el-menu-text-color: #000;
+        ::v-deep(.el-sub-menu__title) {
+          @include menuHover;
+        }
+
+        .el-menu-item {
+          @include menuHover;
         }
       }
 
@@ -115,38 +129,28 @@ const logOut = async () => {
   // 頂部導航區域
   .layout-topNav {
     width: calc(100% - $base-menu-width); // 寬度 = 100% - 左側菜單寬度
-    height: $base-tapbar-height;
+    height: $base-tabbar-height;
     position: fixed;
     top: 0;
     left: $base-menu-width; // 固定定位寬度 = 左側菜單寬度
 
-    transition: $base-menu-close-transition;
-
-    // 菜單縮放時的寬度
-    &.isOpen {
-      width: calc(100vw - $base-menu-close);
-      left: $base-menu-close;
-    }
+    // 處理菜單縮放後的樣式
+    @include closeMenu;
   }
 
   // 中間內容部分
   .layout-content {
     color: white;
     width: calc(100% - $base-menu-width); // 寬度 = 100% - 左側菜單寬度
-    height: calc(100vh - $base-tapbar-height); // 高度 = 視口高度 - 頂部導航高度
+    height: calc(100vh - $base-tabbar-height); // 高度 = 視口高度 - 頂部導航高度
     position: absolute;
-    top: $base-tapbar-height; // 固定定位高度 = 頂部導航高度
+    top: $base-tabbar-height; // 固定定位高度 = 頂部導航高度
     left: $base-menu-width; // 固定定位寬度 = 左側菜單寬度
     padding: 20px;
     overflow: auto;
 
-    transition: $base-menu-close-transition;
-
-    // 菜單縮放時的寬度
-    &.isOpen {
-      width: calc(100vw - $base-menu-close);
-      left: $base-menu-close;
-    }
+    // 處理菜單縮放後的樣式
+    @include closeMenu;
   }
 }
 </style>

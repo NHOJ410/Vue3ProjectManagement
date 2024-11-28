@@ -33,13 +33,13 @@ export const constantRoutes = [
       }
     ]
   },
-  // 一級路由 - 年度銷售資料數據可視化
+  // 一級路由 - 年度銷售數據可視化
   {
     path: '/screen',
     component: () => import('@/views/DataScreen/DataScreen.vue'),
     name: 'Screen',
     meta: {
-      title: '年度銷售資料數據可視化',
+      title: '年度銷售數據可視化',
       hidden: false,
       icon: 'Platform'
     }
@@ -67,14 +67,14 @@ export const constantRoutes = [
     },
     // 二級路由
     children: [
-      // 二級路由 - 用戶管理
+      // 二級路由 - 員工管理
       {
         path: '/acl/user',
         component: () => import('@/views/Acl/User/User.vue'),
         name: 'User',
         meta: { title: '員工管理', icon: 'UserFilled', hidden: false }
       },
-      // 二級路由 - 角色管理
+      // 二級路由 - 職位管理
       {
         path: '/acl/role',
         component: () => import('@/views/Acl/Role/Role.vue'),

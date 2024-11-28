@@ -12,7 +12,7 @@ export const useUserStore = defineStore(
   'user',
   () => {
     // 存儲用戶 token
-    const userToken = ref<string | null>()
+    const userToken = ref<string | null>('123')
     // 存儲用戶訊息
     const userInfo = ref({
       username: '',
@@ -34,16 +34,13 @@ export const useUserStore = defineStore(
     // ------------ 獲取用戶訊息請求部分 --------------
     const getUserInfo = async () => {
       const res = await userInfoAPI()
-      if (res.code === 200) {
-        // 存儲用戶訊息 (用戶名/頭像)
-        userInfo.value.username = res.data.name
-        userInfo.value.avatar = res.data.avatar
 
-        return Promise.resolve() // 返回真 一個成功的 Promise
-      } else {
-        // 如果 code 不是 200 的話 代表獲取用戶訊息失敗 ( 可能是 token 過期 ) , 就拋出一個錯誤的 Promise 方便路由導航守衛去做判斷
-        return Promise.reject(new Error())
-      }
+      // 如果 code 不是 200 的話 代表獲取用戶訊息失敗 ( 可能是 token 過期 ) , 就拋出一個錯誤的 Promise 方便路由導航守衛去做判斷
+      if (res.code !== 200) return Promise.reject(new Error())
+
+      // 走到這裡代表是200 那就存儲用戶訊息(用戶名/頭像)
+      userInfo.value.username = res.data.name
+      userInfo.value.avatar = res.data.avatar
     }
 
     // ------------ 用戶登出處理( 刪除倉庫資料 ) --------------
@@ -53,20 +50,27 @@ export const useUserStore = defineStore(
       // 如果後台返回的 code 不是 200 就拋出一個錯誤的 Promise 方便 組件中做判斷
       if (res.code !== 200) return Promise.reject(new Error())
 
-      //  清除 token
+      // 走到這裡代表登出成功 , 清除token 和 用戶訊息
       userToken.value = ''
-      //  清除用戶訊息
       userInfo.value = {
         username: '',
         avatar: ''
       }
 
-      return Promise.resolve()
+      // 將控制跳過登入的變量 設為 false
+      skip.value = false
     }
 
     // --------- 存儲路由 ( 首頁左側菜單渲染用 方便做權限管理 ) ----------------
     // 目前這裡只存儲了常量路由
     const menuRoutes = ref(constantRoutes)
+
+    // ------------------------ 跳過登入部分(當接口有問題時) -----------------------
+    const skip = ref(false)
+
+    const setSkip = () => {
+      skip.value = !skip.value
+    }
 
     return {
       // ------ state ------
@@ -74,15 +78,18 @@ export const useUserStore = defineStore(
       userInfo, // 存儲用戶訊息
       menuRoutes, // 存儲路由 ( 生成菜單需要 方便做權限管理 )
 
+      skip, // 控制直接登入的變量
+
       // ------ action ------
       userLogin, // 用戶登入請求
       getUserInfo, // 獲取用戶訊息
-      userLogout // 用戶登出
+      userLogout, // 用戶登出
+      setSkip // 跳過登入的變量
     }
   },
   {
     persist: {
-      pick: ['userToken'] // 這裡只有token 需要進行本地存儲持久化
+      pick: ['userToken', 'skip'] // 這裡只有token 和 skip 需要進行本地存儲持久化
     }
   }
 )

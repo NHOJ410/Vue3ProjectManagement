@@ -9,9 +9,16 @@ $base-logo-height: 100px; // Logo高度
 $base-logo-title: 22px;  // Logo部分的文字大小
 $base-menu-close : 100px;  // 菜單縮放時的寬度
 $base-menu-close-transition : 0.6s linear; // 菜單縮放時的過渡效果
+@mixin menuHover {
+  transition: all 0.3s ease-in-out;
+  &:hover {
+    background: linear-gradient(to right, #141e30, #243b55);
+    transform: scale(1.1);
+  }
+}
 
 // 頂部導航條 
-$base-tapbar-height : 100px; // 頂部導航條高度
+$base-tabbar-height : 100px; // 頂部導航條高度
 
 
 

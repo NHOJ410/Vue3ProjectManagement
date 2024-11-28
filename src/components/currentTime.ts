@@ -1,5 +1,4 @@
 // 封裝當前時間函數
-
 export const currentTime = () => {
   // 獲取當前 hour
   const currentHours = new Date().getHours()

@@ -5,14 +5,17 @@ import { getTrademarkListAPI, addTrademarkAPI, editTrademarkAPI, deleteTrademark
 // 導入ts類型
 import type { Records, Trademark } from '@/api/product/trademark/type'
 import type { UploadProps } from 'element-plus'
-import { ElMessageBox, ElMessage } from 'element-plus'
+
+// 導入Hooks
+import { useFormRef } from './composables/useFormRef'
 
 // 一進頁面的消息提示 ( 因為接口鎖定前13條數據不能修改 所以先提示使用者 )
 onMounted(() => {
   ElMessageBox({
     title: '注意',
     message: '因為後端鎖定前13條數據不能修改 , 所以不能進行編輯或刪除喔! 然後因為是公共接口 所以可能會有一些奇怪的數據 請見諒= =',
-    confirmButtonText: '好的 我知道了'
+    confirmButtonText: '好的 我知道了',
+    customClass: 'alertMessage'
   })
 })
 
@@ -140,32 +143,9 @@ const handleAvatarSuccess: UploadProps['onSuccess'] = (response) => {
 
 // 表單驗證部份
 const formRef = ref()
-const rules = {
-  // 品牌名稱驗證
-  tmName: [
-    { required: true, message: '請輸入品牌名稱', trigger: 'blur' },
-    {
-      validator: (rule: any, value: any, callback: any) => {
-        if (value.trim().length < 2) {
-          callback(new Error('品牌名稱不能小於 2 個字'))
-        }
-        callback()
-      },
-      trigger: 'blur'
-    }
-  ],
-  // 品牌LOGO驗證 ( 因為圖片不算在表單內 , 所以必須要用自定義校驗規則 , 用 validate() 在按下確認按鈕時攔截	)
-  logoUrl: [
-    {
-      validator: (rule: any, value: any, callback: any) => {
-        // 如果沒有圖片就攔截
-        if (!value) callback(new Error('請上傳品牌LOGO圖片'))
-        // 有的話就放行
-        callback()
-      }
-    }
-  ]
-}
+// 將hooks裡面存儲的表單驗證部分取出來
+const { rules } = useFormRef()
+
 // 在點擊添加或編輯品牌時 , 先將表單驗證的警告清空 ( 利用 watch 來監視 isShow的變化 )
 watch(isShow, () => {
   //  ( 注意這裡要調用 nextTick() 方法 , 等待DOM渲染完畢 )
@@ -334,6 +314,22 @@ const onRemove = async (row: Trademark) => {
         height: 178px;
         text-align: center;
       }
+    }
+  }
+}
+</style>
+
+<style lang="scss">
+// 修改提示框樣式
+.is-message-box {
+  // 提示框寬度
+  .alertMessage {
+    --el-messagebox-width: 60vw;
+
+    // 內容文字
+    .el-message-box__message {
+      font-size: 20px;
+      color: red;
     }
   }
 }

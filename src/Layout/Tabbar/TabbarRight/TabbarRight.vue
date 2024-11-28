@@ -3,9 +3,7 @@ import { ref } from 'vue'
 // 導入 Pinia倉庫
 import { useUserStore } from '@/stores' // 導入用戶倉庫
 import { useLayoutSettingStore } from '@/stores' // 導入設定倉庫
-const userStore = useUserStore() // 定義用戶倉庫
 const settingStore = useLayoutSettingStore() // 定義設定倉庫
-import { ElMessage } from 'element-plus'
 
 // -------------- 全螢幕按鈕功能 ----------------
 const isFull = ref<number>(0) // 用來控制圖標的 flag : 0 -> 不是全螢幕  1 -> 全螢幕
@@ -96,7 +94,7 @@ const changeModelColor = (newColor: string, oldColor: string) => {
 <template>
   <div class="tabbarRight">
     <!-- 用戶名區域 -->
-    <h2 class="username">歡迎回來 {{ userStore.userInfo.username }}</h2>
+    <h2 class="username">歡迎回來 John</h2>
     <!-- 頭像區域 -->
     <el-avatar
       :size="80"
