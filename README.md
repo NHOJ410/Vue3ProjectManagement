@@ -1,5 +1,10 @@
 # 項目名稱 : 品牌後台管理系統
+
+### 項目路由配置
+![image](https://github.com/user-attachments/assets/31a7a7d2-d739-45cf-87b0-c62bad632de0)
+### 首頁
 ![image](https://github.com/user-attachments/assets/1d066a79-89cb-4f81-a0db-790304288f03)
+### 年度銷售數據可視化部分
 ![image](https://github.com/user-attachments/assets/70963d41-fb3d-40be-9ec2-13cbf9cac4d2)
 
 # 前言 : 
