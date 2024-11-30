@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { Refresh } from '@element-plus/icons-vue'
 // 導入 Pinia倉庫
-import { useUserStore } from '@/stores' // 導入用戶倉庫
 import { useLayoutSettingStore } from '@/stores' // 導入設定倉庫
 const settingStore = useLayoutSettingStore() // 定義設定倉庫
+// 導入hooks
+import { useChangeColor } from '@/composables/useChangeColor' //導入設置主題色 hooks
 
 // -------------- 全螢幕按鈕功能 ----------------
 const isFull = ref<number>(0) // 用來控制圖標的 flag : 0 -> 不是全螢幕  1 -> 全螢幕
@@ -66,30 +68,8 @@ const changeModel = () => {
 }
 
 // ------------ 切換按鈕主題顏色功能 ----------------
-const sureBtn = ref<string>('#000') // 存儲確認按鈕顏色
-const editBtn = ref<string>('#000') // 存儲編輯按鈕顏色
-const checkBtn = ref<string>('#000') // 存儲查看按鈕顏色
-const deleteBtn = ref<string>('#000') // 存儲刪除按鈕顏色
-
-// 調色盤集成 方便使用 v-for遍歷
-const colorObj = ref([
-  { type: 'primary', color: sureBtn, label: '主題', colorStr: '--el-color-primary' },
-  { type: 'warning', color: editBtn, label: '編輯按鈕', colorStr: '--el-color-warning' },
-  { type: 'info', color: checkBtn, label: '查看按鈕', colorStr: '--el-color-info' },
-  { type: 'danger', color: deleteBtn, label: '刪除按鈕', colorStr: '--el-color-danger' }
-])
-
-// 切換按鈕主題顏色的事件處理函數
-const changeModelColor = (newColor: string, oldColor: string) => {
-  // 獲取 html 根節點
-  const html = document.documentElement
-
-  // 獲取css變量
-  getComputedStyle(html).getPropertyValue(oldColor)
-
-  // 設定按鈕的主題顏色
-  html.style.setProperty(oldColor, newColor)
-}
+// 導入 顏色集成 , 切換主題色 , 重置主題色 功能
+const { resetColor, changeModelColor, colorObj } = useChangeColor()
 </script>
 <template>
   <div class="tabbarRight">
@@ -133,7 +113,7 @@ const changeModelColor = (newColor: string, oldColor: string) => {
     />
 
     <!-- 點擊 [ 切換按鈕主題顏色 ] 出現的設定視窗 -->
-    <el-dialog title="切換按鈕主題顏色 (時間問題 還有很多bug 請見諒..)" width="600px" v-model="isShowSettingPop" :append-to-body="true">
+    <el-dialog title="切換按鈕主題顏色" width="600px" v-model="isShowSettingPop" :append-to-body="true">
       <template #default>
         <el-tabs :stretch="true">
           <el-tab-pane v-for="item in colorObj" :key="item.color" :label="item.label">
@@ -145,6 +125,9 @@ const changeModelColor = (newColor: string, oldColor: string) => {
               <!-- 取色器組件 -->
               <el-color-picker @change="changeModelColor(item.color as string, item.colorStr)" v-model="item.color" size="large" />
             </div>
+          </el-tab-pane>
+          <el-tab-pane label="重置全部顏色">
+            <el-button color="red" :icon="Refresh" @click="resetColor">重置所有顏色</el-button>
           </el-tab-pane>
         </el-tabs>
       </template>
