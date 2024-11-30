@@ -3,9 +3,9 @@ import type { FormRules } from 'element-plus'
 
 export const useFormAndRules = () => {
   // 登入表單
-  const loginForm = ref<any>({
-    username: 'admin',
-    password: '111111'
+  const loginForm = ref({
+    username: '',
+    password: ''
   })
 
   // 登入表單 校驗規則

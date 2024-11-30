@@ -10,15 +10,14 @@ import { getSPUListAPI, getCheckSKUListAPI, deleteSPUAPI } from '@/api/product/s
 import type { RecordsData, SpuListData, CheckSkuListData } from '@/api/product/spu/type'
 // 引入倉庫
 import { useCategoryListStore } from '@/stores' // 導入分類倉庫
-import { ElMessage, ElMessageBox } from 'element-plus'
 const categoryStore = useCategoryListStore() // 定義分類倉庫
 
 const isModify = ref<boolean>(true) // 用來控制 下拉框組件 是否禁用的變量
-const isShowContent = ref<number>(0) // 用來控制 顯示 [ SPU內容區 : 0 ] [ 添加/編輯 SPU 頁面  : 1 ] [ 添加 SKU 頁面 : 2 ] 的變量
+const isShowContent = ref<number>(0) // 用來控制 顯示 [ 品項管理內容區 : 0 ] [ 添加/編輯商品詳情頁面  : 1 ] [ 添加商品詳情頁面 : 2 ] 的變量
 
 onMounted(() => {
   ElMessageBox.alert('', '提示', {
-    message: '如果要使用「查看按鈕」盡量在 <br> 手機->手機通訊->手機 上最後一頁的數據去查看<br>因為很多數據添加後後端沒有存儲上去',
+    message: '如果要使用「查看按鈕」盡量在 <br> 手機->手機通訊->手機 上最後一頁的數據去查看<br>因為很多數據添加後 「後端沒有存儲上去」',
     confirmButtonText: 'OK',
     type: 'warning',
     dangerouslyUseHTMLString: true
@@ -173,20 +172,20 @@ onBeforeUnmount(() => {
       <!-- SPU內容區 -->
       <div class="spu-content" v-show="isShowContent == 0">
         <!-- 添加SPU按鈕 -->
-        <el-button type="primary" icon="Plus" size="large" :disabled="!c3ID" @click="addSpuBtn(c3ID)">添加SPU</el-button>
+        <el-button type="primary" icon="Plus" size="large" :disabled="!c3ID" @click="addSpuBtn(c3ID)">添加新的商品</el-button>
 
         <!-- 內容區 - SPU列表 -->
         <el-table border style="margin-top: 20px" :data="spuList">
           <!-- 內容區 - 序列號 -->
           <el-table-column label="序列號" type="index" align="center" width="120px"></el-table-column>
           <!-- 內容區 - SPU名稱 -->
-          <el-table-column label="SPU名稱" align="center" width="280px">
+          <el-table-column label="商品名稱" align="center" width="280px">
             <template #default="{ row }">
               <h3 class="spu-Name">{{ row.spuName }}</h3>
             </template>
           </el-table-column>
           <!-- 內容區 - SPU描述 -->
-          <el-table-column label="SPU描述" show-overflow-tooltip align="center">
+          <el-table-column label="商品描述" show-overflow-tooltip align="center">
             <template #default="{ row }">
               <span class="spu-description">{{ row.description }}</span>
             </template>
@@ -194,14 +193,22 @@ onBeforeUnmount(() => {
           <!-- 內容區 - 按鈕部分 -->
           <el-table-column label="操作" align="center" width="280px">
             <template #default="{ row }">
-              <!-- 按鈕部分 - 添加SKU按鈕 -->
-              <el-button type="primary" icon="Plus" title="添加SKU" @click="addSkuBtn(row)"></el-button>
-              <!-- 按鈕部分 - 修改SPU按鈕 -->
-              <el-button type="warning" icon="Edit" title="修改SPU" @click="editSpuBtn(row)"></el-button>
-              <!-- 按鈕部分 - 查看SPU按鈕 -->
-              <el-button type="info" icon="View" title="查看SPU" @click="checkSKU(row)"></el-button>
-              <!-- 按鈕部分 - 刪除SPU按鈕 -->
-              <el-button type="danger" icon="Delete" title="刪除SPU" @click="deleteSPUBtn(row)"></el-button>
+              <el-tooltip class="box-item" :hide-after="0" effect="dark" content="設定商品詳細資訊" placement="top-start">
+                <!-- 按鈕部分 - 設定商品詳細資訊按鈕 -->
+                <el-button type="primary" icon="Setting" @click="addSkuBtn(row)"></el-button>
+              </el-tooltip>
+              <el-tooltip class="box-item" :hide-after="0" effect="dark" content="修改商品詳細資訊" placement="top-start">
+                <!-- 按鈕部分 - 修改商品詳細資訊按鈕 -->
+                <el-button type="warning" icon="Edit" @click="editSpuBtn(row)"></el-button>
+              </el-tooltip>
+              <el-tooltip class="box-item" :hide-after="0" effect="dark" content="查看商品詳細資訊" placement="top-start">
+                <!-- 按鈕部分 - 查看商品詳細資訊按鈕 -->
+                <el-button type="info" icon="View" @click="checkSKU(row)"></el-button>
+              </el-tooltip>
+              <el-tooltip class="box-item" :hide-after="0" effect="dark" content="刪除商品" placement="top-start">
+                <!-- 按鈕部分 - 刪除商品按鈕 -->
+                <el-button type="danger" icon="Delete" @click="deleteSPUBtn(row)"></el-button>
+              </el-tooltip>
             </template>
           </el-table-column>
         </el-table>

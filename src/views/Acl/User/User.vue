@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, onMounted, computed, watch } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
 // 導入API
 import {
   getUserInfoListAPI,
@@ -16,15 +15,35 @@ import type { FormInstance } from 'element-plus'
 // 導入並定義倉庫
 import { useUserStore } from '@/stores' // 導入用戶倉庫
 const userStore = useUserStore() // 定義用戶倉庫
+// 導入hooks
+import { useUserFormRules } from './composables/useUserFormRules' // 導入員工表單驗證規則Hooks
+
+// ----------------------- 搜索員工資料部分 ------------------------
+const searchUserName = ref<string>('') // 用來儲存搜尋輸入框的 員工姓名
+
+// 搜索按鈕的事件處理函數
+const searchUserBtn = async () => {
+  // 點擊按鈕時 重新渲染一次列表即可 , 將參數帶進去
+  getUserInfo(currentPage.value)
+}
+
+// 小優化 輸入框的值為空的話 重新渲染列表
+watch(searchUserName, () => {
+  // 用if 判斷做即可!
+  if (searchUserName.value === '') getUserInfo(currentPage.value)
+})
 
 // --------------------- 渲染員工管理列表部分 ---------------------
 const currentPage = ref<number>(1) // 當前分頁頁碼
 const dataCount = ref<number>(5) // 當前頁面展示數據數量
 const totalData = ref<number>(100) // 數據的總數量
 const userInfoData = ref<getUserInfoRecordsType[]>([]) // 存儲員工列表資料
+const isLoading = ref<boolean>(false)
 
 // 定義方法 , 獲取員工管理列表資料
 const getUserInfo = async (currentPage = 1) => {
+  isLoading.value = true
+
   // 發送請求 獲取數據
   const res = await getUserInfoListAPI(currentPage, dataCount.value, searchUserName.value)
 
@@ -33,6 +52,8 @@ const getUserInfo = async (currentPage = 1) => {
   // 走到這代表獲取成功 , 存儲需要的數據吧!
   totalData.value = res.data.total // 存儲數據的總數量
   userInfoData.value = res.data.records // 存儲員工列表資料
+
+  isLoading.value = false
 }
 
 onMounted(() => {
@@ -52,35 +73,8 @@ const userParams = ref<getUserInfoRecordsType>({
   password: '' // 存儲員工密碼
 })
 
-// 員工資料表單 校驗規則
-const rules = {
-  // 員工姓名
-
-  name: [
-    { required: true, message: '請輸入員工姓名', trigger: 'blur' },
-    {
-      validator(rule: any, value: any, callback: any) {
-        const regex = /^[a-zA-Z\u4e00-\u9fa5]{2,}$/
-        if (!regex.test(value)) {
-          callback(new Error('員工姓名需包含至少兩個中英文字符'))
-        } else {
-          callback() // 校驗通過
-        }
-      },
-      trigger: 'blur'
-    }
-  ],
-  // 員工暱稱(帳號)
-  username: [
-    { required: true, message: '請輸入帳號', trigger: 'blur' },
-    { min: 3, max: 15, message: '帳號長度應在 3 到 15 個字符之間', trigger: 'blur' }
-  ],
-  // 員工密碼
-  password: [
-    { required: true, message: '請輸入密碼', trigger: 'blur' },
-    { min: 6, max: 15, message: '密碼長度應在 6 到 15 個字符之間', trigger: 'blur' }
-  ]
-}
+// 員工表單驗證規則
+const { rules } = useUserFormRules()
 
 // 添加員工的點擊事件處理函數
 const addUser = () => {
@@ -274,21 +268,6 @@ const deletePatchUser = async () => {
   // 重新渲染員工管理列表
   await getUserInfo(userInfoData.value.length > 1 ? currentPage.value : currentPage.value - 1)
 }
-
-// ----------------------- 搜索員工資料部分 ------------------------
-const searchUserName = ref<string>('') // 用來儲存搜尋輸入框的 員工姓名
-
-// 搜索按鈕的事件處理函數
-const searchUserBtn = async () => {
-  // 點擊按鈕時 重新渲染一次列表即可 , 將參數帶進去
-  getUserInfo(currentPage.value)
-}
-
-// 小優化 輸入框的值為空的話 重新渲染列表
-watch(searchUserName, () => {
-  // 用if 判斷做即可!
-  if (searchUserName.value === '') getUserInfo(currentPage.value)
-})
 </script>
 
 <template>
@@ -316,7 +295,7 @@ watch(searchUserName, () => {
       <el-button icon="Delete" type="danger" :disabled="deleteUserArr.length === 0" @click="deletePatchUser">批量刪除員工資料</el-button>
 
       <!-- 內容區 - 員工資料表格部分 -->
-      <el-table border style="margin-top: 20px" :data="userInfoData" @selection-change="handleSelectionChange">
+      <el-table v-loading="isLoading" border style="margin-top: 20px" :data="userInfoData" @selection-change="handleSelectionChange">
         <!-- 員工表格 - 左側複選框 -->
         <el-table-column type="selection" align="center" width="50px"></el-table-column>
         <!-- 員工表格 - 序列號 -->
@@ -360,6 +339,7 @@ watch(searchUserName, () => {
 
       <!-- 內容區 -分頁器部分 -->
       <el-pagination
+        v-if="userInfoData.length > 0"
         v-model:current-page="currentPage"
         v-model:page-size="dataCount"
         style="margin-top: 30px"

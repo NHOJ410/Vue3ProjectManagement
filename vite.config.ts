@@ -37,7 +37,7 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
         resolvers: [ElementPlusResolver()]
       }),
       Components({
-        resolvers: [ElementPlusResolver()]
+        resolvers: [ElementPlusResolver({ importStyle: 'sass' })]
       })
     ],
     resolve: {
@@ -50,28 +50,38 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
       preprocessorOptions: {
         scss: {
           javascriptEnabled: true,
-          additionalData: '@import "./src/styles/variable.scss";'
+          additionalData: `@use "./src/styles/variable.scss"as *;`
         }
       }
     },
-    //代理跨域
+    // // 配置代理跨域
     server: {
       proxy: {
-        '/api/admin/acl': {
-          // 更新代理规则以匹配新的路径
-          target: 'http://sph-api.atguigu.cn', // 目标后端服务
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api/, '')
-        },
-        '/api': {
-          //获取数据的服务器地址设置
-          target: 'http://39.98.123.211:8510',
-          //需要代理跨域
-          changeOrigin: true,
-          //路径重写
-          rewrite: (path) => path.replace(/^\/api/, '')
+        [env.VITE_APP_BASE_API]: {
+          target: env.VITE_SERVE, // 獲取數據的服務器地址
+          changeOrigin: true, // 是否開啟代理跨域
+          rewrite: (path) => path.replace(/^\/api/, '') // 路徑重寫
         }
       }
     }
+    //代理跨域
+    // server: {
+    //   proxy: {
+    //     '/api/admin/acl': {
+    //       // 更新代理规则以匹配新的路径
+    //       target: 'http://sph-api.atguigu.cn', // 目标后端服务
+    //       changeOrigin: true,
+    //       rewrite: (path) => path.replace(/^\/api/, '')
+    //     },
+    //     '/api': {
+    //       //获取数据的服务器地址设置
+    //       target: 'http://39.98.123.211:8510',
+    //       //需要代理跨域
+    //       changeOrigin: true,
+    //       //路径重写
+    //       rewrite: (path) => path.replace(/^\/api/, '')
+    //     }
+    //   }
+    // }
   }
 }

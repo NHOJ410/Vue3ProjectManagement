@@ -109,26 +109,27 @@ export const constantRoutes = [
         name: 'Trademark',
         meta: { title: '品牌管理', icon: 'ChromeFilled', hidden: false }
       },
+      // 二級路由 - 品項管理
+      {
+        path: '/product/spu',
+        component: () => import('@/views/Product/SPU/SPU.vue'),
+        name: 'Spu',
+        meta: { title: '品項管理', icon: 'Goods', hidden: false }
+      },
       // 二級路由 - 商品規格管理
       {
         path: '/product/attr',
         component: () => import('@/views/Product/Attr/Attr.vue'),
         name: 'Attr',
-        meta: { title: '商品規格管理', icon: 'Goods', hidden: false }
+        meta: { title: '商品規格管理', icon: 'Calendar', hidden: false }
       },
-      // 二級路由 - SPU管理
-      {
-        path: '/product/spu',
-        component: () => import('@/views/Product/SPU/SPU.vue'),
-        name: 'Spu',
-        meta: { title: 'SPU管理', icon: 'Calendar', hidden: false }
-      },
+
       // 二級路由 - SKU管理
       {
         path: '/product/sku',
         component: () => import('@/views/Product/SKU/SKU.vue'),
         name: 'Sku',
-        meta: { title: 'SKU管理', icon: 'Orange', hidden: false }
+        meta: { title: '商品上/下架操作', icon: 'Orange', hidden: false }
       }
     ]
   },

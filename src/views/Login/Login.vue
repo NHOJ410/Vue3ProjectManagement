@@ -8,7 +8,7 @@ const userStore = useUserStore()
 import { useRouter } from 'vue-router'
 const router = useRouter()
 // 導入當前時間函數
-import { currentTime } from '@/components/currentTime'
+import { currentTime } from '@/composables/useCurrentTime'
 // 導入 hooks
 import { useFormAndRules } from './composables/useFormAndRules'
 

@@ -7,8 +7,6 @@ import { getSPUSaleAttrListAPI, getSPUImageListAPI, addSKUDataAPI } from '@/api/
 import type { SpuListData, SkuImageList, SpuSaleAttrValueListData, AddSKUDataType } from '@/api/product/spu/type'
 import type { AttrDataType } from '@/api/product/attr/type'
 
-import { ElMessage, ElMessageBox } from 'element-plus'
-
 // SPU頁面的表單數據存儲
 const skuParams = ref<AddSKUDataType>({
   category3Id: '', // 三級分類 ID
@@ -139,23 +137,23 @@ defineExpose({ initAddSku })
     <!-- 添加SKU表單部分 -->
     <el-form label-width="100px" :model="skuParams">
       <!-- SKU名稱部分 -->
-      <el-form-item label="SKU名稱">
-        <el-input placeholder="請輸入SKU名稱" style="width: 30vw" v-model="skuParams.skuName"></el-input>
+      <el-form-item label="商品名稱">
+        <el-input placeholder="請輸入商品名稱" style="width: 30vw" v-model="skuParams.skuName"></el-input>
       </el-form-item>
 
       <!-- SKU價格部分 -->
-      <el-form-item label="SKU價格(元)">
-        <el-input placeholder="請輸入SKU價格(元)" style="width: 30vw" type="number" v-model="skuParams.price"></el-input>
+      <el-form-item label="商品價格(元)">
+        <el-input placeholder="請輸入商品價格(元)" style="width: 30vw" type="number" v-model="skuParams.price"></el-input>
       </el-form-item>
 
       <!-- SKU重量部分 -->
-      <el-form-item label="SKU重量(g)">
-        <el-input placeholder="請輸入SKU重量(g)" style="width: 30vw" type="number" v-model="skuParams.weight"></el-input>
+      <el-form-item label="商品重量(g)">
+        <el-input placeholder="請輸入商品重量(g)" style="width: 30vw" type="number" v-model="skuParams.weight"></el-input>
       </el-form-item>
 
       <!-- SKU描述 文本域部分 -->
-      <el-form-item label="SKU描述">
-        <el-input placeholder="請輸入SKU描述" type="textarea" :rows="10" v-model="skuParams.skuDesc"></el-input>
+      <el-form-item label="商品描述">
+        <el-input placeholder="請輸入商品描述" type="textarea" :rows="10" v-model="skuParams.skuDesc"></el-input>
       </el-form-item>
 
       <!-- 商品規格 下拉菜單部分 -->
@@ -193,9 +191,8 @@ defineExpose({ initAddSku })
       </el-form-item>
 
       <!-- 產品圖片 表格部分 -->
-      <el-form-item label="產品圖片">
+      <el-form-item label="商品圖片">
         <el-table border :data="imgArr" ref="imgTableRef">
-          <el-table-column type="selection" align="center"></el-table-column>
           <el-table-column label="產品名稱" align="center" prop="imgName"> </el-table-column>
           <el-table-column label="產品圖片" align="center">
             <template #default="{ row }">
@@ -212,7 +209,7 @@ defineExpose({ initAddSku })
 
       <!-- 底部保存和取消按鈕部分 -->
       <el-form-item>
-        <el-button type="primary" icon="Check" @click="onSave">保存</el-button>
+        <el-button type="primary" icon="Check" @click="onSave">保存商品</el-button>
         <el-button type="warning" icon="Close" @click="cancel">取消</el-button>
       </el-form-item>
     </el-form>

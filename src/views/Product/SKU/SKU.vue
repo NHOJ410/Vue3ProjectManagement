@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
 // 導入api
 import { getSKUDataAPI, onSaleProductAPI, cancelSaleProductAPI, getCheckSKUListAPI, deleteSKUListAPI } from '@/api/product/sku/sku'
 // 導入類型

@@ -18,8 +18,6 @@ import type {
   SpuSaleAttrValueList
 } from '@/api/product/spu/type'
 import type { UploadProps } from 'element-plus'
-// 導入 elementPlus組件庫
-import { ElMessageBox, ElMessage } from 'element-plus'
 
 // --------------- 編輯 / 添加功能 ( 這裡要設定起始值為空的目的是因為 添加的時候也可以用到 , 等等要做數據回顯 或是提交給服務器的 ) ----------------
 let spuParams = ref<SpuListData>({
@@ -82,8 +80,8 @@ const onPreview: UploadProps['onPreview'] = (file: any) => {
 // 圖片上傳前的校驗 ( 圖片檔案類型和大小 )
 const onBeforeUpload: UploadProps['beforeUpload'] = (rawFile) => {
   // 如果圖片不是 jpg、jpeg、png、gif 格式 或者 大小超過 5MB 就中斷上傳
-  if (rawFile.type !== 'image/jpeg' && rawFile.type !== 'image/png' && rawFile.type !== 'image/gif') {
-    ElMessageBox.alert('檔案必須是 jpg、jpeg、png、gif 格式', '注意', {
+  if (rawFile.type !== 'image/jpeg' && rawFile.type !== 'image/png') {
+    ElMessageBox.alert('檔案必須是 jpg、jpeg、png 格式', '注意', {
       confirmButtonText: '我知道了'
     })
     return Promise.reject(new Error('檔案格式錯誤!'))
@@ -330,7 +328,7 @@ defineExpose({ getSkuData, initAddSpu })
             <Plus />
           </el-icon>
         </el-upload>
-        <el-dialog v-model="imgPreview">
+        <el-dialog v-model="imgPreview" :custom-class="'custom-dialog'" :close-on-click-modal="true" :show-close="false">
           <img :src="previewImgUrl" alt="Preview Image" style="width: 100%; height: 100%; object-fit: cover" />
         </el-dialog>
       </el-form-item>

@@ -14,11 +14,10 @@ import 'element-plus/theme-chalk/dark/css-vars.css'
 import 'virtual:svg-icons-register'
 // 全局註冊el-icon圖標組件
 import GlobalItem from '@/components/index'
-
-const app = createApp(App)
-
 // 引入 路由前置/後置守衛
 import '@/router/permission'
+
+const app = createApp(App)
 
 // pinia部分
 app.use(pinia)
