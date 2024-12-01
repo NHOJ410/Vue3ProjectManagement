@@ -1,25 +1,5 @@
-@import './reset.scss'; // 導入 reset.scss 清除默認樣式
-
-// 修改滾動條的樣式
-
-// // 控制滾動條的寬度
-// ::-webkit-scrollbar {
-//    width: 20px;
-// }
-
-// // 設置滾動條軌道的顏色
-// ::-webkit-scrollbar-track {
-//    background-color: #013566;
-// }
-
-// // 設置滾動條滑塊的寬度和顏色。
-// ::-webkit-scrollbar-thumb{
-//   width: 10px;
-//   background-color:yellowgreen;
-// }
-
-// 暗黑模式 dark類名
+// 暗黑模式的樣式
 .dark {
-  background-color: #666666;
   color: #fff ;
+  background-color: #666;
 }

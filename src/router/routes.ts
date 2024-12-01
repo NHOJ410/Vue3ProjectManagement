@@ -1,6 +1,5 @@
 // 路由配置
 
-// 1. 常量路由 ( 任何用戶無須權限都可以訪問 )
 export const constantRoutes = [
   // 一級路由 - 登入頁面
   {
@@ -33,13 +32,13 @@ export const constantRoutes = [
       }
     ]
   },
-  // 一級路由 - 年度銷售資料數據可視化
+  // 一級路由 - 年度銷售數據可視化
   {
     path: '/screen',
     component: () => import('@/views/DataScreen/DataScreen.vue'),
     name: 'Screen',
     meta: {
-      title: '年度銷售資料數據可視化',
+      title: '年度銷售數據可視化',
       hidden: false,
       icon: 'Platform'
     }
@@ -67,14 +66,14 @@ export const constantRoutes = [
     },
     // 二級路由
     children: [
-      // 二級路由 - 用戶管理
+      // 二級路由 - 員工管理
       {
         path: '/acl/user',
         component: () => import('@/views/Acl/User/User.vue'),
         name: 'User',
         meta: { title: '員工管理', icon: 'UserFilled', hidden: false }
       },
-      // 二級路由 - 角色管理
+      // 二級路由 - 職位管理
       {
         path: '/acl/role',
         component: () => import('@/views/Acl/Role/Role.vue'),
@@ -109,26 +108,27 @@ export const constantRoutes = [
         name: 'Trademark',
         meta: { title: '品牌管理', icon: 'ChromeFilled', hidden: false }
       },
+      // 二級路由 - 商品管理
+      {
+        path: '/product/spu',
+        component: () => import('@/views/Product/SPU/SPU.vue'),
+        name: 'Spu',
+        meta: { title: '商品管理', icon: 'Goods', hidden: false }
+      },
       // 二級路由 - 商品規格管理
       {
         path: '/product/attr',
         component: () => import('@/views/Product/Attr/Attr.vue'),
         name: 'Attr',
-        meta: { title: '商品規格管理', icon: 'Goods', hidden: false }
+        meta: { title: '商品規格管理', icon: 'Calendar', hidden: false }
       },
-      // 二級路由 - SPU管理
-      {
-        path: '/product/spu',
-        component: () => import('@/views/Product/SPU/SPU.vue'),
-        name: 'Spu',
-        meta: { title: 'SPU管理', icon: 'Calendar', hidden: false }
-      },
+
       // 二級路由 - SKU管理
       {
         path: '/product/sku',
         component: () => import('@/views/Product/SKU/SKU.vue'),
         name: 'Sku',
-        meta: { title: 'SKU管理', icon: 'Orange', hidden: false }
+        meta: { title: '商品銷售狀態', icon: 'Orange', hidden: false }
       }
     ]
   },

@@ -1,9 +1,12 @@
+import vue from '@vitejs/plugin-vue'
 import { fileURLToPath, URL } from 'node:url'
 import path from 'path'
+// 自動導入插件
+import AutoImport from 'unplugin-auto-import/vite'
+import Components from 'unplugin-vue-components/vite'
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 // 引入 svg圖標插件
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
-
-import vue from '@vitejs/plugin-vue'
 
 // mock接口
 import { UserConfigExport, ConfigEnv, loadEnv } from 'vite'
@@ -29,6 +32,12 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
         iconDirs: [path.resolve(process.cwd(), 'src/assets/icons')],
         // Specify symbolId format
         symbolId: 'icon-[dir]-[name]'
+      }),
+      AutoImport({
+        resolvers: [ElementPlusResolver()]
+      }),
+      Components({
+        resolvers: [ElementPlusResolver({ importStyle: 'sass' })]
       })
     ],
     resolve: {
@@ -40,12 +49,13 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
     css: {
       preprocessorOptions: {
         scss: {
+          api: 'modern-compiler', // or "modern"
           javascriptEnabled: true,
-          additionalData: '@import "./src/styles/variable.scss";'
+          additionalData: `@use "@/styles/variable.scss"as *;`
         }
       }
     },
-    // 配置代理跨域
+    // // 配置代理跨域
     server: {
       proxy: {
         [env.VITE_APP_BASE_API]: {
@@ -55,5 +65,25 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
         }
       }
     }
+    // ------------------- 服務器錯誤時的備案 -------------------
+    //代理跨域
+    // server: {
+    //   proxy: {
+    //     '/api/admin/acl': {
+    //       // 更新代理规则以匹配新的路径
+    //       target: 'http://sph-api.atguigu.cn', // 目标后端服务
+    //       changeOrigin: true,
+    //       rewrite: (path) => path.replace(/^\/api/, '')
+    //     },
+    //     '/api': {
+    //       //获取数据的服务器地址设置
+    //       target: 'http://39.98.123.211:8510',
+    //       //需要代理跨域
+    //       changeOrigin: true,
+    //       //路径重写
+    //       rewrite: (path) => path.replace(/^\/api/, '')
+    //     }
+    //   }
+    // }
   }
 }

@@ -7,10 +7,10 @@ const settingStore = useLayoutSettingStore() // 定義設定倉庫
 
 <template>
   <div class="logo" v-if="setting.isShow">
-    <div class="logo-content">
+    <h1 class="logo-content">
       <img :src="setting.logoURL" alt="Logo圖片" />
-      <h1 :class="{ isOpen: settingStore.isOpen }">{{ setting.title }}</h1>
-    </div>
+      <div class="title" :class="{ isOpen: settingStore.isOpen }">{{ setting.title }}</div>
+    </h1>
   </div>
 </template>
 
@@ -24,20 +24,23 @@ const settingStore = useLayoutSettingStore() // 定義設定倉庫
     width: 100%;
     height: $base-logo-height;
 
+    // Logo圖片
     img {
       width: 80px;
       height: 80px;
     }
 
-    h1 {
-      font-size: $base-logo-title;
-      color: #fff;
-      font-weight: 700;
-      text-shadow: 2px 2px 2px rgba(245, 238, 238, 0.8);
-      opacity: 1;
+    // 網頁標題
+    .title {
       margin: 0 10px;
+      font-size: $base-logo-title;
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 2px 2px 2px rgb(245 238 238 / 80%);
+      opacity: 1;
       transition: $base-menu-close-transition;
 
+      // 菜單縮放後的樣式
       &.isOpen {
         font-size: 0;
         opacity: 0;

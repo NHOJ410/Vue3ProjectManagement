@@ -1,9 +1,9 @@
 // 封裝當前時間函數
-
 export const currentTime = () => {
   // 獲取當前 hour
   const currentHours = new Date().getHours()
 
+  // 設定問候語
   let welcomeMsg: string = ''
 
   if (currentHours <= 6) {
@@ -19,6 +19,6 @@ export const currentTime = () => {
   }
 
   return {
-    welcomeMsg
+    welcomeMsg // 問候語
   }
 }

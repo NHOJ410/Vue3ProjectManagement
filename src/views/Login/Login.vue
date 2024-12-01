@@ -1,9 +1,5 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { ElNotification, ElMessageBox } from 'element-plus'
-import { UserFilled, Lock } from '@element-plus/icons-vue' // 導入 element-plus 的圖標
-// // 導入type類型
-// import type { LoginForm } from '@/api/user/type' // 導入用戶登入表單類型
 // 導入 Pinia倉庫
 import { useUserStore } from '@/stores'
 const userStore = useUserStore()
@@ -11,7 +7,9 @@ const userStore = useUserStore()
 import { useRouter } from 'vue-router'
 const router = useRouter()
 // 導入當前時間函數
-import { currentTime } from '@/utils/currentTime'
+import { currentTime } from '@/composables/useCurrentTime'
+// 導入 hooks
+import { useFormAndRules } from './composables/useFormAndRules'
 
 // -------------- 提示用戶消息彈出框 ---------------
 
@@ -26,25 +24,8 @@ onMounted(() => {
 
 // -------------- 登入表單部分 --------------
 
-// 登入表單
-const loginForm = ref<any>({
-  username: 'admin',
-  password: '111111'
-})
-
-// 登入表單 校驗規則
-const rules = {
-  // 帳號校驗
-  username: [
-    { required: true, message: '請輸入帳號', trigger: 'blur' },
-    { min: 3, max: 15, message: '帳號長度應在 3 到 15 個字符之間', trigger: 'blur' }
-  ],
-  // 密碼校驗
-  password: [
-    { required: true, message: '請輸入密碼', trigger: 'blur' },
-    { min: 6, max: 15, message: '密碼長度應在 6 到 15 個字符之間', trigger: 'blur' }
-  ]
-}
+// 登入表單和表單驗證Hooks
+const { rules, loginForm } = useFormAndRules()
 
 // -------------- 登入按鈕部分 --------------
 const elFormRef = ref() // 獲取表單元素
@@ -53,7 +34,7 @@ const btnLoading = ref<boolean>(false) // 按鈕 loading變量
 const loginBtn = async () => {
   await elFormRef.value.validate() // 按下登入按鈕後 觸發elForm的二次驗證
 
-  btnLoading.value = true // 按下登入按鈕後 開啟 loading效果 ( 防抖 )
+  btnLoading.value = true // 按下登入按鈕後 開啟 loading效果 ( 節流 )
 
   //  利用 try catch 來根據 retrun Promise 的結果來判斷登入是否成功
 
@@ -84,7 +65,7 @@ const loginBtn = async () => {
       showClose: false
     })
 
-    btnLoading.value = false // 登入失敗後 , 關閉按鈕的 loading 狀態 ( 防抖 )
+    btnLoading.value = false // 登入失敗後 , 關閉按鈕的 loading 狀態 ( 節流 )
   }
 
   //  不管成功或失敗 按下登入按鈕後 將表單清空
@@ -94,11 +75,11 @@ const loginBtn = async () => {
   }
 }
 
-// -------------- 直接跳轉到首頁按鈕部分 -------
+// -------------- 直接跳轉到首頁按鈕部分 ---------
 const toHome = () => {
-  // 由於後端的token 不是隨機生成的 是固定的 所以可以這樣處理
-  userStore.userToken =
-    'eyJhbGciOiJIUzUxMiIsInppcCI6IkdaSVAifQ.H4sIAAAAAAAAAKtWKi5NUrJSCjAK0A0Ndg1S0lFKrShQsjI0NzY0NDIyNjLVUSotTi3yTAGKQZh-ibmpQB2JKbmZeUq1APcDlJFBAAAA.ScvHQobwz9HyTdWmfIMexIVbkYsSbz7Z9CgNuK7XcAjqR1IbgCJkaL3JS_3e760vXGbVJObw_i5M7qh6TxVziA'
+  // 跳過導航守衛檢查 直接進入頁面中
+  userStore.setSkip()
+
   // 跳轉到首頁
   router.push('/home')
 }
@@ -116,24 +97,28 @@ const toHome = () => {
         <!-- 右側登入頁面表單 ( 頁面小於 768px 佔滿整份 ) -->
         <el-col :span="12" :xs="24">
           <el-form class="login-form" :model="loginForm" :rules="rules" ref="elFormRef">
-            <h1>Hello ! 歡迎來到品牌後台管理頁面</h1>
+            <h2>Hello ! 歡迎來到品牌後台管理頁面</h2>
             <!-- 帳號區域 -->
             <el-form-item prop="username">
-              <el-input :prefix-icon="UserFilled" v-model.trim="loginForm.username" placeholder="請輸入員工暱稱(帳號)"></el-input>
+              <el-input prefix-icon="UserFilled" v-model.trim="loginForm.username" placeholder="請輸入員工暱稱(帳號)"></el-input>
             </el-form-item>
             <!-- 密碼區域 -->
             <el-form-item prop="password">
-              <el-input :prefix-icon="Lock" v-model.trim="loginForm.password" show-password placeholder="請輸入密碼"></el-input>
+              <el-input prefix-icon="Lock" v-model.trim="loginForm.password" show-password placeholder="請輸入密碼"></el-input>
             </el-form-item>
             <!-- 按鈕區域 -->
             <el-form-item>
               <div class="buttonItem">
+                <!-- 登入按鈕 -->
                 <el-button type="primary" :loading="btnLoading" class="login-btn" @click="loginBtn" @keyup.enter="loginBtn"
                   >用戶登入</el-button
                 >
-                <el-button type="warning" :loading="btnLoading" @click="toHome" @keyup.enter="loginBtn"
-                  >如果遇到接口問題無法登入請按這裡</el-button
-                >
+                <!-- 直接進入首頁 -->
+                <el-popconfirm width="400" title="由於token關係 可能會有一些功能無法使用" @confirm="toHome">
+                  <template #reference>
+                    <el-button type="warning" :loading="btnLoading">如果遇到接口問題無法登入請按這裡</el-button>
+                  </template>
+                </el-popconfirm>
               </div>
             </el-form-item>
           </el-form>
@@ -164,24 +149,27 @@ const toHome = () => {
   // 登入表單
   .login-form {
     position: relative;
-    max-width: 80%;
     top: 30vh;
     align-items: center;
+    max-width: 80%;
+    padding: 20px;
     background: url('@/assets/images/login_form.png') no-repeat;
     background-size: cover;
-    padding: 20px;
 
     // 登入頁面標題
-    h1 {
-      color: white;
+    h2 {
+      margin: 20px;
       font-size: 1.4em;
+      color: white;
       text-align: left;
       white-space: nowrap;
-      margin: 20px;
+      user-select: none;
     }
 
+    // 按鈕部分
     .buttonItem {
       display: flex;
+      width: 100%;
     }
   }
 }

@@ -6,10 +6,10 @@ import { getSPUSaleAttrListAPI, getSPUImageListAPI, addSKUDataAPI } from '@/api/
 // 導入類型
 import type { SpuListData, SkuImageList, SpuSaleAttrValueListData, AddSKUDataType } from '@/api/product/spu/type'
 import type { AttrDataType } from '@/api/product/attr/type'
+// 導入hooks
+import { useSetProductForm } from './composable/UseSetProductForm'
 
-import { ElMessage, ElMessageBox } from 'element-plus'
-
-// SPU頁面的表單數據存儲
+// 設定商品詳細資訊頁面的表單數據存儲
 const skuParams = ref<AddSKUDataType>({
   category3Id: '', // 三級分類 ID
   spuId: '', // 已有SPU的ID
@@ -31,9 +31,16 @@ const skuParams = ref<AddSKUDataType>({
 const attrArr = ref<AttrDataType[]>([]) // 存儲 [ 商品規格下拉菜單 ] 的數據
 const saleArr = ref<SpuSaleAttrValueListData[]>([]) // 存儲 [ 銷售規格下拉菜單 ] 的數據
 const imgArr = ref<SkuImageList[]>([]) // 存儲 [ 產品圖片 ] 的數據
+const isLoading = ref<boolean>(false) // 用來控制 loading 的變量
+const skuParamsRef = ref() // 獲取表單元素
 
-// 父組件點擊 添加SPU按鈕 , 子組件做出對應的判斷
+// 父組件點擊 設定商品詳細資訊按鈕 , 子組件做出對應的判斷
 const initAddSku = async (c1ID: number, c2ID: number, row: SpuListData) => {
+  isLoading.value = true
+
+  // 先清空殘留的表單驗證
+  skuParamsRef.value.resetFields()
+
   // 點擊跳轉後 , 將該產品的三個 ID 先儲存起來
   skuParams.value.category3Id = row.category3Id
   skuParams.value.tmId = row.tmId
@@ -50,6 +57,9 @@ const initAddSku = async (c1ID: number, c2ID: number, row: SpuListData) => {
   // 獲取產品圖片的數據
   const res3 = await getSPUImageListAPI(row.id as number)
   imgArr.value = res3.data
+
+  // 關閉 loading
+  isLoading.value = false
 }
 
 // -------------------------- 底部 商品圖片表格 ---------------------------------
@@ -58,12 +68,6 @@ const imgTableRef = ref<any>() // 獲取 底部商品圖片表格的 組件實�
 
 // 設置 默認圖片按鈕 的事件處理函數
 const setDefaultImg = (row: SkuImageList) => {
-  // 這裡只需要 單選框功能 , 點擊時先將全部的勾選狀態清空
-  imgTableRef.value.clearSelection()
-
-  // 設置單選框的勾選狀態
-  imgTableRef.value.toggleRowSelection(row, true)
-
   // 設置默認圖片
   skuParams.value.skuDefaultImg = row.imgUrl || ''
 
@@ -81,8 +85,14 @@ const cancel = () => {
   emit('changeIsShowContent', { webNum: 0, params: '' })
 }
 
+// 導入表單驗證規則
+const { skuParamsRules } = useSetProductForm()
+
 // 底部保存按鈕的事件處理函數
 const onSave = async () => {
+  // 先進行表單驗證 如果有為空的就中斷
+  await skuParamsRef.value.validate()
+
   // 點擊保存按鈕時 , 先將我們之前儲存在 attrArr 和 saleArr 的下拉菜單數據 [ attrIdAndValueId ] 儲存起來 並push到 skuParams中用於提交數據
   // 處理 attrArr 下拉菜單數據
   attrArr.value.map((item: any) => {
@@ -123,7 +133,7 @@ const onSave = async () => {
 
   // 走到這裡代表成功 , 一樣提示用戶
   ElMessage.success('添加SKU成功!')
-  // 並跳轉回 SPU頁面 ( 使用先前定義的自定義事件 )
+  // 並跳轉回 商品管理頁面 ( 使用先前定義的自定義事件 )
   emit('changeIsShowContent', { webNum: 0, params: '' })
 }
 
@@ -136,30 +146,37 @@ defineExpose({ initAddSku })
 
 <template>
   <div class="sku-form">
-    <!-- 添加SKU表單部分 -->
-    <el-form label-width="100px" :model="skuParams">
-      <!-- SKU名稱部分 -->
-      <el-form-item label="SKU名稱">
-        <el-input placeholder="請輸入SKU名稱" style="width: 30vw" v-model="skuParams.skuName"></el-input>
+    <!-- 設定商品詳細資訊頁面表單部分 -->
+    <el-form
+      label-width="100px"
+      ref="skuParamsRef"
+      :model="skuParams"
+      v-loading="isLoading"
+      :rules="skuParamsRules"
+      :hide-required-asterisk="true"
+    >
+      <!-- 商品名稱部分 -->
+      <el-form-item label="商品名稱" prop="skuName">
+        <el-input placeholder="請輸入商品名稱" style="width: 30vw" v-model="skuParams.skuName"></el-input>
       </el-form-item>
 
-      <!-- SKU價格部分 -->
-      <el-form-item label="SKU價格(元)">
-        <el-input placeholder="請輸入SKU價格(元)" style="width: 30vw" type="number" v-model="skuParams.price"></el-input>
+      <!-- 商品價格部分 -->
+      <el-form-item label="商品價格(元)" prop="price">
+        <el-input placeholder="請輸入商品價格(元)" style="width: 30vw" type="number" v-model="skuParams.price"></el-input>
       </el-form-item>
 
-      <!-- SKU重量部分 -->
-      <el-form-item label="SKU重量(g)">
-        <el-input placeholder="請輸入SKU重量(g)" style="width: 30vw" type="number" v-model="skuParams.weight"></el-input>
+      <!-- 商品重量部分 -->
+      <el-form-item label="商品重量(g)" prop="weight">
+        <el-input placeholder="請輸入商品重量(g)" style="width: 30vw" type="number" v-model="skuParams.weight"></el-input>
       </el-form-item>
 
-      <!-- SKU描述 文本域部分 -->
-      <el-form-item label="SKU描述">
-        <el-input placeholder="請輸入SKU描述" type="textarea" :rows="10" v-model="skuParams.skuDesc"></el-input>
+      <!-- 商品描述 文本域部分 -->
+      <el-form-item label="商品描述" prop="skuDesc">
+        <el-input placeholder="請輸入商品描述" type="textarea" :rows="10" v-model="skuParams.skuDesc"></el-input>
       </el-form-item>
 
       <!-- 商品規格 下拉菜單部分 -->
-      <el-form-item label="商品規格">
+      <el-form-item label="商品規格" prop="skuAttrValueList">
         <el-form inline>
           <el-form-item v-for="item in attrArr" :key="item.id" :label="item.attrName" class="select-label">
             <!-- 這裡v-model 蒐集的下拉菜單數據 , 到時候提交到後端前還要進行處理 -->
@@ -176,7 +193,7 @@ defineExpose({ initAddSku })
       </el-form-item>
 
       <!-- 銷售規格 下拉菜單部分 -->
-      <el-form-item label="銷售規格">
+      <el-form-item label="銷售規格" prop="skuSaleAttrValueList">
         <el-form inline>
           <el-form-item v-for="item in saleArr" :key="item.id" :label="item.saleAttrName">
             <!-- 這裡v-model 蒐集的下拉菜單數據 , 到時候提交到後端前還要進行處理 -->
@@ -193,15 +210,15 @@ defineExpose({ initAddSku })
       </el-form-item>
 
       <!-- 產品圖片 表格部分 -->
-      <el-form-item label="產品圖片">
+      <el-form-item label="商品圖片">
         <el-table border :data="imgArr" ref="imgTableRef">
-          <el-table-column type="selection" align="center"></el-table-column>
           <el-table-column label="產品名稱" align="center" prop="imgName"> </el-table-column>
           <el-table-column label="產品圖片" align="center">
             <template #default="{ row }">
               <el-image :src="row.imgUrl" fit="cover" style="width: 60%; height: 60%"></el-image>
             </template>
           </el-table-column>
+
           <el-table-column label="操作" align="center">
             <template #default="{ row }">
               <el-button type="warning" icon="InfoFilled" @click="setDefaultImg(row)">設置為默認圖片</el-button>
@@ -212,7 +229,7 @@ defineExpose({ initAddSku })
 
       <!-- 底部保存和取消按鈕部分 -->
       <el-form-item>
-        <el-button type="primary" icon="Check" @click="onSave">保存</el-button>
+        <el-button type="primary" icon="Check" @click="onSave">保存商品</el-button>
         <el-button type="warning" icon="Close" @click="cancel">取消</el-button>
       </el-form-item>
     </el-form>

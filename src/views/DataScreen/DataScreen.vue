@@ -15,6 +15,17 @@ import HotItem from '@/views/DataScreen/components/HotItem/HotItem.vue'
 import PurchaseChannels from '@/views/DataScreen/components/purchaseChannels/PurchaseChannels.vue'
 import AgeDistribution from './components/ageDistribution/AgeDistribution.vue'
 
+// 一進頁面就先顯示提示訊息
+onMounted(() => {
+  ElMessageBox.alert('', '提示', {
+    message: '<p>數據存放在Pinia倉庫的DashBoard模塊中</p>',
+    confirmButtonText: '好的',
+    type: 'warning',
+    dangerouslyUseHTMLString: true,
+    customClass: 'alertMsg'
+  })
+})
+
 // ------------------ 內容區自適應縮放大小 ------------------
 
 const screenDom = ref() // 獲取 數據面板 內容區的 DOM元素
@@ -77,7 +88,7 @@ window.onresize = () => {
         <div class="screen-right">
           <!-- 商品種類柱狀圖 -->
           <HotItem class="HotItem"></HotItem>
-          <!-- 年齡分布折線圖 -->
+          <!-- 消費水平年齡分布折線圖 -->
           <AgeDistribution class="ageDistribution"></AgeDistribution>
           <!-- 銷售通路餅圖 -->
           <PurchaseChannels class="purchaseChannels"></PurchaseChannels>
@@ -96,10 +107,11 @@ window.onresize = () => {
   // 數據面板 - 內容展示區域
   .screen {
     position: fixed;
+    top: 50%;
+    left: 50%;
     width: 1920px;
     height: 1080px;
-    left: 50%;
-    top: 50%;
+
     // 將位移基點固定在左上角
     transform-origin: left top;
 
@@ -116,11 +128,11 @@ window.onresize = () => {
 
       // 左側
       .screen-left {
-        flex: 1;
-        height: 1040px;
         display: flex;
+        flex: 1;
         flex-direction: column;
         gap: 10px;
+        height: 1040px;
 
         // 客戶滿意度水球圖組件
         .satisfaction {
@@ -140,8 +152,8 @@ window.onresize = () => {
 
       // 中間
       .screen-center {
-        flex: 1.5;
         display: flex;
+        flex: 1.5;
         flex-direction: column;
         margin: 0 15px;
 
@@ -152,36 +164,57 @@ window.onresize = () => {
 
         .trendChart {
           flex: 1;
+
           // background-color: gold;
         }
       }
 
       // 右側
       .screen-right {
-        flex: 1;
-        // background-color: red;
-        height: 1040px;
         display: flex;
+        flex: 1;
         flex-direction: column;
         gap: 10px;
+
+        // background-color: red;
+        height: 1040px;
 
         // 商品種類圖組件
         .HotItem {
           flex: 1.5;
+
           // background-color: red;
         }
 
         // 年齡分布圖組件
         .ageDistribution {
           flex: 1;
+
           // background-color: skyblue;
         }
 
         // 銷售通路圖組件
         .purchaseChannels {
           flex: 1;
+
           // background-color: chocolate;
         }
+      }
+    }
+  }
+}
+</style>
+
+<style lang="scss">
+// 提示框樣式
+.is-message-box {
+  .el-overlay-message-box {
+    .alertMsg {
+      --el-messagebox-width: 25vw;
+
+      p {
+        font-size: 20px;
+        font-weight: 700;
       }
     }
   }

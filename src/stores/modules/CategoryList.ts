@@ -41,6 +41,7 @@ export const useCategoryListStore = defineStore('categoryList', () => {
 
   // 利用 watch 來監聽 c1ID 的變化 , 一旦變化了就發請求 獲取二級分類下拉菜單數據
   watch(c1ID, () => {
+    c2List.value = [] // 重製二級分類下拉菜單 防止數據殘留
     if (c1ID.value === '') return // 避免ID重置時觸發請求
     resetCategoryList(false)
     getC2()
@@ -66,6 +67,7 @@ export const useCategoryListStore = defineStore('categoryList', () => {
 
   // 利用 watch 來監聽 c2ID 的變化 , 一旦變化了就發請求 獲取三級分類下拉菜單數據
   watch(c2ID, () => {
+    c3List.value = [] // 重製三級分類下拉菜單 防止數據殘留
     if (c2ID.value === '') return // 避免ID重置時觸發請求
     resetCategoryList(true)
     getC3()
@@ -81,7 +83,7 @@ export const useCategoryListStore = defineStore('categoryList', () => {
   // 用來偵測 一級菜單 或 二級菜單 二次選擇後 , 其他菜單的數據殘留問題
   const resetCategoryList = (isC2: boolean) => {
     // 如果選擇的不是二級菜單 , 那就是一級菜單
-    if (isC2 === false) {
+    if (!isC2) {
       // 讓 二/三級菜單的 id 重製 , 因為 id 綁定 el-select的 value 屬性 , value 為 0 那麼也就沒有選項了!
       c2ID.value = ''
       c3ID.value = ''
@@ -94,14 +96,20 @@ export const useCategoryListStore = defineStore('categoryList', () => {
   // -------------------- 獲取篩選後的內容 ---------------------
 
   const attrContentList = ref<AttrDataType[]>([]) // 存儲點擊完成下拉菜單後得到的內容
+  const isLoading = ref<boolean>(false) // 用來控制 loading 的變量
 
   // 發送請求 獲取篩選後的內容
   const getAttrContent = async () => {
+    isLoading.value = true
+
     const res = await getAttrContentAPI(c1ID.value as number, c2ID.value as number, c3ID.value as number)
 
     if (res.code !== 200) return Promise.reject(new Error('獲取篩選後的內容失敗'))
 
+    // 走到這裡代表成功 那就存儲數據
     attrContentList.value = res.data
+
+    isLoading.value = false
   }
 
   // 使用 watch來監視 c3ID 的變化 , 一旦變化了就發請求 獲取篩選後的內容
@@ -136,6 +144,7 @@ export const useCategoryListStore = defineStore('categoryList', () => {
 
     attrContentList, // 存儲點擊完成下拉菜單後得到的內容
     getAttrContent, // 發送請求 獲取篩選後的內容
+    isLoading, // 用來控制 loading 的變量
 
     resetCategoryListData // 用來重製  路由跳轉後 下拉菜單內容的 actions
   }
