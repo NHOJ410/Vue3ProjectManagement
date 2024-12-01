@@ -35,7 +35,6 @@ onMounted(() => {
   const myCharts = echarts.init(mapDom.value)
   //  通過初始化拿到的 echarts , 裡面去配置設置項
   myCharts.setOption({
-    // 地圖設置
     geo: {
       map: 'taiwan',
       roam: true, // 可通過滾輪縮放和平移
@@ -43,32 +42,25 @@ onMounted(() => {
       label: {
         show: true, // 顯示地圖上的地名標籤
         color: '#fff', // 標籤顏色 (白色)
-        fontSize: 12, // 標籤字體大小
-        emphasis: {
+        fontSize: 12 // 標籤字體大小
+      },
+      emphasis: {
+        label: {
           show: true, // 滑鼠懸停時顯示標籤
           color: 'yellow', // 懸停標籤顏色
           fontSize: 40 // 鼠標懸停後的文字大小
-        }
-      },
-      itemStyle: {
-        areaColor: {
-          type: 'linear', // 使用線性漸變
-          x: 0,
-          y: 0,
-          x2: 0,
-          y2: 1,
-          colorStops: [
-            { offset: 0, color: '#2c3e50' }, // 深藍色 (頂部)
-            { offset: 1, color: '#6FB1FC' } // 較淺的藍色 (底部)
-          ]
         },
-        borderColor: '#0a0a0a', // 邊界顏色 (接近黑色)
-        borderWidth: 1.5 // 邊界寬度
-      },
-      emphasis: {
         itemStyle: {
           areaColor: '#ffcc00' // 懸停時的區域顏色 (亮黃色)
         }
+      },
+      itemStyle: {
+        areaColor: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+          { offset: 0, color: '#2c3e50' }, // 深藍色 (頂部)
+          { offset: 1, color: '#6FB1FC' } // 較淺的藍色 (底部)
+        ]),
+        borderColor: '#0a0a0a', // 邊界顏色 (接近黑色)
+        borderWidth: 1.5 // 邊界寬度
       },
       regions: [
         {
@@ -80,6 +72,7 @@ onMounted(() => {
         }
       ]
     },
+
     // 飛機航線設置
     series: [
       // 台北到高雄
@@ -262,9 +255,9 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .box {
+  position: relative;
   width: 100%;
   height: 500px;
-  position: relative;
 
   // 大標題
   .mapTitle {
@@ -276,11 +269,11 @@ onMounted(() => {
 
     // 標題部分的背景圖
     &::after {
-      content: '';
       display: block;
-      margin-top: 10px;
       width: 175px;
       height: 4px;
+      margin-top: 10px;
+      content: '';
       background: url('../../images/dataScreen-title.png') no-repeat;
       background-size: cover;
     }
@@ -289,23 +282,23 @@ onMounted(() => {
   // 航線路徑表格
   .airplaneRoute {
     position: absolute;
-    left: 100px;
     bottom: 40px;
-    text-align: center;
+    left: 100px;
     z-index: -99;
+    text-align: center;
 
     // 表格標題
     & dt {
+      margin-bottom: 10px;
       font-size: 30px;
       color: #fff200;
-      margin-bottom: 10px;
     }
 
     // 表格內容
     & dd {
       font-size: 24px;
-      color: $base-dashboard-text-color;
       line-height: 34px;
+      color: $base-dashboard-text-color;
     }
   }
 

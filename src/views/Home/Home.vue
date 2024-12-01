@@ -5,7 +5,7 @@ import { useUserStore } from '@/stores' // 導入用戶倉庫
 const userStore = useUserStore() // 定義用戶倉庫
 
 // 導入問候語函數
-import { currentTime } from '@/utils/currentTime'
+import { currentTime } from '@/composables/useCurrentTime'
 </script>
 
 <template>
@@ -27,7 +27,7 @@ import { currentTime } from '@/utils/currentTime'
         <!-- 右側 問候語和用戶名區域 -->
         <div class="username">
           <p style="margin-right: 20px">{{ currentTime().welcomeMsg }}</p>
-          <h3>歡迎回來啊 {{ userStore.userInfo.username }}</h3>
+          <h3>歡迎回來啊 John</h3>
         </div>
 
         <!-- 右下角 作品描述 -->
@@ -63,11 +63,11 @@ import { currentTime } from '@/utils/currentTime'
       display: flex;
       align-items: center;
       margin-left: 20px;
-      background: linear-gradient(45deg, #2d5f4a, #7ad4af, #1de793);
-      background-clip: text;
-      color: transparent;
       font-size: 30px;
       font-weight: bold;
+      color: transparent;
+      background: linear-gradient(45deg, #2d5f4a, #7ad4af, #1de793);
+      background-clip: text;
     }
 
     .desc {
@@ -80,9 +80,9 @@ import { currentTime } from '@/utils/currentTime'
 
   // 底部 svg LOGO圖標區域
   .bottom {
-    margin-top: 100px;
     display: flex;
     justify-content: space-between;
+    margin-top: 100px;
   }
 }
 </style>

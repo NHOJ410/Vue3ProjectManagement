@@ -20,25 +20,25 @@ import TabbarRight from '@/Layout/Tabbar/TabbarRight/TabbarRight.vue' // 導入�
 
 <style lang="scss" scoped>
 .tabbar {
-  width: 100%;
-  height: 100%;
   display: flex;
   justify-content: space-between;
+  width: 100%;
+  height: 100%;
 
   // 左側 切換展開按鈕和麵包屑組件
   .tabbar-left {
     display: flex;
+    gap: 30px;
     align-items: center;
     height: 100%;
-    gap: 30px;
     font-size: 30px;
   }
 
   // 右側按鈕 / 頭像 / 用戶名
   .tabbar-right {
     display: flex;
-    align-items: center;
     gap: 30px;
+    align-items: center;
     margin-right: 30px;
     vertical-align: baseline;
   }

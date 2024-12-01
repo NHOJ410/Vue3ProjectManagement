@@ -5,14 +5,19 @@ import { getTrademarkListAPI, addTrademarkAPI, editTrademarkAPI, deleteTrademark
 // 導入ts類型
 import type { Records, Trademark } from '@/api/product/trademark/type'
 import type { UploadProps } from 'element-plus'
-import { ElMessageBox, ElMessage } from 'element-plus'
+
+// 導入Hooks
+import { useFormRef } from './composables/useFormRef'
 
 // 一進頁面的消息提示 ( 因為接口鎖定前13條數據不能修改 所以先提示使用者 )
 onMounted(() => {
   ElMessageBox({
     title: '注意',
-    message: '因為後端鎖定前13條數據不能修改 , 所以不能進行編輯或刪除喔! 然後因為是公共接口 所以可能會有一些奇怪的數據 請見諒= =',
-    confirmButtonText: '好的 我知道了'
+    message:
+      '<p>因為後端鎖定前13條數據不能修改 , 所以不能進行編輯或刪除喔!</p> <p>然後因為是公共接口 所以可能會有一些奇怪的數據 請見諒= =</p>',
+    confirmButtonText: '好的 我知道了',
+    customClass: 'alertMessage',
+    dangerouslyUseHTMLString: true
   })
 })
 
@@ -23,14 +28,17 @@ const dataCount = ref<number>(10) // 當前頁面展示數據數量
 // ---------- 獲取品牌管理 數據 ----------
 const totalCount = ref<number>(0) // 品牌總數量
 const trademarkList = ref<Records>([]) // 品牌內容列表
+const isLoading = ref<boolean>(false) // 用來控制 loading 的變量
 
 // 獲取品牌列表
 const getTrademarkList = async (currentPage: number) => {
+  isLoading.value = true
   const res = await getTrademarkListAPI(currentPage, dataCount.value)
   if (res.code === 200) {
     totalCount.value = res.data.total
     trademarkList.value = res.data.records
   }
+  isLoading.value = false
 }
 onMounted(() => {
   getTrademarkList(currentPage.value)
@@ -140,32 +148,9 @@ const handleAvatarSuccess: UploadProps['onSuccess'] = (response) => {
 
 // 表單驗證部份
 const formRef = ref()
-const rules = {
-  // 品牌名稱驗證
-  tmName: [
-    { required: true, message: '請輸入品牌名稱', trigger: 'blur' },
-    {
-      validator: (rule: any, value: any, callback: any) => {
-        if (value.trim().length < 2) {
-          callback(new Error('品牌名稱不能小於 2 個字'))
-        }
-        callback()
-      },
-      trigger: 'blur'
-    }
-  ],
-  // 品牌LOGO驗證 ( 因為圖片不算在表單內 , 所以必須要用自定義校驗規則 , 用 validate() 在按下確認按鈕時攔截	)
-  logoUrl: [
-    {
-      validator: (rule: any, value: any, callback: any) => {
-        // 如果沒有圖片就攔截
-        if (!value) callback(new Error('請上傳品牌LOGO圖片'))
-        // 有的話就放行
-        callback()
-      }
-    }
-  ]
-}
+// 將hooks裡面存儲的表單驗證部分取出來
+const { rules } = useFormRef()
+
 // 在點擊添加或編輯品牌時 , 先將表單驗證的警告清空 ( 利用 watch 來監視 isShow的變化 )
 watch(isShow, () => {
   //  ( 注意這裡要調用 nextTick() 方法 , 等待DOM渲染完畢 )
@@ -196,7 +181,7 @@ const onRemove = async (row: Trademark) => {
 <template>
   <div class="trademark" v-if="trademarkList.length !== 0">
     <!-- 卡片組件 -->
-    <el-card class="box-card" width="100%">
+    <el-card class="box-card" width="100%" v-loading="isLoading">
       <!-- 頂部添加按鈕 -->
       <el-button type="primary" icon="Plus" @click="onAdd">添加品牌</el-button>
       <!-- 內容區 表格組件 -->
@@ -309,17 +294,17 @@ const onRemove = async (row: Trademark) => {
   .avatar-uploader {
     :deep() {
       .avatar {
+        display: block;
         width: 178px;
         height: 178px;
-        display: block;
       }
 
       .el-upload {
-        border: 1px dashed var(--el-border-color);
-        border-radius: 6px;
-        cursor: pointer;
         position: relative;
         overflow: hidden;
+        cursor: pointer;
+        border: 1px dashed var(--el-border-color);
+        border-radius: 6px;
         transition: var(--el-transition-duration-fast);
       }
 
@@ -328,11 +313,31 @@ const onRemove = async (row: Trademark) => {
       }
 
       .el-icon.avatar-uploader-icon {
-        font-size: 28px;
-        color: #8c939d;
         width: 178px;
         height: 178px;
+        font-size: 28px;
+        color: #8c939d;
         text-align: center;
+      }
+    }
+  }
+}
+</style>
+
+<style lang="scss">
+// 修改提示框樣式
+.is-message-box {
+  // 提示框寬度
+  .alertMessage {
+    --el-messagebox-width: 40vw;
+
+    // 內容文字
+    .el-message-box__message {
+      font-size: 20px;
+      color: red;
+
+      p {
+        margin-top: 20px;
       }
     }
   }

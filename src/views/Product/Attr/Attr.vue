@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { nextTick, onBeforeUnmount, ref, onMounted } from 'vue'
+import { nextTick, onBeforeUnmount, ref } from 'vue'
 import { storeToRefs } from 'pinia'
-import { ElMessage, ElMessageBox } from 'element-plus'
 // 導入 api
 import { addOrUpdateAttrAPI, deleteAttrAPI } from '@/api/product/attr/attr'
 // 導入類型檔案
@@ -10,7 +9,7 @@ import type { AttrDataType, AttrValueList } from '@/api/product/attr/type'
 import { useCategoryListStore } from '@/stores' // 導入分類倉庫
 const categoryListStore = useCategoryListStore() // 定義分類倉庫
 
-const { attrContentList, c3ID } = storeToRefs(categoryListStore) // 將我們內容數據解構出來 方便使用
+const { attrContentList, c3ID, isLoading } = storeToRefs(categoryListStore) // 將我們內容數據解構出來 方便使用
 
 const isModify = ref<boolean>(true) // 用來控制顯示 [ 內容區 ] 或 [ 添加 / 編輯 ] 頁面的變量
 
@@ -37,15 +36,6 @@ const handleModify = (row: AttrDataType) => {
     Object.assign(attrParams.value, JSON.parse(JSON.stringify(row)))
   }
 }
-
-// 一進頁面的提示框
-onMounted(() => {
-  ElMessageBox.alert('', '提示', {
-    message: '查詢產品盡量都選最後的選項 前面選項的接口壞了 !',
-    confirmButtonText: '好的',
-    type: 'warning'
-  })
-})
 
 // --------------------------- 進入 添加 / 編輯頁面 ---------------------------------
 
@@ -77,6 +67,13 @@ const addAttr = () => {
 
 //  保存按鈕的事件處理函數
 const saveAttr = async () => {
+  // 先詢問用戶是否要保存
+  await ElMessageBox.confirm('確定要保存以上規格嗎?', '提示', {
+    confirmButtonText: '確定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  })
+
   //  調用請求 存儲到後台
   const res: any = await addOrUpdateAttrAPI(attrParams.value)
 
@@ -84,7 +81,7 @@ const saveAttr = async () => {
   if (res.code !== 200) {
     //  如果有 id 就是 編輯品牌失敗 沒有的話就是添加品牌失敗
     ElMessage.error({
-      message: attrParams.value.id ? '編輯品牌失敗' : '添加品牌失敗'
+      message: attrParams.value.id ? '編輯規格失敗' : '添加規格失敗'
     })
 
     return false
@@ -92,7 +89,7 @@ const saveAttr = async () => {
 
   //  走到這裡代表添加成功 先提示用戶 ( 對於 id 的判斷還是和上面一樣 )
   ElMessage.success({
-    message: attrParams.value.id ? '編輯品牌成功' : '添加品牌成功'
+    message: attrParams.value.id ? '編輯規格成功' : '添加規格成功'
   })
 
   //  發請求 重新渲染內容頁面
@@ -105,7 +102,7 @@ const saveAttr = async () => {
 // -------------- 產品規格 - 內容區輸入和展示框部分 ------------------
 
 // 商品規格 - 編輯框的失去焦點處理函數 ( 切換成展示框 )
-const toShowSku = (row: AttrValueList, $index: number) => {
+const toShowSku = (row: AttrValueList) => {
   // bug修復 - 當產品規格名稱重複的時候
   const repeatAttr = attrParams.value.attrValueList.find((item) => {
     // 這裡先判斷 , 如果不是初次添加 , 且 規格名重複的話 就要 return 了!
@@ -127,9 +124,6 @@ const toShowSku = (row: AttrValueList, $index: number) => {
 
   // bug修復 - 當產品規格名稱為空的時候
   if (row.valueName === '') {
-    // 因為我們添加操作是在點擊 [ 添加按鈕時 ] 就push進去的 所以這裡還要刪除該項產品規格的數據
-    attrParams.value.attrValueList.splice($index, 1)
-
     // 提示用戶 名稱不能為空
     ElMessageBox({
       type: 'error',
@@ -139,7 +133,7 @@ const toShowSku = (row: AttrValueList, $index: number) => {
     })
 
     // return 中斷
-    return false
+    return
   }
 
   // 讓他失去焦點時 , 換成展示狀態 ( 顯示另一個盒子 )
@@ -183,12 +177,12 @@ const deleteAttr = async (id: number) => {
 
   // 如果服務器返回的 code不等於 200 代表刪除失敗
   if (res.code !== 200) {
-    ElMessage.error('刪除品牌內容失敗')
+    ElMessage.error('刪除規格失敗')
     return
   }
 
   // 走到這裡代表刪除成功
-  ElMessage.success('刪除品牌內容成功')
+  ElMessage.success('刪除規格成功')
   //  發請求 重新渲染內容頁面
   await categoryListStore.getAttrContent()
 }
@@ -200,12 +194,12 @@ onBeforeUnmount(() => {
 </script>
 <template>
   <div class="attr">
-    <!-- 頂部下拉菜單部份 -->
+    <!-- 頂部下拉菜單部份(全局組件) -->
     <CategorySelect :isModify="isModify"></CategorySelect>
 
     <!-- 中間內容部分 -->
     <div class="page-content" v-show="isModify === true">
-      <el-card class="content">
+      <el-card class="content" v-loading="isLoading">
         <!-- 添加按鈕部分 -->
         <el-button
           type="primary"
@@ -255,7 +249,11 @@ onBeforeUnmount(() => {
         <!-- 輸入規格名稱部份 -->
         <el-form :inline="true" :model="attrParams">
           <el-form-item label="規格名稱 : " style="width: 400px">
-            <el-input placeholder="請輸入規格名稱" v-model.trim="attrParams.attrName"></el-input>
+            <el-input
+              :disabled="attrParams.attrValueList.length !== 0"
+              placeholder="請輸入新的規格名稱"
+              v-model.trim="attrParams.attrName"
+            ></el-input>
           </el-form-item>
           <!-- 添加規格值按鈕 -->
           <el-form-item>
@@ -263,19 +261,24 @@ onBeforeUnmount(() => {
           </el-form-item>
 
           <!-- 中間展示添加的規格列表 -->
-          <el-table border class="modify-content" :data="attrParams.attrValueList">
+          <el-table border class="modify-content" width="50px" :data="attrParams.attrValueList">
             <el-table-column label="序列號" type="index" width="80px" align="center"></el-table-column>
-            <el-table-column label="規格" align="center">
+            <el-table-column label="規格">
               <template #default="{ row, $index }">
                 <!-- 規格 - 編輯框 -->
                 <el-input
                   v-show="row.flag === true"
                   v-model.trim="row.valueName"
-                  @blur="toShowSku(row, $index)"
+                  @blur="toShowSku(row)"
                   :ref="(element: any) => (attrInputRef[$index] = element)"
+                  @keyup.enter="toShowSku(row)"
                 ></el-input>
                 <!-- 規格 - 展示框 -->
-                <div v-show="!row.flag" @click="toEditSku(row, $index)" style="cursor: pointer">{{ row.valueName }}</div>
+                <el-tooltip class="box-item" :hide-after="0" effect="dark" content="點擊後可以進入編輯狀態" placement="top-start">
+                  <el-tag size="large" v-show="!row.flag" @click="toEditSku(row, $index)" style="cursor: pointer"
+                    >{{ row.valueName }}
+                  </el-tag>
+                </el-tooltip>
               </template>
             </el-table-column>
             <el-table-column label="操作" width="160px">
@@ -307,9 +310,9 @@ $content-margin-top: 30px;
 
     // 產品標題
     .attrName {
-      text-align: center;
-      font-weight: bold;
       font-size: 16px;
+      font-weight: bold;
+      text-align: center;
       text-wrap: nowrap;
     }
   }

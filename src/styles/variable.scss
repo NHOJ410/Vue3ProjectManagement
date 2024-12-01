@@ -7,15 +7,23 @@ $base-menu-width: 260px; // 左側菜單寬度
 $base-menu-BGCcolor: #1a1613; // 菜單背景色
 $base-logo-height: 100px; // Logo高度
 $base-logo-title: 22px;  // Logo部分的文字大小
-$base-menu-close : 100px;  // 菜單縮放時的寬度
-$base-menu-close-transition : 0.6s linear; // 菜單縮放時的過渡效果
+$base-menu-close: 100px;  // 菜單縮放時的寬度
+$base-menu-close-transition: 0.6s linear; // 菜單縮放時的過渡效果
+@mixin menuHover {
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    background: linear-gradient(to right, #141e30, #243b55);
+    transform: scale(1.1);
+  }
+}
 
 // 頂部導航條 
-$base-tapbar-height : 100px; // 頂部導航條高度
+$base-tabbar-height: 100px; // 頂部導航條高度
 
 
 
 // ------------- Dashboard 部分 ---------------------
 
 // 主要文字顏色
-$base-dashboard-text-color : #29fcff;
+$base-dashboard-text-color: #29fcff;

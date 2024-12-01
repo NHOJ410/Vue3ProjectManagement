@@ -116,36 +116,36 @@ onMounted(() => {
 }
 
 .box {
+  position: relative;
+  padding: 0 5px 5px;
+  user-select: none; // 禁止被反白選取到
   background: url('../../images/dataScreen-main-cb.png') no-repeat;
   background-size: 100% 100%;
-  padding: 0 5px 5px 5px;
-  position: relative;
-  user-select: none; // 禁止被反白選取到
 
   // 標題部分
   .statistics {
-    width: 100%;
-    height: 60px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    width: 100%;
+    height: 60px;
 
     // 標題部分
     .satisfaction {
+      padding-top: 15px;
+      padding-left: 10px;
       font-size: 24px;
       font-style: italic;
       font-weight: 600;
-      padding-top: 15px;
-      padding-left: 10px;
       color: #fff;
 
       // 標題部分的背景圖
       &::after {
-        content: '';
         display: block;
-        margin-top: 10px;
         width: 80px;
         height: 6px;
+        margin-top: 10px;
+        content: '';
         background: url('../../images/dataScreen-title.png') no-repeat;
         background-size: cover;
       }
@@ -160,17 +160,18 @@ onMounted(() => {
 
     // 男女比例部份
     .gender {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-evenly;
       width: 100%;
       height: 100%;
-      display: flex;
-      justify-content: space-evenly;
-      text-align: center;
-      flex-wrap: wrap;
       color: #fff;
+      text-align: center;
 
       // 男生部份
       .male {
         @include genderFrame;
+
         background: url('../../images/man-bg.png') no-repeat;
         background-size: 100% 100%;
       }
@@ -178,6 +179,7 @@ onMounted(() => {
       // 女生部份
       .female {
         @include genderFrame;
+
         background: url('../../images/woman-bg.png') no-repeat;
         background-size: 100% 100%;
       }

@@ -40,6 +40,8 @@ defineProps({
             :model-value="categoryListStore.c1ID"
             @update:model-value="categoryListStore.getC1ID"
             :disabled="!isModify || isShowContent !== 0"
+            :loading="categoryListStore.c1List.length === 0"
+            :loading-text="'正在獲取數據...'"
           >
             <el-option v-for="c1 in categoryListStore.c1List" :key="c1.id" :label="c1.name" width="120px" :value="c1.id"></el-option>
           </el-select>
@@ -53,6 +55,8 @@ defineProps({
             :model-value="categoryListStore.c2ID"
             @update:model-value="categoryListStore.getC2ID"
             :disabled="!isModify || isShowContent !== 0"
+            :loading="categoryListStore.c2List.length === 0"
+            :loading-text="'正在獲取數據...'"
           >
             <el-option v-for="c2 in categoryListStore.c2List" :key="c2.id" :label="c2.name" :value="c2.id"></el-option>
           </el-select>
@@ -66,6 +70,8 @@ defineProps({
             :model-value="categoryListStore.c3ID"
             @update:model-value="categoryListStore.getC3ID"
             :disabled="!isModify || isShowContent !== 0"
+            :loading="categoryListStore.c3List.length === 0"
+            :loading-text="'正在獲取數據...'"
           >
             <el-option v-for="c3 in categoryListStore.c3List" :key="c3.id" :label="c3.name" :value="c3.id"></el-option>
           </el-select>

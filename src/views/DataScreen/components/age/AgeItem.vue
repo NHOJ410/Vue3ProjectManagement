@@ -78,36 +78,36 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .box {
+  position: relative;
+  padding: 0 5px 5px;
+  user-select: none; // 禁止被反白選取到
   background: url('../../images/dataScreen-main-lb.png') no-repeat;
   background-size: 100% 100%;
-  padding: 0 5px 5px 5px;
-  position: relative;
-  user-select: none; // 禁止被反白選取到
 
   // 標題和參與人數部分
   .statistics {
-    width: 100%;
-    height: 60px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    width: 100%;
+    height: 60px;
 
     // 標題部分
     .satisfaction {
+      padding-top: 5px;
+      padding-left: 10px;
       font-size: 24px;
       font-style: italic;
       font-weight: 600;
-      padding-top: 5px;
-      padding-left: 10px;
       color: #fff;
 
       // 標題部分的背景圖
       &::after {
-        content: '';
         display: block;
-        margin-top: 10px;
         width: 80px;
         height: 6px;
+        margin-top: 10px;
+        content: '';
         background: url('../../images/dataScreen-title.png') no-repeat;
         background-size: cover;
       }

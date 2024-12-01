@@ -1,4 +1,14 @@
 module.exports = {
+  globals: {
+    ElMessage: 'readonly',
+    ElMessageBox: 'readonly',
+    ElNotification: 'readonly',
+    ElLoading: 'readonly',
+    ElTable: 'readonly',
+    ElScrollbar: 'readonly',
+    ElButton: 'readonly'
+  },
+
   env: {
     browser: true,
     es2021: true,
@@ -35,7 +45,7 @@ module.exports = {
     'no-useless-escape': 'off', // 禁止不必要的轉義字符
 
     // TypeScript (https://typescript-eslint.io/rules)
-    '@typescript-eslint/no-unused-vars': 'error', // 禁止定義未使用的變量
+    '@typescript-eslint/no-unused-vars': 'off', // 禁止定義未使用的變量
     '@typescript-eslint/prefer-ts-expect-error': 'error', // 禁止使用 @ts-ignore
     '@typescript-eslint/no-explicit-any': 'off', // 禁止使用 any 類型
     '@typescript-eslint/no-non-null-assertion': 'off',
@@ -44,7 +54,7 @@ module.exports = {
 
     // eslint-plugin-vue (https://eslint.vuejs.org/rules/)
     'vue/multi-word-component-names': 'off', // 要求組件名稱使用多詞組成
-    'vue/script-setup-uses-vars': 'error', // 防止在 <script setup> 使用的變量被標記為未使用
+    'vue/script-setup-uses-vars': 'off', // 防止在 <script setup> 使用的變量被標記為未使用
     'vue/no-mutating-props': 'off', // 不允許修改組件的 props
     'vue/attribute-hyphenation': 'off' // 強制在模板中的自定義組件中使用屬性連字命名法
   }

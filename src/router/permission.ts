@@ -26,50 +26,51 @@ router.beforeEach(async (to, from) => {
   const username = userStore.userInfo.username
 
   // 拿到token 後就可以做判斷了!
-
-  // ----------  如果沒有token 但想要去 [ 除了登入頁面的其他頁面 ] ------------
-  if (!token && to.path !== '/login') {
-    //  提示用戶尚未登入
-    ElMessage({
-      message: '溫馨提示 : 你好像還沒有登入 , 系統將跳轉到登入頁面',
-      type: 'error',
-      duration: 5000
-    })
-    //  並跳轉到登入頁面
-    return '/login'
-  } else if (token && to.path === '/login' && from.path === '/') {
-    //  ---------- 如果有token 但想要去 [ 登入頁面 ] --------------
-
-    //  提示用戶已經登入
-    ElMessage({
-      message: '溫馨提示 : 你好像已經登入了 , 系統自動跳轉到首頁',
-      type: 'success',
-      duration: 5000
-    })
-    //  並跳轉到首頁
-    return '/'
-  } else if (token && !username) {
-    // ----------  如果有token 但沒有用戶名的請況 ( 可能是 token 過期 或是token 獲取錯誤 ) --------------
-
-    //   由於我們在獲取用戶訊息時 , 有針對獲取失敗的情況拋出錯誤 所以這裡我們可以使用 try catch 的方式來攔截
-    try {
-      //  調用倉庫方法 , 重新獲取用戶訊息
-      await userStore.getUserInfo()
-
-      //  如果走到這裡代表回傳的是一個 錯誤的 Promise 代表獲取失敗 === token 過期
-    } catch (error) {
-      //   提示用戶尚未登入
+  if (userStore.skip === false) {
+    // ----------  如果沒有token 但想要去 [ 除了登入頁面的其他頁面 ] ------------
+    if (!token && to.path !== '/login') {
+      //  提示用戶尚未登入
       ElMessage({
         message: '溫馨提示 : 你好像還沒有登入 , 系統將跳轉到登入頁面',
         type: 'error',
         duration: 5000
       })
-
-      //  調用方法 清空數據 , 防止 bug
-      await userStore.userLogout()
-
-      //  跳轉到登入頁面
+      //  並跳轉到登入頁面
       return '/login'
+    } else if (token && to.path === '/login' && from.path === '/') {
+      //  ---------- 如果有token 但想要去 [ 登入頁面 ] --------------
+
+      //  提示用戶已經登入
+      ElMessage({
+        message: '溫馨提示 : 你好像已經登入了 , 系統自動跳轉到首頁',
+        type: 'success',
+        duration: 5000
+      })
+      //  並跳轉到首頁
+      return '/'
+    } else if (token && !username) {
+      // ----------  如果有token 但沒有用戶名的請況 ( 可能是 token 過期 或是token 獲取錯誤 ) --------------
+
+      //   由於我們在獲取用戶訊息時 , 有針對獲取失敗的情況拋出錯誤 所以這裡我們可以使用 try catch 的方式來攔截
+      try {
+        //  調用倉庫方法 , 重新獲取用戶訊息
+        await userStore.getUserInfo()
+
+        //  如果走到這裡代表回傳的是一個 錯誤的 Promise 代表獲取失敗 === token 過期
+      } catch (error) {
+        //   提示用戶尚未登入
+        ElMessage({
+          message: '溫馨提示 : 你好像還沒有登入 , 系統將跳轉到登入頁面',
+          type: 'error',
+          duration: 5000
+        })
+
+        //  調用方法 清空數據 , 防止 bug
+        await userStore.userLogout()
+
+        //  跳轉到登入頁面
+        return '/login'
+      }
     }
   }
 })
