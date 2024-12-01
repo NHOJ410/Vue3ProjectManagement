@@ -25,8 +25,6 @@
 
 使用的技術棧有 : Vue3 + Pinia + TS 
 
-使用的預校驗工具有 : styleLint ( css風格檢查工具 )  和 Husky Hooks ( 提交前的二次驗證工具 ) 
-
 組件庫為 : ElementPlus 
 
 其他js庫用的有 : eCharts + nprogress + mock + moment + pinia持久化工具
