@@ -65,6 +65,7 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
         }
       }
     }
+    // ------------------- 服務器錯誤時的備案 -------------------
     //代理跨域
     // server: {
     //   proxy: {
