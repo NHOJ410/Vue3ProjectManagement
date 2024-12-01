@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Refresh } from '@element-plus/icons-vue'
 // 導入 Pinia倉庫
 import { useLayoutSettingStore } from '@/stores' // 導入設定倉庫
 const settingStore = useLayoutSettingStore() // 定義設定倉庫
@@ -127,7 +126,7 @@ const { resetColor, changeModelColor, colorObj } = useChangeColor()
             </div>
           </el-tab-pane>
           <el-tab-pane label="重置全部顏色">
-            <el-button color="red" :icon="Refresh" @click="resetColor">重置所有顏色</el-button>
+            <el-button color="red" icon="Refresh" @click="resetColor">重置所有顏色</el-button>
           </el-tab-pane>
         </el-tabs>
       </template>

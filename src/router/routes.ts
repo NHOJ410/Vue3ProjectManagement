@@ -1,6 +1,5 @@
 // 路由配置
 
-// 1. 常量路由 ( 任何用戶無須權限都可以訪問 )
 export const constantRoutes = [
   // 一級路由 - 登入頁面
   {
@@ -109,12 +108,12 @@ export const constantRoutes = [
         name: 'Trademark',
         meta: { title: '品牌管理', icon: 'ChromeFilled', hidden: false }
       },
-      // 二級路由 - 品項管理
+      // 二級路由 - 商品管理
       {
         path: '/product/spu',
         component: () => import('@/views/Product/SPU/SPU.vue'),
         name: 'Spu',
-        meta: { title: '品項管理', icon: 'Goods', hidden: false }
+        meta: { title: '商品管理', icon: 'Goods', hidden: false }
       },
       // 二級路由 - 商品規格管理
       {
@@ -129,7 +128,7 @@ export const constantRoutes = [
         path: '/product/sku',
         component: () => import('@/views/Product/SKU/SKU.vue'),
         name: 'Sku',
-        meta: { title: '商品上/下架操作', icon: 'Orange', hidden: false }
+        meta: { title: '商品銷售狀態', icon: 'Orange', hidden: false }
       }
     ]
   },

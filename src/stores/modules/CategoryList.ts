@@ -96,15 +96,20 @@ export const useCategoryListStore = defineStore('categoryList', () => {
   // -------------------- 獲取篩選後的內容 ---------------------
 
   const attrContentList = ref<AttrDataType[]>([]) // 存儲點擊完成下拉菜單後得到的內容
+  const isLoading = ref<boolean>(false) // 用來控制 loading 的變量
 
   // 發送請求 獲取篩選後的內容
   const getAttrContent = async () => {
+    isLoading.value = true
+
     const res = await getAttrContentAPI(c1ID.value as number, c2ID.value as number, c3ID.value as number)
 
     if (res.code !== 200) return Promise.reject(new Error('獲取篩選後的內容失敗'))
 
     // 走到這裡代表成功 那就存儲數據
     attrContentList.value = res.data
+
+    isLoading.value = false
   }
 
   // 使用 watch來監視 c3ID 的變化 , 一旦變化了就發請求 獲取篩選後的內容
@@ -139,6 +144,7 @@ export const useCategoryListStore = defineStore('categoryList', () => {
 
     attrContentList, // 存儲點擊完成下拉菜單後得到的內容
     getAttrContent, // 發送請求 獲取篩選後的內容
+    isLoading, // 用來控制 loading 的變量
 
     resetCategoryListData // 用來重製  路由跳轉後 下拉菜單內容的 actions
   }

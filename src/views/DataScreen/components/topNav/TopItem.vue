@@ -1,19 +1,10 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from 'vue'
-import { ElNotification, ElMessageBox } from 'element-plus'
 // 導入 moment.js 插件
 import moment from 'moment'
 // 導入 VueRouter
 import { useRouter } from 'vue-router'
 const router = useRouter()
-
-onMounted(() => {
-  ElMessageBox.alert('', '提示', {
-    message: '數據存在Pinia倉庫的DashBoard模塊中',
-    confirmButtonText: '好的',
-    type: 'warning'
-  })
-})
 
 // ----------------- 數據統計按鈕部分 -----------------
 const showData = () => {
@@ -52,7 +43,7 @@ onBeforeUnmount(() => {
     <!-- 左側 -->
     <div class="left">
       <!-- 左側 - 首頁按鈕 -->
-      <span class="leftBtn" @click="router.push('/')">首頁</span>
+      <span class="leftBtn" @click="router.push('/home')">首頁</span>
     </div>
 
     <!-- 中間大標題 -->

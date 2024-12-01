@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
 // 導入api
 import { addOrEditRoleAPI, getRoleListAPI, getPermissionListAPI, setPermissionAPI, deleteRoleAPI } from '@/api/acl/role/role'
 // 導入ts類型檔案
@@ -13,9 +12,11 @@ const dataCount = ref<number>(5) // 當前頁面展示數據數量
 const totalData = ref<number>(100) // 數據的總數量
 const roleList = ref<recordsArr>([]) // 存儲 職位列表數據
 const searchRole = ref<string>('') // 用來儲存搜尋輸入框的 職位名稱
+const isLoading = ref<boolean>(false) // 用來控制 loading 的變量
 
 // 獲取職位列表方法
 const getRoleList = async (currentPage = 1) => {
+  isLoading.value = true
   // 調用請求 獲取 職位列表數據
   const res = await getRoleListAPI(currentPage, dataCount.value, searchRole.value)
 
@@ -24,6 +25,7 @@ const getRoleList = async (currentPage = 1) => {
   // 走到這裡代表獲取成功 存儲數據吧!
   roleList.value = res.data.records //存儲職位列表數據
   totalData.value = res.data.total // 存儲數據的總數量
+  isLoading.value = false
 }
 
 onMounted(() => {
@@ -210,22 +212,22 @@ const onSubmitPermission = async () => {
 // 刪除職位按鈕的事件處理函數
 const deleteRole = async (row: recordsType) => {
   // 先詢問用戶是否要刪除
-  await ElMessageBox.confirm(`此操作將永久刪除職位 : 「${row.roleName}」, 請問是否繼續?`, '提示', {
-    confirmButtonText: '確定',
+  ElMessageBox.confirm(`此操作將永久刪除職位 : 「${row.roleName}」, 請問是否繼續?`, '提示', {
+    confirmButtonText: '確定 我要刪除',
     cancelButtonText: '取消',
     type: 'warning'
+  }).then(async () => {
+    // 如果走到這裡 , 代表點擊了確認按紐 那就調用接口 刪除該職位吧!
+    const res = await deleteRoleAPI(row.id as number)
+
+    if (res.code !== 200) return ElMessage.error('刪除職位失敗 請重新確認')
+
+    // 走到這裡代表刪除成功
+    ElMessage.success('刪除職位成功')
+
+    // 重新渲染頁面
+    getRoleList(roleList.value.length > 1 ? currentPage.value : currentPage.value - 1)
   })
-
-  // 如果走到這裡 , 代表點擊了確認按紐 那就調用接口 刪除該職位吧!
-  const res = await deleteRoleAPI(row.id as number)
-
-  if (res.code !== 200) return ElMessage.error('刪除職位失敗 請重新確認')
-
-  // 走到這裡代表刪除成功
-  ElMessage.success('刪除職位成功')
-
-  // 重新渲染頁面
-  getRoleList(roleList.value.length > 1 ? currentPage.value : currentPage.value - 1)
 }
 </script>
 
@@ -247,7 +249,7 @@ const deleteRole = async (row: recordsType) => {
     </el-card>
 
     <!-- 中間內容區 -->
-    <el-card style="margin-top: 20px">
+    <el-card style="margin-top: 20px" v-loading="isLoading">
       <!-- 中間內容區 - 添加職位按鈕 -->
       <el-button icon="Plus" type="primary" @click="addRole">添加職位</el-button>
 

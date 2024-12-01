@@ -19,16 +19,16 @@ const route = useRoute()
 // --------- 登出按鈕邏輯 ---------
 const logOut = async () => {
   // 使用 ElMessageBox.confirm 來二次確認用戶是否要登出
-  await ElMessageBox.confirm('確認要登出嗎?', '溫馨提示', {
+  ElMessageBox.confirm('確認要登出嗎?', '溫馨提示', {
     cancelButtonText: '取消',
     confirmButtonText: '確認',
     type: 'warning'
+  }).then(async () => {
+    // 如果走到這裡 代表是要登出 那就 清除倉庫中存儲的用戶訊息
+    await userStore.userLogout()
+    // 跳轉到登入頁面 這樣就可以了
+    router.replace('/login')
   })
-
-  // 如果走到這裡 代表是要登出 那就 清除倉庫中存儲的用戶訊息
-  await userStore.userLogout()
-  // 跳轉到登入頁面 這樣就可以了
-  router.replace('/login')
 }
 </script>
 

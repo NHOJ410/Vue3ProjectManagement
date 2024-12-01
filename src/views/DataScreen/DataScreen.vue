@@ -15,6 +15,17 @@ import HotItem from '@/views/DataScreen/components/HotItem/HotItem.vue'
 import PurchaseChannels from '@/views/DataScreen/components/purchaseChannels/PurchaseChannels.vue'
 import AgeDistribution from './components/ageDistribution/AgeDistribution.vue'
 
+// 一進頁面就先顯示提示訊息
+onMounted(() => {
+  ElMessageBox.alert('', '提示', {
+    message: '<p>數據存放在Pinia倉庫的DashBoard模塊中</p>',
+    confirmButtonText: '好的',
+    type: 'warning',
+    dangerouslyUseHTMLString: true,
+    customClass: 'alertMsg'
+  })
+})
+
 // ------------------ 內容區自適應縮放大小 ------------------
 
 const screenDom = ref() // 獲取 數據面板 內容區的 DOM元素
@@ -77,7 +88,7 @@ window.onresize = () => {
         <div class="screen-right">
           <!-- 商品種類柱狀圖 -->
           <HotItem class="HotItem"></HotItem>
-          <!-- 年齡分布折線圖 -->
+          <!-- 消費水平年齡分布折線圖 -->
           <AgeDistribution class="ageDistribution"></AgeDistribution>
           <!-- 銷售通路餅圖 -->
           <PurchaseChannels class="purchaseChannels"></PurchaseChannels>
@@ -182,6 +193,22 @@ window.onresize = () => {
           flex: 1;
           // background-color: chocolate;
         }
+      }
+    }
+  }
+}
+</style>
+
+<style lang="scss">
+// 提示框樣式
+.is-message-box {
+  .el-overlay-message-box {
+    .alertMsg {
+      --el-messagebox-width: 25vw;
+
+      p {
+        font-size: 20px;
+        font-weight: 700;
       }
     }
   }

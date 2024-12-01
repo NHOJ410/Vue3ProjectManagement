@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
 // 導入 api
 import { addOrEditMenuAPI, getMenuListAPI, deleteMenuAPI } from '@/api/acl/menu/menu'
 // 導入類型定義檔案
@@ -8,15 +7,20 @@ import type { getMenuListDataType, menuParamsType } from '@/api/acl/menu/type'
 
 // --------------- 獲取菜單管理數據 -----------------
 const menuList = ref<getMenuListDataType[]>([]) // 存儲菜單管理的數據
+const isLoading = ref(false) // 用來控制 loading 的變量
 
 // 封裝方法 發送請求 獲取菜單管理數據
 const getMenuList = async () => {
+  isLoading.value = true
+
   const res = await getMenuListAPI()
 
   if (res.code !== 200) return ElMessage.error('獲取菜單管理數據失敗')
 
   // 走到這裡代表獲取成功 那就存儲數據吧!
   menuList.value = res.data
+
+  isLoading.value = false
 }
 onMounted(() => {
   getMenuList()
@@ -120,7 +124,7 @@ const deleteMenu = async (row: getMenuListDataType) => {
 
 <template>
   <div class="permission">
-    <el-card>
+    <el-card v-loading="isLoading">
       <!-- 內容區部分 -->
       <el-table border :data="menuList" row-key="id">
         <!-- 內容區 - 菜單名稱 -->

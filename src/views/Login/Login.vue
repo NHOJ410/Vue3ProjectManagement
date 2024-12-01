@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { UserFilled, Lock } from '@element-plus/icons-vue' // 導入 element-plus 的圖標
 // 導入 Pinia倉庫
 import { useUserStore } from '@/stores'
 const userStore = useUserStore()
@@ -101,11 +100,11 @@ const toHome = () => {
             <h2>Hello ! 歡迎來到品牌後台管理頁面</h2>
             <!-- 帳號區域 -->
             <el-form-item prop="username">
-              <el-input :prefix-icon="UserFilled" v-model.trim="loginForm.username" placeholder="請輸入員工暱稱(帳號)"></el-input>
+              <el-input prefix-icon="UserFilled" v-model.trim="loginForm.username" placeholder="請輸入員工暱稱(帳號)"></el-input>
             </el-form-item>
             <!-- 密碼區域 -->
             <el-form-item prop="password">
-              <el-input :prefix-icon="Lock" v-model.trim="loginForm.password" show-password placeholder="請輸入密碼"></el-input>
+              <el-input prefix-icon="Lock" v-model.trim="loginForm.password" show-password placeholder="請輸入密碼"></el-input>
             </el-form-item>
             <!-- 按鈕區域 -->
             <el-form-item>

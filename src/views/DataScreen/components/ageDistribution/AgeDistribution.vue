@@ -16,19 +16,15 @@ const weekData = ref({
   symbol: 'circle', // 節點形狀為圓形
   symbolSize: 25, // 節點大小為 25
   lineStyle: {
-    normal: {
-      color: '#6c50f3', // 折線的顏色
-      shadowColor: 'rgba(0, 0, 0, .3)', // 陰影顏色
-      shadowOffsetY: 5, // 陰影的 Y 偏移量
-      shadowOffsetX: 5 // 陰影的 X 偏移量
-    }
+    color: '#6c50f3', // 折線的顏色
+    shadowColor: 'rgba(0, 0, 0, .3)', // 陰影顏色
+    shadowOffsetY: 5, // 陰影的 Y 偏移量
+    shadowOffsetX: 5 // 陰影的 X 偏移量
   },
   label: {
     show: true, // 顯示數據標籤
     position: 'top', // 標籤位置在節點的上方
-    textStyle: {
-      color: '#6c50f3' // 標籤文字顏色
-    }
+    color: '#6c50f3' // 標籤文字顏色
   },
   itemStyle: {
     color: '#6c50f3', // 節點顏色
@@ -39,28 +35,26 @@ const weekData = ref({
     shadowOffsetX: 2 // X 軸的陰影偏移
   },
   areaStyle: {
-    normal: {
-      color: new echarts.graphic.LinearGradient(
-        0,
-        0,
-        0,
-        1,
-        [
-          {
-            // 折線圖下方的區域漸變填充
-            offset: 0,
-            color: 'rgba(108,80,243,0.3)' // 起點為淡紫色
-          },
-          {
-            offset: 1,
-            color: 'rgba(108,80,243,0)' // 結束點透明
-          }
-        ],
-        false
-      ),
-      shadowColor: 'rgba(108,80,243, 0.9)', // 區域陰影顏色
-      shadowBlur: 20 // 區域陰影模糊度
-    }
+    color: new echarts.graphic.LinearGradient(
+      0,
+      0,
+      0,
+      1,
+      [
+        {
+          // 折線圖下方的區域漸變填充
+          offset: 0,
+          color: 'rgba(108,80,243,0.3)' // 起點為淡紫色
+        },
+        {
+          offset: 1,
+          color: 'rgba(108,80,243,0)' // 結束點透明
+        }
+      ],
+      false
+    ),
+    shadowColor: 'rgba(108,80,243, 0.9)', // 區域陰影顏色
+    shadowBlur: 20 // 區域陰影模糊度
   },
   data: consumerData.value.map((item) => item.week) // 第一條線的數據
 })
@@ -73,19 +67,15 @@ const monthData = ref({
   symbol: 'circle',
   symbolSize: 25,
   lineStyle: {
-    normal: {
-      color: '#00ca95', // 第二條折線圖的顏色
-      shadowColor: 'rgba(0, 0, 0, .3)',
-      shadowOffsetY: 5,
-      shadowOffsetX: 5
-    }
+    color: '#00ca95', // 第二條折線圖的顏色
+    shadowColor: 'rgba(0, 0, 0, .3)',
+    shadowOffsetY: 5,
+    shadowOffsetX: 5
   },
   label: {
     show: true,
     position: 'top',
-    textStyle: {
-      color: '#00ca95' // 標籤顏色為綠色
-    }
+    color: '#00ca95' // 標籤顏色為綠色
   },
   itemStyle: {
     color: '#00ca95', // 節點顏色
@@ -96,33 +86,31 @@ const monthData = ref({
     shadowOffsetX: 2
   },
   areaStyle: {
-    normal: {
-      color: new echarts.graphic.LinearGradient(
-        0,
-        0,
-        0,
-        1,
-        [
-          {
-            // 第二條線的區域漸變
-            offset: 0,
-            color: 'rgba(0,202,149,0.3)' // 綠色漸變起點
-          },
-          {
-            offset: 1,
-            color: 'rgba(0,202,149,0)' // 結束透明
-          }
-        ],
-        false
-      ),
-      shadowColor: 'rgba(0,202,149, 0.9)', // 陰影顏色
-      shadowBlur: 20
-    }
+    color: new echarts.graphic.LinearGradient(
+      0,
+      0,
+      0,
+      1,
+      [
+        {
+          // 第二條線的區域漸變
+          offset: 0,
+          color: 'rgba(0,202,149,0.3)' // 綠色漸變起點
+        },
+        {
+          offset: 1,
+          color: 'rgba(0,202,149,0)' // 結束透明
+        }
+      ],
+      false
+    ),
+    shadowColor: 'rgba(0,202,149, 0.9)', // 陰影顏色
+    shadowBlur: 20
   },
   data: consumerData.value.map((item) => item.month) // 第二條線的數據
 })
 
-// 獲取 銷售商品種類柱狀圖容器
+// 獲取 年齡分布折線圖容器
 const ageDistributionDom = ref()
 
 // 注意要在 onMounted() 鉤子中 , 因為要等待 DOM元素加載完成

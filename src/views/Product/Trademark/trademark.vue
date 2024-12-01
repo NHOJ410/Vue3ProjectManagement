@@ -13,9 +13,11 @@ import { useFormRef } from './composables/useFormRef'
 onMounted(() => {
   ElMessageBox({
     title: '注意',
-    message: '因為後端鎖定前13條數據不能修改 , 所以不能進行編輯或刪除喔! 然後因為是公共接口 所以可能會有一些奇怪的數據 請見諒= =',
+    message:
+      '<p>因為後端鎖定前13條數據不能修改 , 所以不能進行編輯或刪除喔!</p> <p>然後因為是公共接口 所以可能會有一些奇怪的數據 請見諒= =</p>',
     confirmButtonText: '好的 我知道了',
-    customClass: 'alertMessage'
+    customClass: 'alertMessage',
+    dangerouslyUseHTMLString: true
   })
 })
 
@@ -26,14 +28,17 @@ const dataCount = ref<number>(10) // 當前頁面展示數據數量
 // ---------- 獲取品牌管理 數據 ----------
 const totalCount = ref<number>(0) // 品牌總數量
 const trademarkList = ref<Records>([]) // 品牌內容列表
+const isLoading = ref<boolean>(false) // 用來控制 loading 的變量
 
 // 獲取品牌列表
 const getTrademarkList = async (currentPage: number) => {
+  isLoading.value = true
   const res = await getTrademarkListAPI(currentPage, dataCount.value)
   if (res.code === 200) {
     totalCount.value = res.data.total
     trademarkList.value = res.data.records
   }
+  isLoading.value = false
 }
 onMounted(() => {
   getTrademarkList(currentPage.value)
@@ -176,7 +181,7 @@ const onRemove = async (row: Trademark) => {
 <template>
   <div class="trademark" v-if="trademarkList.length !== 0">
     <!-- 卡片組件 -->
-    <el-card class="box-card" width="100%">
+    <el-card class="box-card" width="100%" v-loading="isLoading">
       <!-- 頂部添加按鈕 -->
       <el-button type="primary" icon="Plus" @click="onAdd">添加品牌</el-button>
       <!-- 內容區 表格組件 -->
@@ -324,12 +329,16 @@ const onRemove = async (row: Trademark) => {
 .is-message-box {
   // 提示框寬度
   .alertMessage {
-    --el-messagebox-width: 60vw;
+    --el-messagebox-width: 40vw;
 
     // 內容文字
     .el-message-box__message {
       font-size: 20px;
       color: red;
+
+      p {
+        margin-top: 20px;
+      }
     }
   }
 }

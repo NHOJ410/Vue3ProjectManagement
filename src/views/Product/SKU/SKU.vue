@@ -10,9 +10,11 @@ const currentPage = ref<number>(1) // 當前分頁頁碼
 const dataCount = ref<number>(5) // 當前頁面展示數據數量
 const totalData = ref<number>(0) // 數據的總數量
 const skuDataList = ref<SKURecordsData[]>([]) // 存儲 SKU內容列表
+const isLoading = ref<boolean>(false) // 用來控制 loading 的變量
 
 // 封裝 獲取 SKU數據的方法
 const getSKUData = async (currentPage: number) => {
+  isLoading.value = true
   // 發送請求 獲取數據
   const res = await getSKUDataAPI(currentPage, dataCount.value)
 
@@ -25,6 +27,8 @@ const getSKUData = async (currentPage: number) => {
   skuDataList.value = res.data.records
   // 存儲 數據總數量
   totalData.value = res.data.total
+
+  isLoading.value = false
 }
 
 onMounted(() => {
@@ -86,34 +90,40 @@ const checkProduct = async (row: SKURecordsData) => {
 // 刪除SKU按鈕的事件處理函數
 const deleteSKU = async (row: SKURecordsData) => {
   // 先詢問用戶是否要刪除
-  await ElMessageBox.confirm(`你確定要刪除商品 : ${row.skuName} 嗎?`, '注意', {
+  ElMessageBox.confirm(`你確定要刪除商品 : ${row.skuName} 嗎?`, '注意', {
     confirmButtonText: '刪除',
     cancelButtonText: '取消',
     type: 'warning'
+  }).then(async () => {
+    // 如果走到這裡代表點擊了刪除按鈕
+    const res = await deleteSKUListAPI(row.id)
+
+    if (res.code !== 200) {
+      ElMessage.error('刪除失敗 , 可能是刪除到了固定的數據')
+      return
+    }
+
+    ElMessage.success('刪除成功!')
+
+    // 最後重新發送一次請求 更新頁面即可
+    getSKUData(skuDataList.value.length > 1 ? currentPage.value : currentPage.value - 1)
   })
-
-  // 如果走到這裡代表點擊了刪除按鈕
-  const res = await deleteSKUListAPI(row.id)
-
-  if (res.code !== 200) {
-    ElMessage.error('刪除失敗 , 可能是刪除到了固定的數據')
-    return
-  }
-
-  ElMessage.success('刪除成功!')
-
-  // 最後重新發送一次請求 更新頁面即可
-  getSKUData(skuDataList.value.length > 1 ? currentPage.value : currentPage.value - 1)
 }
 </script>
 
 <template>
   <div class="sku">
-    <el-card>
+    <el-card v-loading="isLoading">
       <!-- SKU內容區 -->
       <el-table border width="100%" :data="skuDataList">
         <!-- SKU內容區 - 序列號 -->
         <el-table-column label="序列號" type="index" width="80px" align="center"></el-table-column>
+        <!-- SKU內容區 - 銷售狀態 -->
+        <el-table-column label="銷售狀態" width="120px" align="center">
+          <template #default="{ row }">
+            <p :style="{ color: row.isSale === 1 ? 'green' : 'red' }">{{ row.isSale === 1 ? '上架' : '下架' }}</p>
+          </template>
+        </el-table-column>
         <!-- SKU內容區 - 商品名稱 -->
         <el-table-column label="商品名稱" width="280px" align="center">
           <template #default="{ row }">
@@ -127,7 +137,7 @@ const deleteSKU = async (row: SKURecordsData) => {
           </template>
         </el-table-column>
         <!-- SKU內容區 - 商品描述 -->
-        <el-table-column label="商品描述" show-overflow-tooltip align="center">
+        <el-table-column label="商品描述" width="480px" show-overflow-tooltip align="center">
           <template #default="{ row }">
             <p style="font-size: 18px; font-weight: 400">{{ row.skuDesc }}</p>
           </template>

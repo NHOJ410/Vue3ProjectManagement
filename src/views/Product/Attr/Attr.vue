@@ -9,7 +9,7 @@ import type { AttrDataType, AttrValueList } from '@/api/product/attr/type'
 import { useCategoryListStore } from '@/stores' // 導入分類倉庫
 const categoryListStore = useCategoryListStore() // 定義分類倉庫
 
-const { attrContentList, c3ID } = storeToRefs(categoryListStore) // 將我們內容數據解構出來 方便使用
+const { attrContentList, c3ID, isLoading } = storeToRefs(categoryListStore) // 將我們內容數據解構出來 方便使用
 
 const isModify = ref<boolean>(true) // 用來控制顯示 [ 內容區 ] 或 [ 添加 / 編輯 ] 頁面的變量
 
@@ -81,7 +81,7 @@ const saveAttr = async () => {
   if (res.code !== 200) {
     //  如果有 id 就是 編輯品牌失敗 沒有的話就是添加品牌失敗
     ElMessage.error({
-      message: attrParams.value.id ? '編輯品牌失敗' : '添加品牌失敗'
+      message: attrParams.value.id ? '編輯規格失敗' : '添加規格失敗'
     })
 
     return false
@@ -89,7 +89,7 @@ const saveAttr = async () => {
 
   //  走到這裡代表添加成功 先提示用戶 ( 對於 id 的判斷還是和上面一樣 )
   ElMessage.success({
-    message: attrParams.value.id ? '編輯品牌成功' : '添加品牌成功'
+    message: attrParams.value.id ? '編輯規格成功' : '添加規格成功'
   })
 
   //  發請求 重新渲染內容頁面
@@ -199,7 +199,7 @@ onBeforeUnmount(() => {
 
     <!-- 中間內容部分 -->
     <div class="page-content" v-show="isModify === true">
-      <el-card class="content">
+      <el-card class="content" v-loading="isLoading">
         <!-- 添加按鈕部分 -->
         <el-button
           type="primary"

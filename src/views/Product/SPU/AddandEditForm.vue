@@ -22,8 +22,8 @@ import type { UploadProps } from 'element-plus'
 // --------------- 編輯 / 添加功能 ( 這裡要設定起始值為空的目的是因為 添加的時候也可以用到 , 等等要做數據回顯 或是提交給服務器的 ) ----------------
 let spuParams = ref<SpuListData>({
   category3Id: '', // 蒐集三級分類的id
-  spuName: '', // SPU的名字
-  description: '', // SPU的描述
+  spuName: '', // 商品的名字
+  description: '', // 商品的描述
   tmId: '', // 品牌的id
   spuImageList: [], // 已有品牌規格圖片
   spuSaleAttrList: [] // 已有品牌銷售規格表格數據
@@ -33,8 +33,8 @@ let spuParams = ref<SpuListData>({
 
 const spuSelect = ref<TradmarkList[]>([]) // 存儲 [ 已有品牌下拉框 ] 的數據
 const spuImageList = ref<SkuImageList[]>([]) // 存儲 [ 已有品牌規格圖片 ] 的數據
-const spuAttrList = ref<SpuSaleAttrValueListData[]>([]) // 存儲 [ SPU銷售規格表格 ] 的數據
-const spuAttrSelect = ref<SpuBaseSaleAttrList[]>([]) // 存儲 [ SPU銷售規格下拉框 ] 的數據
+const spuAttrList = ref<SpuSaleAttrValueListData[]>([]) // 存儲 [ 商品銷售規格表格 ] 的數據
+const spuAttrSelect = ref<SpuBaseSaleAttrList[]>([]) // 存儲 [ 商品銷售規格下拉框 ] 的數據
 
 //  定義方法 getSkuData 用來發送請求 獲取數據 ( 這裡的參數 row 就是父組件傳遞過來的 row 參數  )
 const getSkuData = async (row: SpuListData) => {
@@ -54,16 +54,16 @@ const getSkuData = async (row: SpuListData) => {
     }
   })
 
-  // 發送請求 獲取 [ SPU銷售規格表格 ] 的數據 並儲存
+  // 發送請求 獲取 [ 商品銷售規格表格 ] 的數據 並儲存
   const res3 = await getSPUSaleAttrListAPI(row.id as number)
   spuAttrList.value = res3.data
 
-  // 發送請求 獲取 [ SPU銷售規格下拉框 ] 的數據 並儲存
+  // 發送請求 獲取 [ 商品銷售規格下拉框 ] 的數據 並儲存
   const res4 = await getSPUBaseSaleAttrListAPI()
   spuAttrSelect.value = res4.data
 }
 
-// --------------- SPU 品牌圖片 圖片牆部分 ----------------
+// --------------- 商品 品牌圖片 圖片牆部分 ----------------
 
 const imgPreview = ref<boolean>(false) // 控制點擊圖片預覽狀態的變量
 const previewImgUrl = ref('') // 圖片預覽展示的地址
@@ -109,13 +109,13 @@ const onRemoveImg: UploadProps['onRemove'] = async (uploadFile) => {
   })
 }
 
-// --------------- SPU 銷售規格 下拉菜單 部分  ----------------
+// --------------- 商品 銷售規格 下拉菜單 部分  ----------------
 
 const spuSelectData = ref<string>('') // 蒐集 SPU銷售規格 下拉菜單的數據
 
 // 計算出 ( SPU銷售規格表格部分 ) 還沒有渲染的數據 , 以此來渲染下拉框的選項內容
 const unSelectSaleAttr = computed(() => {
-  //  這裡先弄個範例 方便理解
+  // 這裡先弄個範例 方便理解
   // 全部的銷售規格        (spuAttrSelect) ex : 顏色 , 版本 , 尺碼
   // 表格中已有的的銷售規格 (spuAttrList)   ex : 顏色 , 版本
 
@@ -132,7 +132,7 @@ const unSelectSaleAttr = computed(() => {
   return result
 })
 
-// 添加 [ SPU 銷售規格名稱 ] 按鈕事件處理函數
+// 添加 [ 商品 銷售規格名稱 ] 按鈕事件處理函數
 const addSPUAttrList = () => {
   /*
    表格需要的參數名參考 : 
@@ -163,7 +163,7 @@ const addSPUAttrList = () => {
   spuSelectData.value = ''
 }
 
-// 添加 [ SPU 銷售規格屬性 ] 按鈕事件處理函數
+// 添加 [ 商品 銷售規格屬性 ] 按鈕事件處理函數
 const onAddSaleAttr = (row: SpuSaleAttrValueListData) => {
   // 點擊時 , 讓 flag = true ( 這裡原本是沒有的 )
   row.flag = true
@@ -188,7 +188,7 @@ const onAttrInpBlur = (row: SpuSaleAttrValueListData) => {
     saleAttrValueName: newAttrValue as string // 銷售屬性名
   }
 
-  //  利用 find 方法 來查找是不是有 [ 相同的 SPU銷售規格屬性名 ] , 如果有就返回該值 , 沒有就返回 undefined
+  //  利用 find 方法 來查找是不是有 [ 相同的 商品銷售規格屬性名 ] , 如果有就返回該值 , 沒有就返回 undefined
   const repeatValue = row.spuSaleAttrValueList?.find((item) => {
     return item.saleAttrValueName === row.newAttrValue
   })
@@ -227,7 +227,7 @@ const cancel = () => {
 
 // 保存按鈕事件處理函數
 const onSave = async () => {
-  // 蒐集SPU規格圖片的數據 存儲到 spuParams對象中 , 統一提交給服務器 ( 利用 map 方法將數據轉換成 後端需要的格式 )
+  // 蒐集商品規格圖片的數據 存儲到 spuParams對象中 , 統一提交給服務器 ( 利用 map 方法將數據轉換成 後端需要的格式 )
   spuParams.value.spuImageList = spuImageList.value.map((item: any) => {
     return {
       imgName: item.name,
@@ -235,7 +235,7 @@ const onSave = async () => {
     }
   })
 
-  //  蒐集 SPU規格 表格和下拉框的數據 存儲到 spuParams對象中 , 統一提交給服務器
+  //  蒐集 商品規格 表格和下拉框的數據 存儲到 spuParams對象中 , 統一提交給服務器
   spuParams.value.spuSaleAttrList = spuAttrList.value
 
   // 發送請求 , 儲存修改後的數據
@@ -283,7 +283,7 @@ const initAddSpu = async (c3ID: number) => {
   const res1 = await getTrademarkListAPI()
   spuSelect.value = res1.data
 
-  // 發送請求 獲取 [ SPU銷售規格下拉框 ] 的數據 並儲存
+  // 發送請求 獲取 [ 商品銷售規格下拉框 ] 的數據 並儲存
   const res2 = await getSPUBaseSaleAttrListAPI()
   spuAttrSelect.value = res2.data
 }
@@ -293,28 +293,28 @@ defineExpose({ getSkuData, initAddSpu })
 </script>
 
 <template>
-  <!-- 添加 / 編輯 SPU頁面 -->
+  <!-- 添加 / 編輯 商品頁面 -->
   <div class="spu-form">
     <el-form label-width="100px" :model="spuParams">
-      <!-- SPU名稱部分 -->
-      <el-form-item label="SPU名稱">
-        <el-input placeholder="請輸入SPU名稱" style="width: 30vw" v-model="spuParams.spuName"></el-input>
+      <!-- 商品名稱部分 -->
+      <el-form-item label="商品名稱" prop="spuName">
+        <el-input id="spuName" placeholder="請輸入商品名稱" style="width: 30vw" v-model="spuParams.spuName"></el-input>
       </el-form-item>
 
-      <!-- SPU品牌下拉菜單部分 -->
-      <el-form-item label="SPU品牌">
-        <el-select v-model="spuParams.tmId" placeholder="請選擇SPU品牌" style="width: 30vw">
+      <!-- 商品品牌下拉菜單部分 -->
+      <el-form-item label="商品品牌">
+        <el-select v-model="spuParams.tmId" placeholder="請選擇商品品牌" style="width: 30vw">
           <el-option v-for="item in spuSelect" :key="item.id" :label="item.tmName" :value="item.id" />
         </el-select>
       </el-form-item>
 
-      <!-- SPU描述 文本域部分 -->
-      <el-form-item label="SPU描述">
-        <el-input type="textarea" placeholder="請輸入SPU描述" :rows="10" v-model="spuParams.description"></el-input>
+      <!-- 商品描述 文本域部分 -->
+      <el-form-item label="商品描述" prop="description">
+        <el-input id="description" type="textarea" placeholder="請輸入商品描述" :rows="10" v-model="spuParams.description"></el-input>
       </el-form-item>
 
-      <!-- SPU 規格圖片牆部分 -->
-      <el-form-item label="SPU 規格圖片">
+      <!-- 商品規格圖片牆部分 -->
+      <el-form-item label="商品 規格圖片">
         <el-upload
           v-model:file-list="spuImageList"
           action="/api/admin/product/fileUpload"
@@ -333,8 +333,8 @@ defineExpose({ getSkuData, initAddSpu })
         </el-dialog>
       </el-form-item>
 
-      <!-- SPU 銷售規格部分 -->
-      <el-form-item label="SPU 銷售規格">
+      <!-- 商品 銷售規格部分 -->
+      <el-form-item label="商品銷售規格">
         <!-- 銷售規格 - 下拉框 -->
         <el-select
           v-model="spuSelectData"
@@ -345,7 +345,13 @@ defineExpose({ getSkuData, initAddSpu })
           <el-option v-for="item in unSelectSaleAttr" :key="item.id" :label="item.name" :value="`${item.id}:${item.name}`" />
         </el-select>
         <!-- 銷售規格 - 添加規格按鈕 -->
-        <el-button type="primary" icon="Plus" title="添加規格" style="margin-left: 20px" :disabled="!spuSelectData" @click="addSPUAttrList"
+        <el-button
+          type="primary"
+          icon="Plus"
+          title="添加新的規格"
+          style="margin-left: 20px"
+          :disabled="!spuSelectData"
+          @click="addSPUAttrList"
           >添加規格</el-button
         >
         <!-- 銷售規格 - 底部列表區域 -->
@@ -386,7 +392,7 @@ defineExpose({ getSkuData, initAddSpu })
 
       <!-- 保存/取消 按鈕部分 -->
       <el-form-item>
-        <el-button type="primary" icon="Check" @click="onSave" :disabled="spuAttrList.length === 0">保存</el-button>
+        <el-button type="primary" icon="Check" @click="onSave" :disabled="spuAttrList.length === 0">保存商品數據</el-button>
         <el-button type="warning" icon="Close" @click="cancel">取消</el-button>
       </el-form-item>
     </el-form>

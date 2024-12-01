@@ -78,6 +78,9 @@ const { rules } = useUserFormRules()
 
 // 添加員工的點擊事件處理函數
 const addUser = () => {
+  // 重製表單項 , 並清理殘留的驗證訊息
+  AddOrEditFormRef.value?.resetFields()
+
   // 清理 userParams
   Object.assign(userParams.value, {
     id: '',
@@ -289,13 +292,13 @@ const deletePatchUser = async () => {
     </el-card>
 
     <!-- 中間內容區 員工管理 和 分頁器部分 -->
-    <el-card style="margin-top: 20px">
+    <el-card style="margin-top: 20px" v-loading="isLoading">
       <!-- 內容區 - 按鈕部分 -->
       <el-button icon="Plus" type="primary" @click="addUser">添加員工</el-button>
       <el-button icon="Delete" type="danger" :disabled="deleteUserArr.length === 0" @click="deletePatchUser">批量刪除員工資料</el-button>
 
       <!-- 內容區 - 員工資料表格部分 -->
-      <el-table v-loading="isLoading" border style="margin-top: 20px" :data="userInfoData" @selection-change="handleSelectionChange">
+      <el-table border style="margin-top: 20px" :data="userInfoData" @selection-change="handleSelectionChange">
         <!-- 員工表格 - 左側複選框 -->
         <el-table-column type="selection" align="center" width="50px"></el-table-column>
         <!-- 員工表格 - 序列號 -->
@@ -328,7 +331,7 @@ const deletePatchUser = async () => {
             <!-- 按鈕部分 - 編輯員工資料按鈕 -->
             <el-button icon="Edit" type="warning" @click="editUserInfo(row)">編輯員工資料</el-button>
             <!-- 按鈕部分 - 刪除員工資料按鈕 -->
-            <el-popconfirm :title="`你確定要刪除「 ${row.name} 」 嗎?`" width="300px" @confirm="deleteUser(row.id)">
+            <el-popconfirm :title="`你確定要刪除「 ${row.name} 」 這位員工嗎?`" width="400px" @confirm="deleteUser(row.id)">
               <template #reference>
                 <el-button icon="Delete" type="danger">刪除員工資料</el-button>
               </template>
