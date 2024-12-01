@@ -108,7 +108,12 @@ const { resetColor, changeModelColor, colorObj } = useChangeColor()
       inline-prompt
       active-icon="Sunrise"
       inactive-icon="MoonNight"
-      style="--el-switch-on-color: #000; --el-switch-off-color: #dbd9d9; border-color: #000"
+      style="
+        --el-switch-on-color: #000;
+        --el-switch-off-color: #dbd9d9;
+
+        border-color: #000;
+      "
     />
 
     <!-- 點擊 [ 切換按鈕主題顏色 ] 出現的設定視窗 -->
@@ -118,7 +123,7 @@ const { resetColor, changeModelColor, colorObj } = useChangeColor()
           <el-tab-pane v-for="item in colorObj" :key="item.color" :label="item.label">
             <div class="demo-color-sizes">
               <!-- 預覽按鈕部分 -->
-              <el-button :type="item.type" style="margin: 0px 30px 5px 0">{{
+              <el-button :type="item.type" style="margin: 0 30px 5px 0">{{
                 `預覽 「${item.label}」 顏色 , 右邊方框可以調整顏色`
               }}</el-button>
               <!-- 取色器組件 -->
@@ -137,8 +142,8 @@ const { resetColor, changeModelColor, colorObj } = useChangeColor()
 <style lang="scss" scoped>
 .tabbarRight {
   display: flex;
-  align-items: center;
   gap: 30px;
+  align-items: center;
 
   // 用戶名
   .username {

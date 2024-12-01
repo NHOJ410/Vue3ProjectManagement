@@ -438,10 +438,10 @@ const deletePatchUser = async () => {
 .user {
   // 頂部 員工姓名 和 按鈕部分
   .top-search {
-    height: 100px;
-    padding-top: 20px;
     display: flex;
     align-items: center;
+    height: 100px;
+    padding-top: 20px;
   }
 
   // 給尚未分配職位加個樣式

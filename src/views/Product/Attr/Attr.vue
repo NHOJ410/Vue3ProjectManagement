@@ -310,9 +310,9 @@ $content-margin-top: 30px;
 
     // 產品標題
     .attrName {
-      text-align: center;
-      font-weight: bold;
       font-size: 16px;
+      font-weight: bold;
+      text-align: center;
       text-wrap: nowrap;
     }
   }

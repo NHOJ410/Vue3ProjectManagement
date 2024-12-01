@@ -6,6 +6,8 @@ import { createApp } from 'vue'
 // Pinia
 import pinia from '@/stores/index'
 
+// 引入 reset.scss
+import '@/styles/reset.scss'
 // 引入 全局scss樣式
 import '@/styles/common.scss'
 // 引入 elementPlus 切換主題css變量

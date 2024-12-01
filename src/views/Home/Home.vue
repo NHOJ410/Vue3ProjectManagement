@@ -63,11 +63,11 @@ import { currentTime } from '@/composables/useCurrentTime'
       display: flex;
       align-items: center;
       margin-left: 20px;
-      background: linear-gradient(45deg, #2d5f4a, #7ad4af, #1de793);
-      background-clip: text;
-      color: transparent;
       font-size: 30px;
       font-weight: bold;
+      color: transparent;
+      background: linear-gradient(45deg, #2d5f4a, #7ad4af, #1de793);
+      background-clip: text;
     }
 
     .desc {
@@ -80,9 +80,9 @@ import { currentTime } from '@/composables/useCurrentTime'
 
   // 底部 svg LOGO圖標區域
   .bottom {
-    margin-top: 100px;
     display: flex;
     justify-content: space-between;
+    margin-top: 100px;
   }
 }
 </style>

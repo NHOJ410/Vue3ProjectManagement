@@ -32,12 +32,12 @@ const settingStore = useLayoutSettingStore() // 定義設定倉庫
 
     // 網頁標題
     .title {
-      font-size: $base-logo-title;
-      color: #fff;
-      font-weight: 700;
-      text-shadow: 2px 2px 2px rgba(245, 238, 238, 0.8);
-      opacity: 1;
       margin: 0 10px;
+      font-size: $base-logo-title;
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 2px 2px 2px rgb(245 238 238 / 80%);
+      opacity: 1;
       transition: $base-menu-close-transition;
 
       // 菜單縮放後的樣式

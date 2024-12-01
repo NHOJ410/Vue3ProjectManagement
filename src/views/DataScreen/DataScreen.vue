@@ -107,10 +107,11 @@ window.onresize = () => {
   // 數據面板 - 內容展示區域
   .screen {
     position: fixed;
+    top: 50%;
+    left: 50%;
     width: 1920px;
     height: 1080px;
-    left: 50%;
-    top: 50%;
+
     // 將位移基點固定在左上角
     transform-origin: left top;
 
@@ -127,11 +128,11 @@ window.onresize = () => {
 
       // 左側
       .screen-left {
-        flex: 1;
-        height: 1040px;
         display: flex;
+        flex: 1;
         flex-direction: column;
         gap: 10px;
+        height: 1040px;
 
         // 客戶滿意度水球圖組件
         .satisfaction {
@@ -151,8 +152,8 @@ window.onresize = () => {
 
       // 中間
       .screen-center {
-        flex: 1.5;
         display: flex;
+        flex: 1.5;
         flex-direction: column;
         margin: 0 15px;
 
@@ -163,34 +164,39 @@ window.onresize = () => {
 
         .trendChart {
           flex: 1;
+
           // background-color: gold;
         }
       }
 
       // 右側
       .screen-right {
-        flex: 1;
-        // background-color: red;
-        height: 1040px;
         display: flex;
+        flex: 1;
         flex-direction: column;
         gap: 10px;
+
+        // background-color: red;
+        height: 1040px;
 
         // 商品種類圖組件
         .HotItem {
           flex: 1.5;
+
           // background-color: red;
         }
 
         // 年齡分布圖組件
         .ageDistribution {
           flex: 1;
+
           // background-color: skyblue;
         }
 
         // 銷售通路圖組件
         .purchaseChannels {
           flex: 1;
+
           // background-color: chocolate;
         }
       }

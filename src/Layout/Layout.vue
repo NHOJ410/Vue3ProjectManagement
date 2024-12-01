@@ -77,8 +77,8 @@ const logOut = async () => {
 
   // 菜單縮放後的寬度
   &.isOpen {
-    width: calc(100vw - $base-menu-close);
     left: $base-menu-close;
+    width: calc(100vw - $base-menu-close);
   }
 }
 
@@ -108,7 +108,7 @@ const logOut = async () => {
       .layout-menu {
         --el-menu-bg-color: $base-menu-BGCcolor;
         --el-menu-text-color: #fff;
-        --el-menu-active-color: rgb(0, 204, 255);
+        --el-menu-active-color: rgb(0 204 255);
 
         ::v-deep(.el-sub-menu__title) {
           @include menuHover;
@@ -128,11 +128,11 @@ const logOut = async () => {
 
   // 頂部導航區域
   .layout-topNav {
-    width: calc(100% - $base-menu-width); // 寬度 = 100% - 左側菜單寬度
-    height: $base-tabbar-height;
     position: fixed;
     top: 0;
     left: $base-menu-width; // 固定定位寬度 = 左側菜單寬度
+    width: calc(100% - $base-menu-width); // 寬度 = 100% - 左側菜單寬度
+    height: $base-tabbar-height;
 
     // 處理菜單縮放後的樣式
     @include closeMenu;
@@ -140,14 +140,14 @@ const logOut = async () => {
 
   // 中間內容部分
   .layout-content {
-    color: white;
-    width: calc(100% - $base-menu-width); // 寬度 = 100% - 左側菜單寬度
-    height: calc(100vh - $base-tabbar-height); // 高度 = 視口高度 - 頂部導航高度
     position: absolute;
     top: $base-tabbar-height; // 固定定位高度 = 頂部導航高度
     left: $base-menu-width; // 固定定位寬度 = 左側菜單寬度
+    width: calc(100% - $base-menu-width); // 寬度 = 100% - 左側菜單寬度
+    height: calc(100vh - $base-tabbar-height); // 高度 = 視口高度 - 頂部導航高度
     padding: 20px;
     overflow: auto;
+    color: white;
 
     // 處理菜單縮放後的樣式
     @include closeMenu;

@@ -63,21 +63,21 @@ onBeforeUnmount(() => {
 
 <style lang="scss" scoped>
 // 點選按鈕的過度變量
-@mixin transitionSize {
+@mixin transition-Size {
   width: 164px;
   height: 40px;
   text-shadow: 0 0 10px $base-dashboard-text-color;
-  transform: translate(1px, -2px);
   cursor: pointer;
+  transform: translate(1px, -2px);
 }
 
 // --------- 頁面 css樣式 -----------
 .top {
+  display: flex;
   width: 100%;
   height: 38px;
-  display: flex;
-  color: $base-dashboard-text-color;
   font-size: 20px;
+  color: $base-dashboard-text-color;
   user-select: none; // 禁止被反白選取到
 
   // 左側部分
@@ -91,14 +91,14 @@ onBeforeUnmount(() => {
       float: right;
       width: 150px;
       height: 40px;
+      line-height: 40px;
+      text-align: center;
       background: url('../../images/dataScreen-header-btn-bg-l.png') no-repeat;
       background-size: 100% 100%;
-      text-align: center;
-      line-height: 40px;
       transition: all 0.5s;
 
       &:hover {
-        @include transitionSize;
+        @include transition-Size;
       }
     }
   }
@@ -110,37 +110,36 @@ onBeforeUnmount(() => {
     .centerTitle {
       width: 100%;
       height: 74px;
+      font-size: 40px;
+      line-height: 74px;
+      text-align: center;
       background: url('../../images/dataScreen-header-center-bg.png') no-repeat;
       background-size: 100% 100%;
-      text-align: center;
-      line-height: 74px;
-      font-size: 40px;
     }
   }
 
   // 右側部分
   .right {
+    display: flex;
     flex: 1.5;
+    align-items: center;
+    justify-content: space-between;
     height: 38px;
     background: url('../../images/dataScreen-header-right-bg.png') no-repeat;
     background-size: 100% 100%;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
 
     // 右側統計數據按鈕部分
     .dataCount {
       width: 150px;
       height: 40px;
+      line-height: 40px;
+      text-align: center;
       background: url('../../images/dataScreen-header-btn-bg-r.png') no-repeat;
       background-size: 100% 100%;
-      text-align: center;
-      line-height: 40px;
       transition: all 0.5s;
 
       &:hover {
-        @include transitionSize;
+        @include transition-Size;
       }
     }
 

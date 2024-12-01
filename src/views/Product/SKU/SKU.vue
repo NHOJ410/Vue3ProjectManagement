@@ -192,7 +192,7 @@ const deleteSKU = async (row: SKURecordsData) => {
     <el-drawer v-model="isShowProduct" size="50%" style="padding-left: 60px">
       <!-- 頂部標題 -->
       <template #header>
-        <h3 style="font-weight: 700; font-size: 30px; color: #000; text-align: center">查看商品</h3>
+        <h3 style="font-size: 30px; font-weight: 700; color: #000; text-align: center">查看商品</h3>
       </template>
 
       <!-- 中間內容區 -->

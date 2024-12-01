@@ -22,16 +22,16 @@ const router = useRouter()
 
   // 回到首頁按鈕
   .goHome {
-    width: 400px;
-    height: 200px;
-    border-radius: 20px;
     position: absolute;
     top: 50%;
     left: 75%;
-    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 200px;
     font-size: 30px;
-    animation: blink 1.5s infinite;
+    border-radius: 20px;
     transition: background-color 0.3s ease;
+    transform: translate(-50%, -50%);
+    animation: blink 1.5s infinite;
   }
 }
 

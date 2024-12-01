@@ -325,7 +325,7 @@ const deleteRole = async (row: recordsType) => {
       <template #default>
         <el-tree
           ref="permissionTreeRef"
-          style="max-width: 600px; font-size: 18px; margin-top: 50px"
+          style="max-width: 600px; margin-top: 50px; font-size: 18px"
           show-checkbox
           node-key="id"
           :default-checked-keys="selectArr"

@@ -50,8 +50,8 @@ const onchangeOpen = () => {
   // 麵包屑導航文字
   .breadcrumbTitle {
     margin: 0 10px;
-    vertical-align: top;
     font-weight: 400;
+    vertical-align: top;
   }
 }
 </style>

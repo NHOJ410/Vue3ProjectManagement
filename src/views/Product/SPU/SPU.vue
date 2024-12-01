@@ -271,8 +271,8 @@ onBeforeUnmount(() => {
   .spu-content {
     // 內容區 - SPU名稱
     .spu-Name {
-      font-weight: bold;
       font-size: 20px;
+      font-weight: bold;
       text-align: center;
     }
 

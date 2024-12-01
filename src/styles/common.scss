@@ -1,7 +1,5 @@
-@use './reset.scss' as *; // 導入 reset.scss 清除默認樣式
-
-// 暗黑模式 dark類名
+// 暗黑模式的樣式
 .dark {
-  background-color: #666666;
   color: #fff ;
+  background-color: #666;
 }

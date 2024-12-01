@@ -255,9 +255,9 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .box {
+  position: relative;
   width: 100%;
   height: 500px;
-  position: relative;
 
   // 大標題
   .mapTitle {
@@ -269,11 +269,11 @@ onMounted(() => {
 
     // 標題部分的背景圖
     &::after {
-      content: '';
       display: block;
-      margin-top: 10px;
       width: 175px;
       height: 4px;
+      margin-top: 10px;
+      content: '';
       background: url('../../images/dataScreen-title.png') no-repeat;
       background-size: cover;
     }
@@ -282,23 +282,23 @@ onMounted(() => {
   // 航線路徑表格
   .airplaneRoute {
     position: absolute;
-    left: 100px;
     bottom: 40px;
-    text-align: center;
+    left: 100px;
     z-index: -99;
+    text-align: center;
 
     // 表格標題
     & dt {
+      margin-bottom: 10px;
       font-size: 30px;
       color: #fff200;
-      margin-bottom: 10px;
     }
 
     // 表格內容
     & dd {
       font-size: 24px;
-      color: $base-dashboard-text-color;
       line-height: 34px;
+      color: $base-dashboard-text-color;
     }
   }
 

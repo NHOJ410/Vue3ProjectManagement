@@ -149,27 +149,27 @@ const toHome = () => {
   // 登入表單
   .login-form {
     position: relative;
-    max-width: 80%;
     top: 30vh;
     align-items: center;
+    max-width: 80%;
+    padding: 20px;
     background: url('@/assets/images/login_form.png') no-repeat;
     background-size: cover;
-    padding: 20px;
 
     // 登入頁面標題
     h2 {
-      color: white;
+      margin: 20px;
       font-size: 1.4em;
+      color: white;
       text-align: left;
       white-space: nowrap;
-      margin: 20px;
       user-select: none;
     }
 
     // 按鈕部分
     .buttonItem {
-      width: 100%;
       display: flex;
+      width: 100%;
     }
   }
 }

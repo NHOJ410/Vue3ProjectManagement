@@ -133,11 +133,11 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .box {
+  position: relative;
+  padding: 0 5px 5px;
+  user-select: none; // 禁止被反白選取到
   background: url('../../images/dataScreen-main-cb.png') no-repeat;
   background-size: 100% 100%;
-  padding: 0 5px 5px 5px;
-  position: relative;
-  user-select: none; // 禁止被反白選取到
 
   // 標題部分
   .statistics {
@@ -146,20 +146,20 @@ onMounted(() => {
 
     // 標題部分
     .satisfaction {
+      padding-top: 5px;
+      padding-left: 10px;
       font-size: 24px;
       font-style: italic;
       font-weight: 600;
-      padding-top: 5px;
-      padding-left: 10px;
       color: #fff;
 
       // 標題部分的背景圖
       &::after {
-        content: '';
         display: block;
-        margin-top: 10px;
         width: 180px;
         height: 4px;
+        margin-top: 10px;
+        content: '';
         background: url('../../images/dataScreen-title.png') no-repeat;
         background-size: cover;
       }

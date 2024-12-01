@@ -294,17 +294,17 @@ const onRemove = async (row: Trademark) => {
   .avatar-uploader {
     :deep() {
       .avatar {
+        display: block;
         width: 178px;
         height: 178px;
-        display: block;
       }
 
       .el-upload {
-        border: 1px dashed var(--el-border-color);
-        border-radius: 6px;
-        cursor: pointer;
         position: relative;
         overflow: hidden;
+        cursor: pointer;
+        border: 1px dashed var(--el-border-color);
+        border-radius: 6px;
         transition: var(--el-transition-duration-fast);
       }
 
@@ -313,10 +313,10 @@ const onRemove = async (row: Trademark) => {
       }
 
       .el-icon.avatar-uploader-icon {
-        font-size: 28px;
-        color: #8c939d;
         width: 178px;
         height: 178px;
+        font-size: 28px;
+        color: #8c939d;
         text-align: center;
       }
     }
