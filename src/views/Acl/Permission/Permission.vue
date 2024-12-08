@@ -4,6 +4,8 @@ import { ref, onMounted } from 'vue'
 import { addOrEditMenuAPI, getMenuListAPI, deleteMenuAPI } from '@/api/acl/menu/menu'
 // 導入類型定義檔案
 import type { getMenuListDataType, menuParamsType } from '@/api/acl/menu/type'
+// 導入hooks
+import { usePromissionFormRules } from './composables/usePermissionFormRules' // 導入表單驗證規則 hooks
 
 // --------------- 獲取菜單管理數據 -----------------
 const menuList = ref<getMenuListDataType[]>([]) // 存儲菜單管理的數據
@@ -30,13 +32,8 @@ onMounted(() => {
 const isShowDialog = ref(false) // 控制 點擊添加 / 編輯菜單 按鈕後 對話框組件顯示隱藏狀態
 const formRef = ref() // 獲取 form 表單
 
-// 表單驗證部分
-const rules = ref({
-  // 菜單名稱
-  name: [{ required: true, message: '請輸入菜單名稱', trigger: 'blur' }],
-  // 路由名稱
-  code: [{ required: true, message: '請輸入路由名稱', trigger: 'blur' }]
-})
+// 導入表單驗證規則部分
+const { rules } = usePromissionFormRules()
 
 // 存儲添加 / 編輯菜單or功能按鈕的數據
 const menuParams = ref<menuParamsType>({
@@ -71,6 +68,9 @@ const addMenu = (row: getMenuListDataType) => {
 
 // 編輯按紐的事件處理函數
 const editMenu = (row: getMenuListDataType) => {
+  // 先將表單驗證規則清空
+  formRef.value?.clearValidate()
+
   // 把 row 的數據 拷貝給 menuParams
   Object.assign(menuParams.value, row)
 

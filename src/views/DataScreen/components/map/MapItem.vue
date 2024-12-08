@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+// 導入 倉庫數據
+import { useDashBoardStore } from '@/stores'
+const dashBoardStore = useDashBoardStore()
 // 導入 echarts
 import * as echarts from 'echarts'
 //  導入 台灣的JSON數據
@@ -24,6 +27,20 @@ const airplaneEffect = ref({
   symbolSize: 25, // 飛機大小
   color: '#38ef7d', // 飛機顏色
   loop: true // 循環播放
+})
+
+// 航線圖部分
+const createFlightSeries = (route: any) => ({
+  type: 'lines',
+  coordinateSystem: 'geo',
+  lineStyle: airplaneLineStyle.value, // 航線 線條設置
+  effect: airplaneEffect.value, // 動畫效果和飛機圖標樣式設置
+  data: [
+    {
+      coords: [route.from, route.to], // 飛機航線整理
+      name: route.name // 飛機航線名稱
+    }
+  ]
 })
 
 //  註冊台灣地圖
@@ -73,160 +90,8 @@ onMounted(() => {
       ]
     },
 
-    // 飛機航線設置
-    series: [
-      // 台北到高雄
-      {
-        type: 'lines', // 使用線條繪製航線
-        coordinateSystem: 'geo', // 基於地理坐標系繪製
-        // 航線 線條設置
-        lineStyle: airplaneLineStyle.value,
-        // 動畫效果和飛機圖標樣式設置
-        effect: airplaneEffect.value,
-        data: [
-          {
-            coords: [
-              [121.565425, 25.033], // 起點(台北)
-              [120.310663, 22.6273] // 終點(高雄)
-            ]
-          }
-        ]
-      },
-      // 台北到台中
-      {
-        type: 'lines', // 使用線條繪製航線
-        coordinateSystem: 'geo', // 基於地理坐標系繪製
-        lineStyle: airplaneLineStyle.value,
-        // 動畫效果和飛機圖標樣式設置
-        effect: airplaneEffect.value,
-        data: [
-          {
-            coords: [
-              [121.565425, 25.033], // 起點(台北)
-              [120.673648, 24.147736] // 終點(台中)
-            ]
-          }
-        ]
-      },
-      // 台北到台南
-      {
-        type: 'lines', // 使用線條繪製航線
-        coordinateSystem: 'geo', // 基於地理坐標系繪製
-        lineStyle: airplaneLineStyle.value,
-        // 動畫效果和飛機圖標樣式設置
-        effect: airplaneEffect.value,
-        data: [
-          {
-            coords: [
-              [121.565425, 25.033], // 起點(台北)
-              [120.227027, 22.999728] // 終點(台南)
-            ]
-          }
-        ]
-      },
-      // 台北到澎湖
-      {
-        type: 'lines', // 使用線條繪製航線
-        coordinateSystem: 'geo', // 基於地理坐標系繪製
-        lineStyle: airplaneLineStyle.value,
-        // 動畫效果和飛機圖標樣式設置
-        effect: airplaneEffect.value,
-        data: [
-          {
-            coords: [
-              // 台北到澎湖
-              [121.565425, 25.033], // 起點(台北)
-              [119.566244, 23.566491] // 終點(澎湖)
-            ]
-          }
-        ]
-      },
-      // 高雄到澎湖
-      {
-        type: 'lines', // 使用線條繪製航線
-        coordinateSystem: 'geo', // 基於地理坐標系繪製
-        lineStyle: airplaneLineStyle.value,
-        // 動畫效果和飛機圖標樣式設置
-        effect: airplaneEffect.value,
-        data: [
-          {
-            coords: [
-              // 高雄到澎湖
-              [120.310663, 22.6273], // 起點(高雄)
-              [119.566244, 23.566491] // 終點(澎湖)
-            ]
-          }
-        ]
-      },
-      // 台中到金門
-      {
-        type: 'lines', // 使用線條繪製航線
-        coordinateSystem: 'geo', // 基於地理坐標系繪製
-        lineStyle: airplaneLineStyle.value,
-        // 動畫效果和飛機圖標樣式設置
-        effect: airplaneEffect.value,
-        data: [
-          {
-            coords: [
-              // 台中到金門
-              [120.673648, 24.147736], // 起點(台中)
-              [118.31786, 24.4404] // 終點(金門)
-            ]
-          }
-        ]
-      },
-      // 台中到澎湖
-      {
-        type: 'lines', // 使用線條繪製航線
-        coordinateSystem: 'geo', // 基於地理坐標系繪製
-        lineStyle: airplaneLineStyle.value,
-        // 動畫效果和飛機圖標樣式設置
-        effect: airplaneEffect.value,
-        data: [
-          {
-            coords: [
-              // 台中到澎湖
-              [120.673648, 24.147736], // 起點(台中)
-              [119.566244, 23.566491] // 終點(澎湖)
-            ]
-          }
-        ]
-      },
-      // 嘉義到台北
-      {
-        type: 'lines', // 使用線條繪製航線
-        coordinateSystem: 'geo', // 基於地理坐標系繪製
-        lineStyle: airplaneLineStyle.value,
-        // 動畫效果和飛機圖標樣式設置
-        effect: airplaneEffect.value,
-        data: [
-          {
-            coords: [
-              // 嘉義到台北
-              [121.565425, 25.033], // 起點(嘉義)
-              [120.440663, 23.47511] // 終點(台北)
-            ]
-          }
-        ]
-      },
-      // 高雄到澎湖
-      {
-        type: 'lines', // 使用線條繪製航線
-        coordinateSystem: 'geo', // 基於地理坐標系繪製
-        lineStyle: airplaneLineStyle.value,
-        // 動畫效果和飛機圖標樣式設置
-        effect: airplaneEffect.value,
-        data: [
-          {
-            coords: [
-              // 高雄到澎湖
-              [120.310663, 22.6273], // 起點(高雄)
-              [119.566244, 23.566491] // 終點(澎湖)
-            ]
-          }
-        ]
-      }
-    ]
+    // 航線部分設置
+    series: dashBoardStore.flightRoutes.map(createFlightSeries)
   })
 })
 </script>
@@ -238,15 +103,7 @@ onMounted(() => {
     <!-- 航線路徑表格 -->
     <dl class="airplaneRoute">
       <dt>航線路徑</dt>
-      <dd>台北 → 高雄</dd>
-      <dd>台北 → 台中</dd>
-      <dd>台北 → 台南</dd>
-      <dd>台北 → 澎湖</dd>
-      <dd>高雄 → 澎湖</dd>
-      <dd>高雄 → 澎湖</dd>
-      <dd>台中 → 澎湖</dd>
-      <dd>台中 → 金門</dd>
-      <dd>嘉義 → 台北</dd>
+      <dd v-for="item in dashBoardStore.flightRoutes" :key="item.name">{{ item.name.replace('到', '⭢') }}</dd>
     </dl>
     <!-- 台灣地圖本圖 -->
     <div class="mapItem" ref="mapDom"></div>

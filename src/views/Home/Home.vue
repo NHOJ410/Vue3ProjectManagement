@@ -1,9 +1,4 @@
 <script setup lang="ts">
-// 導入倉庫
-import { useUserStore } from '@/stores' // 導入用戶倉庫
-// 定義
-const userStore = useUserStore() // 定義用戶倉庫
-
 // 導入問候語函數
 import { currentTime } from '@/composables/useCurrentTime'
 </script>

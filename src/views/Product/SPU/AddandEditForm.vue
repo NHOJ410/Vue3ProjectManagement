@@ -79,9 +79,9 @@ const onPreview: UploadProps['onPreview'] = (file: any) => {
 
 // 圖片上傳前的校驗 ( 圖片檔案類型和大小 )
 const onBeforeUpload: UploadProps['beforeUpload'] = (rawFile) => {
-  // 如果圖片不是 jpg、jpeg、png、gif 格式 或者 大小超過 5MB 就中斷上傳
+  // 如果圖片不是 jpg、jpeg、png 格式 或者 大小超過 5MB 就中斷上傳
   if (rawFile.type !== 'image/jpeg' && rawFile.type !== 'image/png') {
-    ElMessageBox.alert('檔案必須是 jpg、jpeg、png 格式', '注意', {
+    ElMessageBox.alert('檔案必須是 jpg/jpeg、png 格式', '注意', {
       confirmButtonText: '我知道了'
     })
     return Promise.reject(new Error('檔案格式錯誤!'))

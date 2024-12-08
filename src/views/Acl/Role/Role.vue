@@ -5,6 +5,8 @@ import { addOrEditRoleAPI, getRoleListAPI, getPermissionListAPI, setPermissionAP
 // 導入ts類型檔案
 import type { recordsArr, recordsType, getPermissionDataType } from '@/api/acl/role/type'
 import type { FormInstance } from 'element-plus'
+// 導入 hooks
+import { useRoleFormRules } from './composable/useRoleFormRules' // 導入職位表單驗證規則
 
 // ----------------- 獲取職位列表數據 --------------------
 const currentPage = ref<number>(1) // 當前分頁頁碼
@@ -78,13 +80,8 @@ const editRole = (row: recordsArr) => {
   isShowDialog.value = true
 }
 
-// 職位名稱的表單驗證
-const addOrEditroleRules = {
-  roleName: [
-    { required: true, message: '請輸入職位名稱', trigger: 'blur' },
-    { min: 2, max: 10, message: '職位名稱長度應在 2 到 10 個字符之間', trigger: 'blur' }
-  ]
-}
+// 職位輸入框的表單驗證規則
+const { addOrEditroleRules } = useRoleFormRules()
 
 // 保存按鈕的事件處理函數
 const submit = async () => {

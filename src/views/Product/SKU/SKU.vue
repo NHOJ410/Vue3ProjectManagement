@@ -294,11 +294,6 @@ const deleteSKU = async (row: SKURecordsData) => {
       font-size: 26px;
       color: #000;
     }
-
-    // 上下間距
-    .mt-50 {
-      margin-top: 50px;
-    }
   }
 }
 </style>
