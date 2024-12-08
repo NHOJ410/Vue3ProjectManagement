@@ -1,5 +1,7 @@
 # 項目名稱 : 品牌後台管理系統
 
+組件功能整理 : https://childlike-box-14b.notion.site/156916c569a480fa9ef5d0ca89ea3e41?pvs=4
+
 ### 項目路由配置
 ![image](https://github.com/user-attachments/assets/31a7a7d2-d739-45cf-87b0-c62bad632de0)
 ### 首頁
